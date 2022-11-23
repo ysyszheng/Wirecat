@@ -155,7 +155,7 @@ public:
 "background-color: rgb(154, 153, 150);"));
         TCP_restrcut = new QPushButton(centralWidget);
         TCP_restrcut->setObjectName(QString::fromUtf8("TCP_restrcut"));
-        TCP_restrcut->setGeometry(QRect(860, 530, 121, 61));
+        TCP_restrcut->setGeometry(QRect(850, 530, 141, 61));
         TCP_restrcut->setFont(font2);
         TCP_restrcut->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
@@ -199,9 +199,9 @@ public:
         pushButton->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
         MainWindow->setCentralWidget(centralWidget);
-        layoutWidget1->raise();
-        layoutWidget1->raise();
-        layoutWidget1->raise();
+        layoutWidget->raise();
+        layoutWidget->raise();
+        layoutWidget->raise();
         stopped->raise();
         label->raise();
         packet_info->raise();
