@@ -233,9 +233,9 @@ background-color: rgb(154, 153, 150);</string>
    <widget class="QPushButton" name="TCP_restrcut">
     <property name="geometry">
      <rect>
-      <x>860</x>
+      <x>850</x>
       <y>530</y>
-      <width>121</width>
+      <width>141</width>
       <height>61</height>
      </rect>
     </property>

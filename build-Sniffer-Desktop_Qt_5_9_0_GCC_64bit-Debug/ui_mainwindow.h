@@ -157,7 +157,7 @@ public:
 "background-color: rgb(154, 153, 150);"));
         TCP_restrcut = new QPushButton(centralWidget);
         TCP_restrcut->setObjectName(QStringLiteral("TCP_restrcut"));
-        TCP_restrcut->setGeometry(QRect(860, 530, 121, 61));
+        TCP_restrcut->setGeometry(QRect(850, 530, 141, 61));
         TCP_restrcut->setFont(font2);
         TCP_restrcut->setStyleSheet(QLatin1String("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
