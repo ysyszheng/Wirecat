@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ../bin/sniffer
+TARGET = ../bin/Sniffer
 TEMPLATE = app
 
 CONFIG += C++11

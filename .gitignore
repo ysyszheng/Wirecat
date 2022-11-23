@@ -33,3 +33,4 @@
 
 # Qt
 .qmake.stash
+build-Sniffer-*Debug
