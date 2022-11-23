@@ -43,12 +43,12 @@ public:
     QTableWidget *packet_info;
     QTextBrowser *textBrowser;
     QPushButton *start;
-    QPushButton *start_2;
-    QPushButton *start_3;
-    QPushButton *start_4;
+    QPushButton *stop;
+    QPushButton *IP_restruct;
+    QPushButton *TCP_restrcut;
     QPushButton *pushButton_2;
-    QPushButton *start_5;
-    QWidget *widget;
+    QPushButton *Exit;
+    QWidget *layoutWidget2;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_2;
     QLineEdit *lineEdit;
@@ -66,9 +66,9 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         stopped = new QLabel(centralWidget);
         stopped->setObjectName(QString::fromUtf8("stopped"));
-        stopped->setGeometry(QRect(50, 140, 141, 31));
+        stopped->setGeometry(QRect(50, 140, 171, 31));
         QFont font;
-        font.setFamily(QString::fromUtf8("aakar"));
+        font.setFamily(QString::fromUtf8("Ubuntu"));
         font.setPointSize(15);
         font.setBold(true);
         font.setWeight(75);
@@ -76,12 +76,12 @@ public:
         stopped->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
         label = new QLabel(centralWidget);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(50, 490, 111, 31));
+        label->setGeometry(QRect(50, 490, 171, 41));
         label->setFont(font);
         label->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
         layoutWidget = new QWidget(centralWidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(50, 0, 701, 34));
+        layoutWidget->setGeometry(QRect(50, 0, 701, 41));
         horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setSpacing(6);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
@@ -96,7 +96,7 @@ public:
 
         Interface = new QComboBox(layoutWidget);
         Interface->setObjectName(QString::fromUtf8("Interface"));
-        Interface->setStyleSheet(QString::fromUtf8("background-color: rgb(222, 221, 218);"));
+        Interface->setStyleSheet(QString::fromUtf8("background-color: rgb(154, 153, 150);"));
 
         horizontalLayout->addWidget(Interface);
 
@@ -141,23 +141,23 @@ public:
         start->setFont(font2);
         start->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
-        start_2 = new QPushButton(centralWidget);
-        start_2->setObjectName(QString::fromUtf8("start_2"));
-        start_2->setGeometry(QRect(860, 290, 121, 61));
-        start_2->setFont(font2);
-        start_2->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
+        stop = new QPushButton(centralWidget);
+        stop->setObjectName(QString::fromUtf8("stop"));
+        stop->setGeometry(QRect(860, 290, 121, 61));
+        stop->setFont(font2);
+        stop->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
-        start_3 = new QPushButton(centralWidget);
-        start_3->setObjectName(QString::fromUtf8("start_3"));
-        start_3->setGeometry(QRect(860, 410, 121, 61));
-        start_3->setFont(font2);
-        start_3->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
+        IP_restruct = new QPushButton(centralWidget);
+        IP_restruct->setObjectName(QString::fromUtf8("IP_restruct"));
+        IP_restruct->setGeometry(QRect(860, 410, 121, 61));
+        IP_restruct->setFont(font2);
+        IP_restruct->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
-        start_4 = new QPushButton(centralWidget);
-        start_4->setObjectName(QString::fromUtf8("start_4"));
-        start_4->setGeometry(QRect(860, 530, 121, 61));
-        start_4->setFont(font2);
-        start_4->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
+        TCP_restrcut = new QPushButton(centralWidget);
+        TCP_restrcut->setObjectName(QString::fromUtf8("TCP_restrcut"));
+        TCP_restrcut->setGeometry(QRect(860, 530, 121, 61));
+        TCP_restrcut->setFont(font2);
+        TCP_restrcut->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
         pushButton_2 = new QPushButton(centralWidget);
         pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
@@ -165,28 +165,28 @@ public:
         pushButton_2->setFont(font2);
         pushButton_2->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
-        start_5 = new QPushButton(centralWidget);
-        start_5->setObjectName(QString::fromUtf8("start_5"));
-        start_5->setGeometry(QRect(860, 650, 121, 61));
-        start_5->setFont(font2);
-        start_5->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
+        Exit = new QPushButton(centralWidget);
+        Exit->setObjectName(QString::fromUtf8("Exit"));
+        Exit->setGeometry(QRect(860, 650, 121, 61));
+        Exit->setFont(font2);
+        Exit->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
-        widget = new QWidget(centralWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(50, 90, 701, 32));
-        horizontalLayout_2 = new QHBoxLayout(widget);
+        layoutWidget2 = new QWidget(centralWidget);
+        layoutWidget2->setObjectName(QString::fromUtf8("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(50, 90, 701, 32));
+        horizontalLayout_2 = new QHBoxLayout(layoutWidget2);
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        label_2 = new QLabel(widget);
+        label_2 = new QLabel(layoutWidget2);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setFont(font1);
         label_2->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
 
         horizontalLayout_2->addWidget(label_2);
 
-        lineEdit = new QLineEdit(widget);
+        lineEdit = new QLineEdit(layoutWidget2);
         lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
         lineEdit->setStyleSheet(QString::fromUtf8("background-color: rgb(222, 221, 218);"));
 
@@ -199,22 +199,20 @@ public:
         pushButton->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(154, 153, 150);"));
         MainWindow->setCentralWidget(centralWidget);
-        layoutWidget->raise();
-        layoutWidget->raise();
+        layoutWidget1->raise();
+        layoutWidget1->raise();
+        layoutWidget1->raise();
         stopped->raise();
         label->raise();
         packet_info->raise();
         textBrowser->raise();
         start->raise();
-        start_2->raise();
-        pushButton->raise();
-        start_3->raise();
-        start_4->raise();
-        label_2->raise();
-        lineEdit->raise();
+        stop->raise();
+        IP_restruct->raise();
+        TCP_restrcut->raise();
         pushButton_2->raise();
         pushButton->raise();
-        start_5->raise();
+        Exit->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1191, 28));
@@ -231,18 +229,18 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        stopped->setText(QCoreApplication::translate("MainWindow", "\346\212\223\345\214\205\345\267\262\345\201\234\346\255\242", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "\350\257\246\347\273\206\344\277\241\346\201\257", nullptr));
-        Inter_sel->setText(QCoreApplication::translate("MainWindow", "\351\200\211\346\213\251\350\246\201\344\276\246\345\220\254\347\232\204\347\275\221\345\215\241", nullptr));
-        input_rule->setText(QCoreApplication::translate("MainWindow", "\350\276\223\345\205\245\350\277\207\346\273\244\350\247\204\345\210\231", nullptr));
-        start->setText(QCoreApplication::translate("MainWindow", "\345\274\200\345\247\213\346\212\223\345\214\205", nullptr));
-        start_2->setText(QCoreApplication::translate("MainWindow", "\345\201\234\346\255\242\346\212\223\345\214\205", nullptr));
-        start_3->setText(QCoreApplication::translate("MainWindow", "IP\351\207\215\347\273\204", nullptr));
-        start_4->setText(QCoreApplication::translate("MainWindow", "TCP\351\207\215\347\273\204", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("MainWindow", "\345\214\205\346\237\245\350\257\242", nullptr));
-        start_5->setText(QCoreApplication::translate("MainWindow", "\351\200\200\345\207\272", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "\350\276\223\345\205\245\346\237\245\350\257\242\346\235\241\344\273\266", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "\345\214\205\350\277\207\346\273\244", nullptr));
+        stopped->setText(QCoreApplication::translate("MainWindow", "Packet display list", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Packet details", nullptr));
+        Inter_sel->setText(QCoreApplication::translate("MainWindow", "Select the network adapter to listen on", nullptr));
+        input_rule->setText(QCoreApplication::translate("MainWindow", "Input the filtering rule     ", nullptr));
+        start->setText(QCoreApplication::translate("MainWindow", "Start", nullptr));
+        stop->setText(QCoreApplication::translate("MainWindow", "Stop", nullptr));
+        IP_restruct->setText(QCoreApplication::translate("MainWindow", "IP Restruct", nullptr));
+        TCP_restrcut->setText(QCoreApplication::translate("MainWindow", "TCP Restruct", nullptr));
+        pushButton_2->setText(QCoreApplication::translate("MainWindow", "Search", nullptr));
+        Exit->setText(QCoreApplication::translate("MainWindow", "Exit", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "Input the search criteria  ", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "Filter", nullptr));
     } // retranslateUi
 
 };
