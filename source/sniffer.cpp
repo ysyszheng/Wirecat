@@ -16,7 +16,7 @@ bool Sniffer::findAllDevs() {
 
   if (allDev_ptr == NULL) {
     printf("pcap_findalldevs(): %s", errbuf);
-    return FALSE;
+    exit(1);
   }
 
   for (pcap_if_t *pdev = allDev_ptr; pdev; pdev = pdev->next) {
