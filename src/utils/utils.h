@@ -2,11 +2,17 @@
 #define UTILS_H
 
 #include "../header.h"
+#include <arpa/inet.h>
 #include <cstdio>
+#include <ctype.h>
+#include <errno.h>
 #include <iostream>
 #include <netinet/in.h>
 #include <pcap.h>
 #include <pcap/pcap.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <vector>
