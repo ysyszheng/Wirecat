@@ -2,19 +2,22 @@
 #define SNIFFER_H
 
 #include "utils.h"
-#include <pcap.h>
-#include <vector>
 
 class Sniffer {
 private:
   pcap_if_t *allDev_ptr;
   std::vector<pcap_if_t *> allDev_vec;
-  pcap_if_t *cur_dev;
+  const char *dev;  // device name
+  bpf_u_int32 mask; // net mask
+  bpf_u_int32 net;  // IP address
 
 public:
   Sniffer();
   ~Sniffer();
   bool findAllDevs();
+  void getDevName(const char *devName);
+  bool getDevInfo();
+  bool sniff(); // sniff after setDev
 };
 
 #endif // SNIFFER_H
