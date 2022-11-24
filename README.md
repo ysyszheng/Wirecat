@@ -27,12 +27,27 @@ Structure
 * `ui/` - UI files
   * `ui/mainwindow.ui` - Main window UI
 * `build/` - Build directory
-  * `sniffer.pro` - Project file
+  * `build/build.sh` - Build script
+  * `build/sniffer.pro` - Project file
   * `build/bin/` - Executable directory
     * `build/bin/sniffer` - Executable file
 
 Build & Run
 -----
+
+Use `build.sh` script: 
+
+
+```bash
+# build
+$ cd build
+$ bash build.sh
+# run
+$ ./bin/sniffer
+```
+
+Manually: 
+
 ```bash
 # build
 $ cd ./build
