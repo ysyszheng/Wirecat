@@ -3,10 +3,10 @@ Sniffer X
 
 A Not Simple Network Sniffer.
 
-Env
+Environment
 -----
-* Ubuntu 20.04 LTS
-* Qt 5.9.0 LTS
+* Ubuntu 20.04
+* Qt 5.9.0
 * libpcap 1.10.1
 
 Dependencies
@@ -16,20 +16,31 @@ $ sudo apt-get install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
 $ sudo apt-get install libpcap-dev
 ```
 
-Build
+Structure
 -----
-```bash
-$ cd ./source
-$ qmake -o Makefil Sniffer.pro
-$ make
-```
+* `src/` - Source code
+  * `src/main.cpp` - Main function
+  * `src/mainwindow.cpp` - Main window
+  * `src/mainwindow.h` - Main window header
+  * `src/sniffer.cpp` - Sniffer
+  * `src/sniffer.h` - Sniffer header
+* `ui/` - UI files
+  * `ui/mainwindow.ui` - Main window UI
+* `build/` - Build directory
+  * `build/bin/` - Executable directory
+    * `build/bin/sniffer` - Executable file
 
-Run
+Build & Run
 -----
 ```bash
+# build
+$ cd ./build
+$ qmake -o Makefil ../sniffer.pro
+$ make
+# run
 $ cd ./bin
-$ chmod +x ./Sniffer 
-$ ./Sniffer
+$ chmod +x ./sniffer 
+$ ./sniffer
 ```
 
 TODO
