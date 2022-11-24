@@ -36,7 +36,7 @@ Build & Run
 ```bash
 # build
 $ cd ./build
-$ qmake -o Makefil ./sniffer.pro
+$ qmake -o Makefile ./sniffer.pro
 $ make
 # run
 $ cd ./bin
