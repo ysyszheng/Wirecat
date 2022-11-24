@@ -1,7 +1,7 @@
 #ifndef SNIFFER_H
 #define SNIFFER_H
 
-#include "utils.h"
+#include "utils/utils.h"
 
 class Sniffer {
 private:

@@ -1,5 +1,4 @@
 #include "sniffer.h"
-#include "utils.h"
 
 Sniffer::Sniffer() {
   dev = NULL;
