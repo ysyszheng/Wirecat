@@ -1,5 +1,5 @@
 #include "../src/sniffer.h"
-#include "../src/utils.h"
+#include "../src/utils/utils.h"
 
 int main(int argc, char **argv) {
   Sniffer sniffer;
