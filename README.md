@@ -27,6 +27,7 @@ Structure
 * `ui/` - UI files
   * `ui/mainwindow.ui` - Main window UI
 * `build/` - Build directory
+  * `sniffer.pro` - Project file
   * `build/bin/` - Executable directory
     * `build/bin/sniffer` - Executable file
 
@@ -35,7 +36,7 @@ Build & Run
 ```bash
 # build
 $ cd ./build
-$ qmake -o Makefil ../sniffer.pro
+$ qmake -o Makefil ./sniffer.pro
 $ make
 # run
 $ cd ./bin
