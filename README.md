@@ -47,5 +47,6 @@ TODO
 
 Reference
 -----
+* [Getting Started with qmake](https://doc.qt.io/qt-6.2/qmake-tutorial.html)
 * [pcap tutorial](https://www.tcpdump.org/pcap.html)
 * [The Sniffer's Guide to Raw Traffic](http://yuba.stanford.edu/~casado/pcap/)
