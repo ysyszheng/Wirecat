@@ -5,7 +5,6 @@
 #include <pcap.h>
 #include <vector>
 
-
 class Sniffer {
 private:
   pcap_if_t *allDev_ptr;

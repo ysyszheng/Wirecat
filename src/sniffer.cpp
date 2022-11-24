@@ -12,6 +12,7 @@ Sniffer::~Sniffer() {
 }
 
 bool Sniffer::findAllDevs() {
+  char errbuf[PCAP_ERRBUF_SIZE];
   pcap_findalldevs(&allDev_ptr, errbuf);
 
   if (allDev_ptr == NULL) {
