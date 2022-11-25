@@ -63,7 +63,7 @@ TODO
 -----
 * [x] GUI framework
 * [x] Find all network devices
-* [ ] Capture packets
+* [x] Catch packets
 * [ ] Parse packets (Parse IP, TCP, UDP, ICMP, ARP, etc.)
 * [ ] IP fragmentation reassembly
 * [ ] Filter packets (Filter IP addresses (src & dst), ports (src & dst), protocols, etc.)
