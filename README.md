@@ -19,11 +19,17 @@ $ sudo apt-get install libpcap-dev
 Structure
 -----
 * `src/` - Source code
+  * `src/utils/` - Utility functions
+  * `src/utils/utils.h` - Utility functions header
+  * `src/utils/utils.cpp` - Utility functions implementation
+  * `src/hdr.h` - Package header information
   * `src/main.cpp` - Main function
   * `src/mainwindow.cpp` - Main window
   * `src/mainwindow.h` - Main window header
   * `src/sniffer.cpp` - Sniffer
   * `src/sniffer.h` - Sniffer header
+  * `src/catch.h` - Catch package
+  * `src/catch.cpp` - Catch package implementation
 * `ui/` - UI files
   * `ui/mainwindow.ui` - Main window UI
 * `build/` - Build directory
@@ -31,6 +37,9 @@ Structure
   * `build/sniffer.pro` - Project file
   * `build/bin/` - Executable directory
     * `build/bin/sniffer` - Executable file
+* `test/` - Test directory
+  * `Makefile` - Makefile
+  * `test/test.cpp` - Test file
 
 Build & Run
 -----
