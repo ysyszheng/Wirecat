@@ -19,9 +19,13 @@ bool Sniffer::findAllDevs() {
     exit(1);
   }
 
+  if (PRINT_DEV_NAME) {
+    printf("Available devices: \n");
+  }
+
   for (pcap_if_t *pdev = allDev_ptr; pdev; pdev = pdev->next) {
     if (PRINT_DEV_NAME) {
-      std::cout << "@: " << pdev->name << std::endl;
+      std::cout << "  @: " << pdev->name << std::endl;
     }
     allDev_vec.push_back(pdev);
   }
@@ -49,19 +53,18 @@ bool Sniffer::getDevInfo() {
 bool Sniffer::sniff() {
   char errbuf[PCAP_ERRBUF_SIZE];
   pcap_t *handle;
-  struct pcap_pkthdr header; /* The header that pcap gives us */
-  const u_char *packet;      /* The actual packet */
+  // struct pcap_pkthdr header; /* The header that pcap gives us */
+  // const u_char *packet;      /* The actual packet */
+  size_t num_packets = 10;
 
   handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
   if (handle == NULL) {
     ERROR_INFO(errbuf);
     return FALSE;
   }
-  /* Grab a packet */
-  packet = pcap_next(handle, &header);
-  /* Print its length */
-  printf("Jacked a packet with length of [%d]\n", header.len);
-  /* And close the session */
+
+  pcap_loop(handle, num_packets, get_packet, NULL);
+
   pcap_close(handle);
 
   return TRUE;

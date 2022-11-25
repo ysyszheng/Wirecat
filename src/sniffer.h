@@ -1,6 +1,7 @@
 #ifndef SNIFFER_H
 #define SNIFFER_H
 
+#include "capture.h"
 #include "utils/utils.h"
 
 class Sniffer {
@@ -19,5 +20,6 @@ public:
   bool getDevInfo();
   bool sniff(); // sniff after setDev
 };
+
 
 #endif // SNIFFER_H

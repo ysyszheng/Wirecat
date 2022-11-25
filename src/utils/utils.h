@@ -7,6 +7,9 @@
 #include <ctype.h>
 #include <errno.h>
 #include <iostream>
+#include <net/ethernet.h>
+#include <netinet/ether.h>
+#include <netinet/if_ether.h>
 #include <netinet/in.h>
 #include <pcap.h>
 #include <pcap/pcap.h>
@@ -21,6 +24,8 @@
 #define TRUE 1
 #define PRINT_DEV_NAME TRUE
 #define PRINT_DEV_INFO TRUE
+#define PRINT_ETHER_ADDR TRUE
+
 #define ERROR_INFO(msg)                                                        \
   std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << __FUNCTION__      \
             << "(): " << msg << std::endl;
