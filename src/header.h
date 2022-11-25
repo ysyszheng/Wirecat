@@ -16,6 +16,10 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
+#define ETHER_TYPE_IPV4 0x0800
+#define ETHER_TYPE_ARP 0x0806
+#define ETHER_TYPE_IPV6 0x86DD
+
 /* ethernet headers are always exactly 14 bytes */
 #define SIZE_ETHERNET 14
 
