@@ -22,7 +22,7 @@ Structure
   * `src/utils/` - Utility functions
   * `src/utils/utils.h` - Utility functions header
   * `src/utils/utils.cpp` - Utility functions implementation
-  * `src/hdr.h` - Package header information
+  * `src/utils/hdr.h` - Package header information
   * `src/main.cpp` - Main function
   * `src/mainwindow.cpp` - Main window
   * `src/mainwindow.h` - Main window header
