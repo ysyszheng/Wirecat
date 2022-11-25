@@ -2,12 +2,14 @@
 #include "../src/utils/utils.h"
 
 int main(int argc, char **argv) {
-  char *devName = NULL;
+  const char *devName;
+  std::string devNameStr;
   Sniffer sniffer;
   sniffer.findAllDevs();
 
   std::cout << "Input Devices: " << std::endl;
-  scanf("%s", devName);
+  std::cin >> devNameStr;
+  devName = devNameStr.c_str();
 
   sniffer.getDevName(devName);
   sniffer.getDevInfo();
