@@ -59,6 +59,53 @@ $ chmod +x ./sniffer
 $ ./sniffer
 ```
 
+Test
+-----
+
+Test sniffer in terminal: 
+
+```bash
+$ cd test
+# make clean if necessary
+$ make
+$ sudo ./test
+```
+
+The output should be like this: 
+
+```bash
+Available devices: 
+  @: eth0
+  @: any
+  @: lo
+  @: dummy0
+  @: tunl0
+  @: sit0
+  @: bluetooth-monitor
+  @: nflog
+  @: nfqueue
+  @: dbus-system
+  @: dbus-session
+  @: bond0
+Input Devices: 
+eth0 # your inputs
+NET: 0.224.30.172
+
+Packet number 1:
+  Src Host Ethernet Address: 0:15:5d:bc:b1:16
+  Dst Host Ethernet Address: 0:15:5d:e1:b:30
+  Ethernet Type: IPv4
+    Src Host IPv4 Address: 172.30.231.192
+    Dst Host IPv4 Address: 172.30.224.1
+    Protocol: UDP
+      Src port: 40845
+      Dst port: 53
+Payload (33 bytes):
+00000  fb 6f 01 00 00 01 00 00  00 00 00 00 03 61 70 69  .o......  .....api
+00010  07 74 61 62 6e 69 6e 65  03 63 6f 6d 00 00 01 00  .tabnine  .com....
+00020  01                                                .                 
+```
+
 TODO
 -----
 * [x] GUI framework
