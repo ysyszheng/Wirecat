@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "../header.h"
+#include "hdr.h"
 #include <arpa/inet.h>
 #include <cstdio>
 #include <ctype.h>
@@ -22,9 +22,13 @@
 
 #define FALSE 0
 #define TRUE 1
+
 #define PRINT_DEV_NAME TRUE
 #define PRINT_DEV_INFO TRUE
+#define PRINT_PACKAGE_NUM TRUE
 #define PRINT_ETHER_ADDR TRUE
+#define PRINT_UNKNOW_ETHER_TYPE TRUE
+#define PRINT_UNKNOW_IP_PROTO TRUE
 
 #define ERROR_INFO(msg)                                                        \
   std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << __FUNCTION__      \

@@ -3,7 +3,7 @@
 void print_payload(const u_char *payload, size_t payload_len) {
   size_t offset = 0;
   size_t cnt = 0;
-  char str[17];
+  u_char str[17];
   while (offset < payload_len) {
     printf("%05zx  ", offset);
     while (cnt < payload_len && cnt - offset < 16) {
@@ -25,10 +25,10 @@ void print_payload(const u_char *payload, size_t payload_len) {
     }
     for (size_t i = 0; i < 16; i++) {
       if (i < cnt - offset) {
-        if (str[i] == 0) {
-          printf(".");
-        } else {
+        if (isprint(str[i])) {
           printf("%c", str[i]);
+        } else {
+          printf(".");
         }
       } else {
         printf(" ");

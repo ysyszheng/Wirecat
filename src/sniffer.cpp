@@ -45,7 +45,8 @@ bool Sniffer::getDevInfo() {
   }
 
   if (PRINT_DEV_INFO) {
-    std::cout << "NET: " << net << " mask: " << mask << std::endl;
+    printf("NET: %d.%d.%d.%d\n", (net >> 24) & 0xff, (net >> 16) & 0xff,
+     (net >> 8) & 0xff, (net)&0xff);
   }
   return TRUE;
 }
@@ -53,11 +54,9 @@ bool Sniffer::getDevInfo() {
 bool Sniffer::sniff() {
   char errbuf[PCAP_ERRBUF_SIZE];
   pcap_t *handle;
-  // struct pcap_pkthdr header; /* The header that pcap gives us */
-  // const u_char *packet;      /* The actual packet */
-  size_t num_packets = 10;
+  int num_packets = -1;
 
-  handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
+  handle = pcap_open_live(dev, BUFSIZ, -1, 1000, errbuf);
   if (handle == NULL) {
     ERROR_INFO(errbuf);
     return FALSE;

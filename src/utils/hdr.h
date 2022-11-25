@@ -2,8 +2,8 @@
  * The part of TCP and IPv4 packet header refers to
  * https://www.tcpdump.org/other/sniffex.c
  */
-#ifndef HEADER_H
-#define HEADER_H
+#ifndef HDR_H
+#define HDR_H
 
 #include <arpa/inet.h>
 #include <ctype.h>
@@ -16,10 +16,10 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-/* ethernet headers are always exactly 14 bytes */
 #define SIZE_ETHERNET 14
+#define SIZE_ARP 28
+#define SIZE_IPV4 32
 
-/* Ethernet addresses are 6 bytes */
 #define ETHER_ADDR_LEN 6
 
 /* Ethernet header */
@@ -103,10 +103,12 @@ typedef struct {
 
 /* IGMP header */
 typedef struct {
-  u_int version : 4; /* version, 4 bits */
-  u_int type : 4;    /* type, 4 bits */
-  uint8_t unused;    /* Unused part, 1 byte */
-  u_short check_sum; /* check sum, 2 bytes */
+  uint8_t type;
+  uint8_t code;
+  uint16_t checksum;
+  uint32_t id;
+  uint32_t group_addr;
+  uint32_t access_key;
 } igmp_header;
 
 /* ARP header */
@@ -137,4 +139,4 @@ typedef struct {
   void *apph;            /* Application layer packet header */
 } data_packet;
 
-#endif // HEADER_H
+#endif // HDR_H
