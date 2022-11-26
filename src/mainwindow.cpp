@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "listview.h"
 #include <QAction>
 #include <QDebug>
 #include <QMenu>
@@ -7,8 +8,11 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
+  
   ui->setupUi(this);
   setWindowTitle(tr("Sniffer X"));
+
+  view = new ListView();
 
   /* 添加菜单栏 */
   QMenuBar *mBar =

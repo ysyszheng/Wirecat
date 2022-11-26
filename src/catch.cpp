@@ -2,12 +2,14 @@
 
 void get_packet(u_char *args, const struct pcap_pkthdr *header,
                 const u_char *packet) {
+  
 
   static size_t cnt = 1; /* packet counter */
   const ethernet_header *ethernet;
 
   if (PRINT_PACKAGE_NUM) {
     printf("\nPacket number %zu:\n", cnt);
+
   }
   cnt++;
 
@@ -18,7 +20,8 @@ void get_packet(u_char *args, const struct pcap_pkthdr *header,
            ether_ntoa((const struct ether_addr *)&ethernet->ether_shost));
     printf("  Dst Host MAC Address: %s\n",
            ether_ntoa((const struct ether_addr *)&ethernet->ether_dhost));
-  }
+  } 
+  
 
   /***** handle ethernet *****/
   switch (ntohs(ethernet->ether_type)) {
