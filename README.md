@@ -135,6 +135,7 @@ TODO
 * [ ] Save packets (Save packets to readable file)
 * [ ] File reassembly (Reassemble files from TCP packets)
 * [ ] Interact in GUI (Show packets info in GUI)
+* [ ] Beautify UI (QStyle class may be helpful)
 
 Reference
 -----
