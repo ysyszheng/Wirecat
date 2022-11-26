@@ -45,8 +45,11 @@ bool Sniffer::getDevInfo() {
   }
 
   if (PRINT_DEV_INFO) {
-    printf("NET: %d.%d.%d.%d\n", (net >> 24) & 0xff, (net >> 16) & 0xff,
-     (net >> 8) & 0xff, (net)&0xff);
+    printf("Device Info:\n");
+    printf("NET: %d.%d.%d.%d\tmask: %d.%d.%d.%d\n", (net >> 24) & 0xff,
+           (net >> 16) & 0xff, (net >> 8) & 0xff, (net)&0xff,
+           (mask >> 24) & 0xff, (mask >> 16) & 0xff, (mask >> 8) & 0xff,
+           mask & 0xff);
   }
   return TRUE;
 }

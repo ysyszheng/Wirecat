@@ -14,9 +14,9 @@ void get_packet(u_char *args, const struct pcap_pkthdr *header,
   ethernet = (ethernet_header *)(packet);
 
   if (PRINT_ETHER_ADDR) {
-    printf("  Src Host Ethernet Address: %s\n",
+    printf("  Src Host MAC Address: %s\n",
            ether_ntoa((const struct ether_addr *)&ethernet->ether_shost));
-    printf("  Dst Host Ethernet Address: %s\n",
+    printf("  Dst Host MAC Address: %s\n",
            ether_ntoa((const struct ether_addr *)&ethernet->ether_dhost));
   }
 
@@ -127,12 +127,12 @@ void handle_arp(const u_char *packet) {
   size_arp = 28; // TODO
 
   /* print source and destination MAC & IP addresses */
-  printf("    Src MAC address: %x:%x:%x:%x:%x:%x\n", arp->src_mac[0],
+  printf("    Src Host MAC address: %x:%x:%x:%x:%x:%x\n", arp->src_mac[0],
          arp->src_mac[1], arp->src_mac[2], arp->src_mac[3], arp->src_mac[4],
          arp->src_mac[5]);
   printf("    Src Host IPv4 Address: %d.%d.%d.%d\n", arp->src_ip[0],
          arp->src_ip[1], arp->src_ip[2], arp->src_ip[3]);
-  printf("    Dst MAC address: %x:%x:%x:%x:%x:%x\n", arp->dest_mac[0],
+  printf("    Dst Host MAC address: %x:%x:%x:%x:%x:%x\n", arp->dest_mac[0],
          arp->dest_mac[1], arp->dest_mac[2], arp->dest_mac[3], arp->dest_mac[4],
          arp->dest_mac[5]);
   printf("    Dst Host IPv4 Address: %d.%d.%d.%d\n", arp->dest_ip[0],

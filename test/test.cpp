@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
   Sniffer sniffer;
   sniffer.findAllDevs();
 
-  std::cout << "Input Devices: " << std::endl;
+  std::cout << "Input Devices: ";
   std::cin >> devNameStr;
   devName = devNameStr.c_str();
 
