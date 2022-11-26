@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1191</width>
-    <height>846</height>
+    <width>1319</width>
+    <height>963</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,60 +17,12 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="stopped">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>140</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-      <pointsize>15</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(0, 0, 0);</string>
-    </property>
-    <property name="text">
-     <string>Packet display list</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>490</y>
-      <width>171</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-      <pointsize>15</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(0, 0, 0);</string>
-    </property>
-    <property name="text">
-     <string>Packet details</string>
-    </property>
-   </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>0</y>
-      <width>701</width>
+      <y>40</y>
+      <width>1211</width>
       <height>41</height>
      </rect>
     </property>
@@ -102,279 +54,278 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QTableView" name="sim_packet_info">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>40</y>
-      <width>701</width>
-      <height>41</height>
+      <y>160</y>
+      <width>1211</width>
+      <height>351</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="input_rule">
-       <property name="font">
-        <font>
-         <pointsize>15</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(0, 0, 0);</string>
-       </property>
-       <property name="text">
-        <string>Input the filtering rule     </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="fliter_rule">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(222, 221, 218);</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </widget>
-   <widget class="QTableWidget" name="packet_info">
+   <widget class="QTreeView" name="treeView">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>180</y>
-      <width>701</width>
+      <y>510</y>
+      <width>271</width>
       <height>301</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+   </widget>
+   <widget class="QTextBrowser" name="load_content">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>510</y>
+      <width>941</width>
+      <height>301</height>
+     </rect>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="textBrowser">
+   <widget class="QPushButton" name="Strat">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>530</y>
-      <width>701</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="start">
-    <property name="geometry">
-     <rect>
-      <x>860</x>
-      <y>180</y>
-      <width>121</width>
-      <height>61</height>
+      <y>0</y>
+      <width>91</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>15</pointsize>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(154, 153, 150);</string>
+background-color: rgb(46, 194, 126);</string>
     </property>
     <property name="text">
      <string>Start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="stop">
+   <widget class="QPushButton" name="Stop">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>290</y>
-      <width>121</width>
-      <height>61</height>
+      <x>180</x>
+      <y>0</y>
+      <width>91</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>15</pointsize>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(154, 153, 150);</string>
+background-color: rgb(192, 28, 40);</string>
     </property>
     <property name="text">
      <string>Stop</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="IP_restruct">
+   <widget class="QPushButton" name="IP_restr">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>410</y>
-      <width>121</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(154, 153, 150);</string>
-    </property>
-    <property name="text">
-     <string>IP Restruct</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="TCP_restrcut">
-    <property name="geometry">
-     <rect>
-      <x>850</x>
-      <y>530</y>
-      <width>141</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(154, 153, 150);</string>
-    </property>
-    <property name="text">
-     <string>TCP Restruct</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>860</x>
-      <y>90</y>
-      <width>121</width>
+      <x>310</x>
+      <y>0</y>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>15</pointsize>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(154, 153, 150);</string>
+</string>
     </property>
     <property name="text">
-     <string>Search</string>
+     <string>IP restruct</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Exit">
+   <widget class="QPushButton" name="TCP_restr">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>650</y>
-      <width>121</width>
-      <height>61</height>
+      <x>480</x>
+      <y>0</y>
+      <width>151</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>15</pointsize>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(154, 153, 150);</string>
+</string>
+    </property>
+    <property name="text">
+     <string>TCP restruct</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exit">
+    <property name="geometry">
+     <rect>
+      <x>1150</x>
+      <y>0</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(252, 255, 0);</string>
     </property>
     <property name="text">
      <string>Exit</string>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>90</y>
-      <width>701</width>
-      <height>32</height>
+      <y>80</y>
+      <width>1211</width>
+      <height>41</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="label_2">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="input_rule">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);</string>
+         </property>
+         <property name="text">
+          <string>Input the filtering rule     </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="fliter_rule">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(222, 221, 218);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
        <property name="font">
         <font>
-         <pointsize>15</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(0, 0, 0);</string>
+        <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(154, 153, 150);</string>
        </property>
        <property name="text">
-        <string>Input the search criteria  </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(222, 221, 218);</string>
+        <string>Filter</string>
        </property>
       </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>50</y>
-      <width>121</width>
-      <height>31</height>
+      <x>50</x>
+      <y>120</y>
+      <width>1211</width>
+      <height>41</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(0, 0, 0);
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);</string>
+         </property>
+         <property name="text">
+          <string>Input the search criteria  </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(222, 221, 218);</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(154, 153, 150);</string>
-    </property>
-    <property name="text">
-     <string>Filter</string>
-    </property>
+       </property>
+       <property name="text">
+        <string>Search</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
-   <zorder>stopped</zorder>
-   <zorder>label</zorder>
-   <zorder>packet_info</zorder>
-   <zorder>textBrowser</zorder>
-   <zorder>start</zorder>
-   <zorder>stop</zorder>
-   <zorder>IP_restruct</zorder>
-   <zorder>TCP_restrcut</zorder>
    <zorder>pushButton_2</zorder>
    <zorder>pushButton</zorder>
-   <zorder>Exit</zorder>
+   <zorder>sim_packet_info</zorder>
+   <zorder>treeView</zorder>
+   <zorder>load_content</zorder>
+   <zorder>Strat</zorder>
+   <zorder>Stop</zorder>
+   <zorder>IP_restr</zorder>
+   <zorder>TCP_restr</zorder>
+   <zorder>exit</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1191</width>
+     <width>1319</width>
      <height>28</height>
     </rect>
    </property>
