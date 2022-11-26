@@ -70,21 +70,26 @@ void handle_ipv4(const u_char *packet) {
     printf("    Protocol: TCP\n");
     handle_tcp(packet, size_ip, ntohs(ipv4->ip_len));
     break;
+    /***** UDP *****/
   case IPPROTO_UDP:
     printf("    Protocol: UDP\n");
     handle_udp(packet, size_ip, ntohs(ipv4->ip_len));
     break;
+    /***** ICMP *****/
   case IPPROTO_ICMP:
     printf("    Protocol: ICMP\n");
     handle_icmp(packet, size_ip, ntohs(ipv4->ip_len));
     break;
+    /***** IGMP *****/
   case IPPROTO_IGMP:
     printf("    Protocol: IGMP\n");
     handle_tcp(packet, size_ip, ntohs(ipv4->ip_len));
     break;
+    /***** IP *****/
   case IPPROTO_IP:
     printf("    Protocol: IP\n");
     break;
+    /***** Other *****/
   default:
     if (PRINT_UNKNOW_IP_PROTO) {
       printf("    Unknown Protocol: %d\n", ipv4->ip_p);
@@ -125,7 +130,7 @@ void handle_arp(const u_char *packet) {
   printf("    Src MAC address: %x:%x:%x:%x:%x:%x\n", arp->src_mac[0],
          arp->src_mac[1], arp->src_mac[2], arp->src_mac[3], arp->src_mac[4],
          arp->src_mac[5]);
-  printf("    Src Host IPv64 Address: %d.%d.%d.%d\n", arp->src_ip[0],
+  printf("    Src Host IPv4 Address: %d.%d.%d.%d\n", arp->src_ip[0],
          arp->src_ip[1], arp->src_ip[2], arp->src_ip[3]);
   printf("    Dst MAC address: %x:%x:%x:%x:%x:%x\n", arp->dest_mac[0],
          arp->dest_mac[1], arp->dest_mac[2], arp->dest_mac[3], arp->dest_mac[4],
