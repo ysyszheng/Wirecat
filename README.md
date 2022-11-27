@@ -123,6 +123,16 @@ Payload (175 bytes):
 000a0  31 30 37 20 57 69 6e 64  6f 77 73 0d 0a 0d 0a     107 Wind  ows....
 ```
 
+Print to log file: 
+
+```bash
+$ cd test
+# make clean if necessary
+$ make
+$ echo "eth0" > test.in # change "eth0" to your device
+$ sudo ./test < test.in > test.log
+```
+
 TODO
 -----
 * [x] GUI framework
