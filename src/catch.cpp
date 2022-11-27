@@ -87,7 +87,7 @@ void handle_ipv4(const u_char *packet) {
     break;
     /***** IP *****/
   case IPPROTO_IP:
-    printf("    Protocol: IP\n");
+    printf("    Protocol: IP (Dummy protocol for TCP)\n");
     break;
     /***** Other *****/
   default:
@@ -140,12 +140,13 @@ void handle_ipv6(const u_char *packet) {
     break;
     /***** IP *****/
   case IPPROTO_IP:
-    printf("    Protocol: IP\n");
-    if (ipv6->payload_len != 0) {
-      printf("Payload (%hu bytes):\n", ipv6->payload_len);
-      print_payload((u_char *)(packet + SIZE_ETHERNET + size_ipv6),
-                    ipv6->payload_len);
-    }
+    printf("    Protocol: IP (Dummy protocol for TCP)\n");
+    // handle_tcp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    // if (ipv6->payload_len != 0) {
+    //   printf("Payload (%hu bytes):\n", ipv6->payload_len);
+    //   print_payload((u_char *)(packet + SIZE_ETHERNET + size_ipv6),
+    //                 ipv6->payload_len);
+    // }
     break;
     /***** Other *****/
   default:
