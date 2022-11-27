@@ -48,13 +48,26 @@ typedef struct {
 #define IPv4_HL(ip) (((ip)->ip_vhl) & 0x0f)
 #define IPv4_V(ip) (((ip)->ip_vhl) >> 4)
 
+/* ARP header */
+typedef struct {
+  uint16_t hard_type;   /* hardware type, 2 bytes */
+  uint16_t pro_type;    /* protocal type, 2 bytes */
+  u_char hard_adr_len; /* hardware address len, 1 byte */
+  u_char pro_adr_len;  /* protocal address len, 1 byte */
+  u_short opcode; /* operation type, 2 bytes,1 for request, 2 for response */
+  u_char src_mac[6]; /* MAC for source, 6 bytes */
+  u_char src_ip[4];  /* IP for source, 4 bytes */
+  u_char dest_mac[6]; /* MAC for dest, 6 bytes */
+  u_char dest_ip[4];  /* IP for dest, 4 bytes */
+} arp_header;
+
 /* IPv6 header */
 typedef struct {
   u_int version : 4;    /* version, 4 bits */
   uint8_t flow_type;    /* flow type, 1 byte */
   u_int flow_id : 20;   /* flow id, 20 bits*/
-  uint16_t len_load;    /* length of load， 2 bytes*/
-  uint8_t next_head;    /* next head，1 byte */
+  uint16_t payload_len;    /* length of load， 2 bytes*/
+  uint8_t next_header;    /* next head，1 byte */
   uint8_t hop_limit;    /* hop limit，1 byte */
   u_short src_addr[8];  /* source address，16 bytes */
   u_short dest_addr[8]; /* dest address，16 bytes */
@@ -110,19 +123,6 @@ typedef struct {
   uint32_t group_addr;
   uint32_t access_key;
 } igmp_header;
-
-/* ARP header */
-typedef struct {
-  u_short hard_type;   /* hardware type, 2 bytes */
-  u_short pro_type;    /* protocal type, 2 bytes */
-  u_char hard_adr_len; /* hardware address len, 1 byte */
-  u_char pro_adr_len;  /* protocal address len, 1 byte */
-  u_short oper_type; /* operation type, 2 bytes,1 for request, 2 for response */
-  u_char src_mac[6]; /* MAC for source, 6 bytes */
-  u_char src_ip[4];  /* IP for source, 4 bytes */
-  u_char dest_mac[6]; /* MAC for dest, 6 bytes */
-  u_char dest_ip[4];  /* IP for dest, 4 bytes */
-} arp_header;
 
 /* data_packet */
 typedef struct {

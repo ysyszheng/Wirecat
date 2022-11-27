@@ -2,14 +2,12 @@
 
 void get_packet(u_char *args, const struct pcap_pkthdr *header,
                 const u_char *packet) {
-  
 
   static size_t cnt = 1; /* packet counter */
   const ethernet_header *ethernet;
 
   if (PRINT_PACKAGE_NUM) {
     printf("\nPacket number %zu:\n", cnt);
-
   }
   cnt++;
 
@@ -20,8 +18,7 @@ void get_packet(u_char *args, const struct pcap_pkthdr *header,
            ether_ntoa((const struct ether_addr *)&ethernet->ether_shost));
     printf("  Dst Host MAC Address: %s\n",
            ether_ntoa((const struct ether_addr *)&ethernet->ether_dhost));
-  } 
-  
+  }
 
   /***** handle ethernet *****/
   switch (ntohs(ethernet->ether_type)) {
@@ -86,7 +83,7 @@ void handle_ipv4(const u_char *packet) {
     /***** IGMP *****/
   case IPPROTO_IGMP:
     printf("    Protocol: IGMP\n");
-    handle_tcp(packet, size_ip, ntohs(ipv4->ip_len));
+    handle_igmp(packet, size_ip, ntohs(ipv4->ip_len));
     break;
     /***** IP *****/
   case IPPROTO_IP:
@@ -119,27 +116,82 @@ void handle_ipv6(const u_char *packet) {
          ipv6->dest_addr[3], ipv6->dest_addr[4], ipv6->dest_addr[5],
          ipv6->dest_addr[6], ipv6->dest_addr[7]);
 
+  /* determine protocol */
+  switch (ipv6->next_header) {
+  case IPPROTO_TCP:
+    /***** TCP *****/
+    printf("    Protocol: TCP\n");
+    handle_tcp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    break;
+    /***** UDP *****/
+  case IPPROTO_UDP:
+    printf("    Protocol: UDP\n");
+    handle_udp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    break;
+    /***** ICMP *****/
+  case IPPROTO_ICMP:
+    printf("    Protocol: ICMP\n");
+    handle_icmp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    break;
+    /***** IGMP *****/
+  case IPPROTO_IGMP:
+    printf("    Protocol: IGMP\n");
+    handle_igmp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    break;
+    /***** IP *****/
+  case IPPROTO_IP:
+    printf("    Protocol: IP\n");
+    if (ipv6->payload_len != 0) {
+      printf("Payload (%hu bytes):\n", ipv6->payload_len);
+      print_payload((u_char *)(packet + SIZE_ETHERNET + size_ipv6),
+                    ipv6->payload_len);
+    }
+    break;
+    /***** Other *****/
+  default:
+    if (PRINT_UNKNOW_IP_PROTO) {
+      printf("    Unknown Protocol: %d\n", ipv6->next_header);
+    }
+    break;
+  }
+
   return;
 }
 
 void handle_arp(const u_char *packet) {
   const arp_header *arp;
-  size_t size_arp;
+  // size_t size_arp;
 
-  arp = (const arp_header *)(packet + SIZE_ETHERNET);
-  size_arp = 28; // TODO
+  arp = (arp_header *)(packet + SIZE_ETHERNET);
+  // size_arp = 28; // TODO
 
-  /* print source and destination MAC & IP addresses */
-  printf("    Src Host MAC address: %x:%x:%x:%x:%x:%x\n", arp->src_mac[0],
-         arp->src_mac[1], arp->src_mac[2], arp->src_mac[3], arp->src_mac[4],
-         arp->src_mac[5]);
-  printf("    Src Host IPv4 Address: %d.%d.%d.%d\n", arp->src_ip[0],
-         arp->src_ip[1], arp->src_ip[2], arp->src_ip[3]);
-  printf("    Dst Host MAC address: %x:%x:%x:%x:%x:%x\n", arp->dest_mac[0],
-         arp->dest_mac[1], arp->dest_mac[2], arp->dest_mac[3], arp->dest_mac[4],
-         arp->dest_mac[5]);
-  printf("    Dst Host IPv4 Address: %d.%d.%d.%d\n", arp->dest_ip[0],
-         arp->dest_ip[1], arp->dest_ip[2], arp->dest_ip[3]);
+  (arp->opcode == 1) ? printf("    Opcode: ARP Request\n")
+                     : printf("    Opcode: ARP Reply\n");
+
+  /* determine protocol */
+  switch (ntohs(arp->pro_type)) {
+  case ETHERTYPE_IP:
+    /***** IPv4 *****/
+    printf("    Protocol: IPv4\n");
+    /* print source and destination MAC & IP addresses */
+    printf("      Src Host MAC address: %x:%x:%x:%x:%x:%x\n", arp->src_mac[0],
+           arp->src_mac[1], arp->src_mac[2], arp->src_mac[3], arp->src_mac[4],
+           arp->src_mac[5]);
+    printf("      Src Host IPv4 Address: %d.%d.%d.%d\n", arp->src_ip[0],
+           arp->src_ip[1], arp->src_ip[2], arp->src_ip[3]);
+    printf("      Dst Host MAC address: %x:%x:%x:%x:%x:%x\n", arp->dest_mac[0],
+           arp->dest_mac[1], arp->dest_mac[2], arp->dest_mac[3],
+           arp->dest_mac[4], arp->dest_mac[5]);
+    printf("      Dst Host IPv4 Address: %d.%d.%d.%d\n", arp->dest_ip[0],
+           arp->dest_ip[1], arp->dest_ip[2], arp->dest_ip[3]);
+    break;
+    /***** Other *****/
+  default:
+    if (PRINT_UNKNOW_IP_PROTO) {
+      printf("    Unknown Protocol: 0x%04x\n", ntohs(arp->pro_type));
+    }
+  }
+  return;
 }
 
 void handle_tcp(const u_char *packet, size_t hdr_len, size_t total_len) {

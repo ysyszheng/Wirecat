@@ -29,6 +29,7 @@
 #define PRINT_ETHER_ADDR TRUE
 #define PRINT_UNKNOW_ETHER_TYPE TRUE
 #define PRINT_UNKNOW_IP_PROTO TRUE
+#define PRINT_UNKNOW_ARP_PROTO TRUE
 
 #define ERROR_INFO(msg)                                                        \
   std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << __FUNCTION__      \
