@@ -121,32 +121,31 @@ void handle_ipv6(const u_char *packet) {
   case IPPROTO_TCP:
     /***** TCP *****/
     printf("    Protocol: TCP\n");
-    handle_tcp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    handle_tcp(packet, size_ipv6, ntohs(ipv6->payload_len) + size_ipv6);
     break;
     /***** UDP *****/
   case IPPROTO_UDP:
     printf("    Protocol: UDP\n");
-    handle_udp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    handle_udp(packet, size_ipv6, ntohs(ipv6->payload_len) + size_ipv6);
     break;
     /***** ICMP *****/
   case IPPROTO_ICMP:
     printf("    Protocol: ICMP\n");
-    handle_icmp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    handle_icmp(packet, size_ipv6, ntohs(ipv6->payload_len) + size_ipv6);
     break;
     /***** IGMP *****/
   case IPPROTO_IGMP:
     printf("    Protocol: IGMP\n");
-    handle_igmp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
+    handle_igmp(packet, size_ipv6, ntohs(ipv6->payload_len) + size_ipv6);
     break;
     /***** IP *****/
   case IPPROTO_IP:
     printf("    Protocol: IP (Dummy protocol for TCP)\n");
-    // handle_tcp(packet, size_ipv6, ipv6->payload_len + size_ipv6);
-    // if (ipv6->payload_len != 0) {
-    //   printf("Payload (%hu bytes):\n", ipv6->payload_len);
-    //   print_payload((u_char *)(packet + SIZE_ETHERNET + size_ipv6),
-    //                 ipv6->payload_len);
-    // }
+    if (ntohs(ipv6->payload_len) != 0) {
+      printf("Payload (%hu bytes):\n", ntohs(ipv6->payload_len));
+      print_payload((u_char *)(packet + SIZE_ETHERNET + size_ipv6),
+                    ntohs(ipv6->payload_len));
+    }
     break;
     /***** Other *****/
   default:
