@@ -123,14 +123,15 @@ Payload (175 bytes):
 000a0  31 30 37 20 57 69 6e 64  6f 77 73 0d 0a 0d 0a     107 Wind  ows....
 ```
 
-Print to log file: 
+Save to log file: 
 
 ```bash
 $ cd test
+$ mkdir log
 # make clean if necessary
 $ make
 $ echo "eth0" > test.in # change "eth0" to your device
-$ sudo ./test < test.in > test.log
+$ sudo ./test < test.in > ./log/"$(date +"%Y-%m-%d_%H-%M-%S").log"
 ```
 
 TODO

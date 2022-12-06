@@ -1,4 +1,6 @@
+!example.log
 *.in
 *.log
 *.backup
 test
+log
