@@ -27,6 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+        ../src/devwindow.cpp \
         ../src/main.cpp \
         ../src/mainwindow.cpp \
         ../src/catch.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
         ../src/utils/utils.cpp
 
 HEADERS += \
+        ../src/devwindow.h \
         ../src/mainwindow.h \
         ../src/catch.h \
         ../src/sniffer.h \
@@ -41,4 +43,5 @@ HEADERS += \
         ../src/utils/hdr.h
 
 FORMS += \
+        ../ui/devwindow.ui \
         ../ui/mainwindow.ui
