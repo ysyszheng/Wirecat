@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-// #include "listview.h"
 #include "ui_mainwindow.h"
 #include <QAction>
 #include <QDebug>
@@ -9,10 +8,12 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
 
-  ui->setupUi(this);
   setWindowTitle(tr("Wirecat"));
 
-//   view = new ListView();
+  ui->setupUi(this);
+  sniffer = new Sniffer();
+  devwindow = new DevWindow(sniffer, this);
+
 
   QMenuBar *mBar = menuBar();
 

@@ -3,6 +3,7 @@
 Sniffer::Sniffer() {
   dev = NULL;
   allDev_ptr = NULL;
+  findAllDevs();
 }
 
 Sniffer::~Sniffer() {

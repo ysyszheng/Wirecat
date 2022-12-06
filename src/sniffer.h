@@ -5,7 +5,9 @@
 #include "utils/utils.h"
 
 class Sniffer {
-private:
+  friend class DevWindow;
+  
+protected:
   pcap_if_t *allDev_ptr;
   std::vector<pcap_if_t *> allDev_vec;
   const char *dev;  // device name
