@@ -29,13 +29,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         ../src/main.cpp \
         ../src/mainwindow.cpp \
-        ../src/listview.cpp \
-        ../src/sniffer.cpp
+        ../src/catch.cpp \
+        ../src/sniffer.cpp \
+        ../src/utils/utils.cpp
 
 HEADERS += \
         ../src/mainwindow.h \
-        ../src/listview.h \
-        ../src/sniffer.h
+        ../src/catch.h \
+        ../src/sniffer.h \
+        ../src/utils/utils.h \
+        ../src/utils/hdr.h
 
 FORMS += \
         ../ui/mainwindow.ui
