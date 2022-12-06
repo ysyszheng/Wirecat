@@ -1,12 +1,16 @@
 #ifndef DEVWINDOW_H
 #define DEVWINDOW_H
 
-#include "sniffer.h"
 #include "./utils/utils.h"
+#include "sniffer.h"
 #include "ui_devwindow.h"
-#include <QDialog>
-#include <QMainWindow>
 #include <QDebug>
+#include <QDialog>
+#include <QGroupBox>
+#include <QMainWindow>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QVBoxLayout>
 #include <cstdlib>
 
 class QDialog;
@@ -22,15 +26,15 @@ public:
   ~DevWindow();
 
 private slots:
-  // void on_choiceBox_activated(const QString &arg1);
-  void on_pushButton_clicked();
+  void pushButtonClicked();
+  void onToggled(bool checked);
 
 private:
   Ui::DevWindow *ui;
   Sniffer *sniffer;
-
-  void addDev();
-  // void showDevInfo();
+  QGroupBox *devChoice;
+  QRadioButton *selected;
+  QGroupBox *creatDevChoice();
 };
 
 #endif // DEVWINDOW_H

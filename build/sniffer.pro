@@ -43,5 +43,4 @@ HEADERS += \
         ../src/utils/hdr.h
 
 FORMS += \
-        ../ui/devwindow.ui \
         ../ui/mainwindow.ui

@@ -7,9 +7,6 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
-
-  setWindowTitle(tr("Wirecat"));
-
   ui->setupUi(this);
   sniffer = new Sniffer();
   devwindow = new DevWindow(sniffer, this);
@@ -33,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent)
   pRe->addSeparator();
   QAction *pFre = pRe->addAction("File Reassemble");
   connect(pFre, &QAction::triggered, [=]() { qDebug() << "File Reassemble"; });
+
+  setWindowTitle(tr("Wirecat"));
 }
 
 MainWindow::~MainWindow() { delete ui; }
