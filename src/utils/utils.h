@@ -23,13 +23,13 @@
 #define FALSE 0
 #define TRUE 1
 
-#define PRINT_DEV_NAME TRUE
-#define PRINT_DEV_INFO TRUE
-#define PRINT_PACKAGE_NUM TRUE
-#define PRINT_ETHER_ADDR TRUE
-#define PRINT_UNKNOW_ETHER_TYPE TRUE
-#define PRINT_UNKNOW_IP_PROTO TRUE
-#define PRINT_UNKNOW_ARP_PROTO TRUE
+#define PRINT_DEV_NAME FALSE
+#define PRINT_DEV_INFO FALSE
+#define PRINT_PACKAGE_NUM FALSE
+#define PRINT_ETHER_ADDR FALSE
+#define PRINT_UNKNOW_ETHER_TYPE FALSE
+#define PRINT_UNKNOW_IP_PROTO FALSE
+#define PRINT_UNKNOW_ARP_PROTO FALSE
 
 #define ERROR_INFO(msg)                                                        \
   std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << __FUNCTION__      \

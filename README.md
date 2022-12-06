@@ -154,3 +154,4 @@ Reference
 * [pcap tutorial](https://www.tcpdump.org/pcap.html)
 * [sniffex.c](https://www.tcpdump.org/other/sniffex.c)
 * [libpcap packet capture tutorial](http://yuba.stanford.edu/~casado/pcap/)
+* [Qt forward declaration problem](https://stackoverflow.com/questions/21113581/qt-invalid-use-of-incomplete-type-and-forward-declaration)

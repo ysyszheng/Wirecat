@@ -6,7 +6,7 @@
 
 class Sniffer {
   friend class DevWindow;
-  
+
 protected:
   pcap_if_t *allDev_ptr;
   std::vector<pcap_if_t *> allDev_vec;
@@ -22,6 +22,5 @@ public:
   bool getDevInfo();
   bool sniff(); // sniff after setDev
 };
-
 
 #endif // SNIFFER_H

@@ -1,23 +1,22 @@
 #include "devwindow.h"
 
-DevWindow::DevWindow(Sniffer *snifferObj,QWidget *parent):QDialog(parent), ui(new Ui::DevWindow)
-{
+DevWindow::DevWindow(Sniffer *snifferObj, QWidget *parent)
+    : QDialog(parent), ui(new Ui::DevWindow) {
   ui->setupUi(this);
-  sniffer=snifferObj;
+  sniffer = snifferObj;
   addDev();
 }
 
-DevWindow::~DevWindow(){
-  delete ui;
-}
+DevWindow::~DevWindow() { delete ui; }
 
-void DevWindow::addDev(){
-  ui->choiceBox->setEditable(true);
-  for(auto &i:sniffer->allDev_vec){
-    ui->choiceBox->insertItem(-1, i->name);
+void DevWindow::addDev() {
+  ui->devchoice->setEditable(true);
+  for (auto &i : sniffer->allDev_vec) {
+    ui->devchoice->insertItem(-1, i->name);
   }
 }
 
-void DevWindow::on_buttonBox_clicked(){
-  sniffer->dev = ui->choiceBox->currentText();
+void DevWindow::on_pushButton_clicked() {
+  sniffer->dev = ui->devchoice->currentText().toLocal8Bit().constData();
+  // std::cout << sniffer->dev << std::endl;
 }
