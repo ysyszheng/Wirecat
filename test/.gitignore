@@ -1,6 +1,5 @@
-!example.log
 *.in
 *.log
+!example.log
 *.backup
 test
-log
