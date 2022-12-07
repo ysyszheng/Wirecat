@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include "sniffer.h"
 #include "devwindow.h"
+#include "sniffer.h"
+#include <QMainWindow>
 
 namespace Ui {
 class MainWindow;
@@ -15,6 +15,9 @@ class MainWindow : public QMainWindow {
 public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
+
+private slots:
+  void showMainWnd();
 
 private:
   Ui::MainWindow *ui;

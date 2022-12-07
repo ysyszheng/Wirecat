@@ -1,21 +1,21 @@
 #include "devwindow.h"
 
-DevWindow::DevWindow(Sniffer *snifferObj, QWidget *parent)
-    : QDialog(parent), ui(new Ui::DevWindow) {
+DevWindow::DevWindow(Sniffer *snifferObj, QWidget *parent) : QDialog(parent) {
+  setWindowFlags(Qt::Tool);
   sniffer = snifferObj;
   QGridLayout *grid = new QGridLayout;
   QPushButton *PB = new QPushButton("Enjoy Sniff!");
-  connect(PB, SIGNAL(clicked()), this, SLOT(pushButtonClicked()));
+  connect(PB, SIGNAL(clicked()), this, SLOT(onClicked()));
   QGroupBox *devChoice = creatDevChoice();
   grid->addWidget(devChoice, 0, 0);
   grid->addWidget(PB, 1, 0);
   setLayout(grid);
 
   setWindowTitle(tr("Select Network Device"));
-  resize(480, 320);
+  resize(640, 480);
 }
 
-DevWindow::~DevWindow() { delete ui; }
+DevWindow::~DevWindow() {}
 
 QGroupBox *DevWindow::creatDevChoice() {
   QGroupBox *groupBox = new QGroupBox();
@@ -44,8 +44,9 @@ void DevWindow::onToggled(bool checked) {
   }
 }
 
-void DevWindow::pushButtonClicked() {
+void DevWindow::onClicked() {
   sniffer->dev = selected->text().toLocal8Bit().constData();
   std::cout << "@: " << sniffer->dev << std::endl;
+  emit subWndClosed();
   this->close();
 }

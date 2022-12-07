@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "devwindow.h"
 #include "ui_mainwindow.h"
 #include <QAction>
 #include <QDebug>
@@ -9,8 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   sniffer = new Sniffer();
-  devwindow = new DevWindow(sniffer, this);
+  DevWindow *devwindow = new DevWindow(sniffer, this);
   devwindow->show();
+  connect(devwindow, SIGNAL(subWndClosed()), this, SLOT(showMainWnd()));
 
   QMenuBar *mBar = menuBar();
 
@@ -35,3 +37,5 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::showMainWnd() { this->show(); }
