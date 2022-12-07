@@ -41,3 +41,12 @@ void print_payload(const u_char *payload, size_t payload_len) {
     printf("\n");
   }
 }
+
+const std::string currentDataTime() {
+  time_t now = time(NULL);
+  struct tm tstruct;
+  char buf[80];
+  tstruct = *localtime(&now);
+  strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tstruct);
+  return buf;
+}

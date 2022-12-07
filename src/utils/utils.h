@@ -2,8 +2,21 @@
 #define UTILS_H
 
 #include "hdr.h"
+#include <QAction>
+#include <QDebug>
+#include <QDialog>
+#include <QGroupBox>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QThread>
+#include <QVBoxLayout>
 #include <arpa/inet.h>
 #include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include <ctype.h>
 #include <errno.h>
 #include <iostream>
@@ -38,5 +51,7 @@
   std::cout << "(" << __FILE__ << ":" << __LINE__ << ")" << msg << std::endl;
 
 void print_payload(const u_char *payload, size_t payload_len);
+
+const std::string currentDataTime();
 
 #endif // UTILS_H

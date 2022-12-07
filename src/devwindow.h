@@ -3,15 +3,6 @@
 
 #include "./utils/utils.h"
 #include "sniffer.h"
-#include "ui_devwindow.h"
-#include <QDebug>
-#include <QDialog>
-#include <QGroupBox>
-#include <QMainWindow>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QVBoxLayout>
-#include <cstdlib>
 
 class DevWindow : public QDialog {
   Q_OBJECT

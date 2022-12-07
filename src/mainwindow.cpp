@@ -1,10 +1,4 @@
 #include "mainwindow.h"
-#include "devwindow.h"
-#include "ui_mainwindow.h"
-#include <QAction>
-#include <QDebug>
-#include <QMenu>
-#include <QMenuBar>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {

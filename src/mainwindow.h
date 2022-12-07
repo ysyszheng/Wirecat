@@ -3,7 +3,8 @@
 
 #include "devwindow.h"
 #include "sniffer.h"
-#include <QMainWindow>
+#include "ui_mainwindow.h"
+#include "utils/utils.h"
 
 namespace Ui {
 class MainWindow;

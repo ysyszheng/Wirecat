@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1319</width>
-    <height>963</height>
+    <height>919</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,41 +17,11 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTableView" name="packet_info">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>120</y>
-      <width>1211</width>
-      <height>331</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTreeView" name="hdr_details">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>450</y>
-      <width>1211</width>
-      <height>181</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="payload_details">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>630</y>
-      <width>1211</width>
-      <height>261</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>30</y>
+      <y>10</y>
       <width>1211</width>
       <height>41</height>
      </rect>
@@ -106,7 +76,7 @@ background-color: rgb(154, 153, 150);</string>
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>70</y>
+      <y>50</y>
       <width>1211</width>
       <height>41</height>
      </rect>
@@ -157,11 +127,36 @@ background-color: rgb(154, 153, 150);</string>
      </item>
     </layout>
    </widget>
-   <zorder>layoutWidget</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>packet_info</zorder>
-   <zorder>hdr_details</zorder>
-   <zorder>payload_details</zorder>
+   <widget class="QTableView" name="tableView">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>100</y>
+      <width>1211</width>
+      <height>261</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTreeView" name="treeView">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>360</y>
+      <width>1211</width>
+      <height>231</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowser">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>590</y>
+      <width>1211</width>
+      <height>261</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

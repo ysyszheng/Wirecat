@@ -27,6 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+        ../src/cthread.cpp \
         ../src/devwindow.cpp \
         ../src/main.cpp \
         ../src/mainwindow.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
         ../src/utils/utils.cpp
 
 HEADERS += \
+        ../src/cthread.h \
         ../src/devwindow.h \
         ../src/mainwindow.h \
         ../src/catch.h \

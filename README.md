@@ -150,10 +150,14 @@ TODO
 
 Reference
 -----
+Resources
 * [Getting Started with qmake](https://doc.qt.io/qt-6.2/qmake-tutorial.html)
 * [pcap tutorial](https://www.tcpdump.org/pcap.html)
 * [sniffex.c](https://www.tcpdump.org/other/sniffex.c)
 * [libpcap packet capture tutorial](http://yuba.stanford.edu/~casado/pcap/)
-* [Qt forward declaration problem](https://stackoverflow.com/questions/21113581/qt-invalid-use-of-incomplete-type-and-forward-declaration)
 * [Qt groupbox example](https://doc.qt.io/qt-5/qtwidgets-widgets-groupbox-example.html)
+
+Q&A
 * [QGroupBox find selected Radio Button](https://stackoverflow.com/questions/43106746/qgroupbox-find-selected-radio-button)
+* [Qt forward declaration problem](https://stackoverflow.com/questions/21113581/qt-invalid-use-of-incomplete-type-and-forward-declaration)
+* [Include Qt path in vscode-clangd](https://stackoverflow.com/questions/61206703/is-there-includepath-option-in-clangd#answer-69269142)

@@ -1,7 +1,3 @@
-/*
- * The part of TCP and IPv4 packet header refers to
- * https://www.tcpdump.org/other/sniffex.c
- */
 #ifndef HDR_H
 #define HDR_H
 
@@ -12,7 +8,7 @@
 #include <pcap.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 #include <sys/socket.h>
 #include <sys/types.h>
 
@@ -50,11 +46,11 @@ typedef struct {
 
 /* ARP header */
 typedef struct {
-  uint16_t hard_type;   /* hardware type, 2 bytes */
-  uint16_t pro_type;    /* protocal type, 2 bytes */
+  uint16_t hard_type;  /* hardware type, 2 bytes */
+  uint16_t pro_type;   /* protocal type, 2 bytes */
   u_char hard_adr_len; /* hardware address len, 1 byte */
   u_char pro_adr_len;  /* protocal address len, 1 byte */
-  u_short opcode; /* operation type, 2 bytes,1 for request, 2 for response */
+  u_short opcode;    /* operation type, 2 bytes,1 for request, 2 for response */
   u_char src_mac[6]; /* MAC for source, 6 bytes */
   u_char src_ip[4];  /* IP for source, 4 bytes */
   u_char dest_mac[6]; /* MAC for dest, 6 bytes */
@@ -66,8 +62,8 @@ typedef struct {
   u_int version : 4;    /* version, 4 bits */
   uint8_t flow_type;    /* flow type, 1 byte */
   u_int flow_id : 20;   /* flow id, 20 bits*/
-  uint16_t payload_len;    /* length of load， 2 bytes*/
-  uint8_t next_header;    /* next head，1 byte */
+  uint16_t payload_len; /* length of load， 2 bytes*/
+  uint8_t next_header;  /* next head，1 byte */
   uint8_t hop_limit;    /* hop limit，1 byte */
   u_short src_addr[8];  /* source address，16 bytes */
   u_short dest_addr[8]; /* dest address，16 bytes */
@@ -125,18 +121,28 @@ typedef struct {
 } igmp_header;
 
 /* data_packet */
+typedef enum { ARP, IPv4, IPv6, ICMP, IGMP } net_t;
+typedef enum { UDP, TCP } trs_t;
+
 typedef struct {
-  char type[8];          /* packet type */
-  int time[6];           /* time */
-  int len;               /* length */
-  ethernet_header *ethh; /* Ethernet header */
-  arp_header *arph;      /* ARP header */
-  ipv4_header *ip4h;     /* IPv4 header */
-  ipv6_header *ip6h;     /* IPv6 header */
-  icmp_header *icmph;    /* ICMP header */
-  udp_header *udph;      /* UDP header */
-  tcp_header *tcph;      /* TCP header */
-  void *apph;            /* Application layer packet header */
-} data_packet;
+  size_t no;
+  std::string time; /* time */
+  int len;          /* length */
+  net_t net_type;
+  trs_t trs_type;
+  ethernet_header *eth_hdr; /* Ethernet header */
+  union {
+    arp_header *arp_hdr;   /* ARP header */
+    ipv4_header *ipv4_hdr; /* IPv4 header */
+    ipv6_header *ipv6_hdr; /* IPv6 header */
+    icmp_header *icmp_hdr; /* ICMP header */
+    igmp_header *igmp_hdr; /* IGMP header */
+  } net_hdr;
+  union {
+    udp_header *udp_hdr; /* UDP header */
+    tcp_header *tcp_hdr; /* TCP header */
+  } trs_hdr;
+  u_char *payload; /* payload */
+} packet;
 
 #endif // HDR_H

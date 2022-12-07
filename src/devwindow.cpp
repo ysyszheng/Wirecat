@@ -46,7 +46,7 @@ void DevWindow::onToggled(bool checked) {
 
 void DevWindow::onClicked() {
   sniffer->dev = selected->text().toLocal8Bit().constData();
-  std::cout << "@: " << sniffer->dev << std::endl;
+  std::cout << "Select Network Device: " << sniffer->dev << "\n";
   emit subWndClosed();
   this->close();
 }
