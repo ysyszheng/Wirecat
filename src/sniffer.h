@@ -2,7 +2,9 @@
 #define SNIFFER_H
 
 #include "catch.h"
+#include "utils/hdr.h"
 #include "utils/utils.h"
+#include <pcap/pcap.h>
 
 class Sniffer : public QObject {
   Q_OBJECT
@@ -16,9 +18,10 @@ protected:
   std::vector<pcap_if_t *> allDev_vec;
   const char *dev; // device name
   pcap_t *handle;
-  bpf_u_int32 mask; // net mask
-  bpf_u_int32 net;  // IP address
-  flag_t status;    // status {start, stop, restart}
+  bpf_u_int32 mask;                        // net mask
+  bpf_u_int32 net;                         // IP address
+  flag_t status;                           // status {start, stop, restart}
+  static std::vector<packet_struct *> pkt; // packet
 
 public:
   Sniffer();
@@ -27,8 +30,15 @@ public:
   void getDevName(const char *devName);
   bool getDevInfo();
 
+private:
+  static void get_packet(u_char *args, const struct pcap_pkthdr *header,
+                         const u_char *packet);
+  static void handle_ipv4(const u_char *packet, packet_struct *pkt_p);
+  static void handle_arp(const u_char *packet, packet_struct *pkt_p);
+  static void handle_ipv6(const u_char *packet, packet_struct *pkt_p);
+
 public slots:
-  void sniff(); // sniff after setDev
+  void sniff();
 };
 
 #endif // SNIFFER_H

@@ -14,7 +14,9 @@
 
 #define SIZE_ETHERNET 14
 #define SIZE_ARP 28
-#define SIZE_IPV4 32
+#define SIZE_IPv6 40
+#define SIZE_ICMP 8
+#define SIZE_IGMP 80
 
 #define ETHER_ADDR_LEN 6
 
@@ -121,13 +123,13 @@ typedef struct {
 } igmp_header;
 
 /* data_packet */
-typedef enum { Unet, ARP, IPv4, IPv6, ICMP, IGMP } net_t;
-typedef enum { Utrs, UDP, TCP } trs_t;
+typedef enum { Unet, ARP, IPv4, IPv6 } net_t;
+typedef enum { Utrs, ICMP, IGMP, UDP, TCP } trs_t;
 
 typedef struct {
   size_t no;
   std::string time; /* time */
-  int len;          /* length */
+  long len;         /* length */
   net_t net_type;
   trs_t trs_type;
   ethernet_header *eth_hdr; /* Ethernet header */
@@ -135,14 +137,13 @@ typedef struct {
     arp_header *arp_hdr;   /* ARP header */
     ipv4_header *ipv4_hdr; /* IPv4 header */
     ipv6_header *ipv6_hdr; /* IPv6 header */
-    icmp_header *icmp_hdr; /* ICMP header */
-    igmp_header *igmp_hdr; /* IGMP header */
   } net_hdr;
   union {
-    udp_header *udp_hdr; /* UDP header */
-    tcp_header *tcp_hdr; /* TCP header */
+    icmp_header *icmp_hdr; /* ICMP header */
+    igmp_header *igmp_hdr; /* IGMP header */
+    udp_header *udp_hdr;   /* UDP header */
+    tcp_header *tcp_hdr;   /* TCP header */
   } trs_hdr;
-  u_char *payload; /* payload */
-} packet;
+} packet_struct;
 
 #endif // HDR_H
