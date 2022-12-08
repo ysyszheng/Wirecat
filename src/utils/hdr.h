@@ -121,8 +121,8 @@ typedef struct {
 } igmp_header;
 
 /* data_packet */
-typedef enum { ARP, IPv4, IPv6, ICMP, IGMP } net_t;
-typedef enum { UDP, TCP } trs_t;
+typedef enum { ARP, IPv4, IPv6} net_t;
+typedef enum { UDP, TCP, ICMP, IGMP } trs_t;
 
 typedef struct {
   size_t no;
@@ -135,14 +135,16 @@ typedef struct {
     arp_header *arp_hdr;   /* ARP header */
     ipv4_header *ipv4_hdr; /* IPv4 header */
     ipv6_header *ipv6_hdr; /* IPv6 header */
-    icmp_header *icmp_hdr; /* ICMP header */
-    igmp_header *igmp_hdr; /* IGMP header */
   } net_hdr;
   union {
     udp_header *udp_hdr; /* UDP header */
     tcp_header *tcp_hdr; /* TCP header */
+    icmp_header *icmp_hdr; /* ICMP header */
+    igmp_header *igmp_hdr; /* IGMP header */
   } trs_hdr;
   u_char *payload; /* payload */
-} packet;
+} packet_struct;
+
+
 
 #endif // HDR_H

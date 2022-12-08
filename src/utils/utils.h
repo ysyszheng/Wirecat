@@ -12,6 +12,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QStandardItemModel>
+#include <QString>
 #include <QTableView>
 #include <QTextBrowser>
 #include <QThread>
