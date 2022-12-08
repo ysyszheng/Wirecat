@@ -1,4 +1,8 @@
 #include "sniffer.h"
+#include "utils/hdr.h"
+#include <sys/types.h>
+
+std::vector<packet_struct *> Sniffer::pkt; // packet
 
 Sniffer::Sniffer() {
   dev = NULL;
@@ -73,7 +77,118 @@ void Sniffer::sniff() {
       LOG("Initiating...");
     }
   }
-  // pcap_loop(handle, num_packets, get_packet, NULL);
 
+  return;
+}
+
+void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
+                         const u_char *packet) {
+
+  static size_t cnt = 0;
+
+  packet_struct *pkt_p = new packet_struct;
+  pkt_p->len = SIZE_ETHERNET;
+  pkt_p->time = currentDataTime();
+  pkt_p->eth_hdr = (ethernet_header *)(packet);
+
+  switch (ntohs(pkt_p->eth_hdr->ether_type)) {
+  case ETHERTYPE_IP:
+    pkt_p->net_type = IPv4;
+    handle_ipv4(packet, pkt_p);
+    break;
+  case ETHERTYPE_ARP:
+    pkt_p->net_type = ARP;
+    handle_arp(packet, pkt_p);
+    break;
+  case ETHERTYPE_IPV6:
+    pkt_p->net_type = IPv6;
+    handle_ipv6(packet, pkt_p);
+    break;
+  default:
+    if (PRINT_UNKNOW_ETHER_TYPE) {
+      printf("  Unknown Ethernet Type: 0x%04x\n",
+             ntohs(pkt_p->eth_hdr->ether_type));
+    }
+    return;
+  }
+
+  if (pkt_p->net_type != Unet && pkt_p->trs_type != Utrs) { // Known types
+    cnt++;
+    pkt_p->no = cnt;
+    Sniffer::pkt.push_back(pkt_p);
+    // print_payload((u_char *)pkt_p->eth_hdr, pkt_p->len); // test in CLI
+    // TODO view display view->func(pkt_p) balabala...
+  }
+
+  return;
+}
+
+void Sniffer::handle_ipv4(const u_char *packet, packet_struct *pkt_p) {
+  pkt_p->net_hdr.ipv4_hdr = (ipv4_header *)(packet + SIZE_ETHERNET);
+  long size_ip = IPv4_HL(pkt_p->net_hdr.ipv4_hdr) * 4;
+  pkt_p->len += size_ip;
+
+  switch (pkt_p->net_hdr.ipv4_hdr->ip_p) {
+  case IPPROTO_TCP:
+    pkt_p->trs_type = TCP;
+    pkt_p->trs_hdr.tcp_hdr = (tcp_header *)(packet + pkt_p->len);
+    break;
+  case IPPROTO_UDP:
+    pkt_p->trs_type = UDP;
+    pkt_p->trs_hdr.udp_hdr = (udp_header *)(packet + pkt_p->len);
+    break;
+  case IPPROTO_ICMP:
+    pkt_p->trs_type = ICMP;
+    pkt_p->trs_hdr.icmp_hdr = (icmp_header *)(packet + pkt_p->len);
+    break;
+  case IPPROTO_IGMP:
+    pkt_p->trs_type = IGMP;
+    pkt_p->trs_hdr.igmp_hdr = (igmp_header *)(packet + pkt_p->len);
+    break;
+  default:
+    pkt_p->trs_type = Utrs;
+    break;
+  }
+
+  pkt_p->len -= size_ip; // sub size_ip, because ip_len include it
+  pkt_p->len += ntohs(pkt_p->net_hdr.ipv4_hdr->ip_len); // TODO
+
+  return;
+}
+
+void Sniffer::handle_ipv6(const u_char *packet, packet_struct *pkt_p) {
+  pkt_p->net_hdr.ipv6_hdr = (ipv6_header *)(packet + SIZE_ETHERNET);
+  pkt_p->len += SIZE_IPv6;
+
+  switch (pkt_p->net_hdr.ipv6_hdr->next_header) { // TODO
+  case IPPROTO_TCP:
+    pkt_p->trs_type = TCP;
+    pkt_p->trs_hdr.tcp_hdr = (tcp_header *)(packet + pkt_p->len);
+    break;
+  case IPPROTO_UDP:
+    pkt_p->trs_type = UDP;
+    pkt_p->trs_hdr.udp_hdr = (udp_header *)(packet + pkt_p->len);
+    break;
+  case IPPROTO_ICMP:
+    pkt_p->trs_type = ICMP;
+    pkt_p->trs_hdr.icmp_hdr = (icmp_header *)(packet + pkt_p->len);
+    break;
+  case IPPROTO_IGMP:
+    pkt_p->trs_type = IGMP;
+    pkt_p->trs_hdr.igmp_hdr = (igmp_header *)(packet + pkt_p->len);
+    break;
+  default:
+    pkt_p->trs_type = Utrs;
+    break;
+  }
+
+  pkt_p->len += ntohs(pkt_p->net_hdr.ipv6_hdr->payload_len); // TODO
+
+  return;
+}
+
+void Sniffer::handle_arp(const u_char *packet, packet_struct *pkt_p) {
+  pkt_p->net_hdr.arp_hdr = (arp_header *)(packet + SIZE_ETHERNET);
+  pkt_p->len += SIZE_ARP;
   return;
 }
