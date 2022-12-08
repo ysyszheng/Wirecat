@@ -6,7 +6,13 @@
 class View {
 
 private:
+    QStandardItemModel *treeModel;
+    QTreeView *treeView;
+    QTextBrowser *textBrowser;
 
+    void reload();
+    void setTreeViewByIndex(packet_struct packet);
+    void setHexViewByIndex(packet_struct packet);
 public:
     QTableView *view;
     View(QTableView *view);
@@ -20,6 +26,13 @@ public:
     void getOrderNumber(QModelIndex &index, QString &strNumber);
 
     void clearData();
+
+    MultiView(QTreeView *tree, QTextBrowser* hex, QTableView *list):ListView(list),treeView(tree),textBrowser(hex){
+        reload();
+    }
+    ~MultiView();
+    void packetInfoByIndex(QModelIndex index);   //call to update treeView $ hexView; responding signal list_item_clicked
+    QList<QStandardItem*> returnTreeItems();
 
 protected:
     friend class MainWindow;
