@@ -141,11 +141,11 @@ void handle_ipv6(const u_char *packet) {
     /***** IP *****/
   case IPPROTO_IP:
     printf("    Protocol: IP (Dummy protocol for TCP)\n");
-    if (ntohs(ipv6->payload_len) != 0) {
-      printf("Payload (%hu bytes):\n", ntohs(ipv6->payload_len));
-      print_payload((u_char *)(packet + SIZE_ETHERNET + size_ipv6),
-                    ntohs(ipv6->payload_len));
-    }
+    // if (ntohs(ipv6->payload_len) != 0) {
+    //   printf("Payload (%hu bytes):\n", ntohs(ipv6->payload_len));
+    //   print_payload((u_char *)(packet + SIZE_ETHERNET + size_ipv6),
+    //                 ntohs(ipv6->payload_len));
+    // }
     break;
     /***** Other *****/
   default:

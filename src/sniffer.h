@@ -5,7 +5,9 @@
 #include "utils/utils.h"
 
 class Sniffer {
+  friend class MainWindow;
   friend class DevWindow;
+  friend class CThread;
 
 protected:
   pcap_if_t *allDev_ptr;

@@ -11,7 +11,11 @@
 #include <QMenuBar>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QStandardItemModel>
+#include <QTableView>
+#include <QTextBrowser>
 #include <QThread>
+#include <QTreeView>
 #include <QVBoxLayout>
 #include <arpa/inet.h>
 #include <cstdio>
@@ -31,7 +35,9 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <vector>
+
 
 #define FALSE 0
 #define TRUE 1
@@ -48,7 +54,9 @@
   std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << __FUNCTION__      \
             << "(): " << msg << std::endl;
 #define LOG(msg)                                                               \
-  std::cout << "(" << __FILE__ << ":" << __LINE__ << ")" << msg << std::endl;
+  std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << msg << std::endl;
+
+typedef enum { Init, Start, Stop, Restart } flag_t;
 
 void print_payload(const u_char *payload, size_t payload_len);
 

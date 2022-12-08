@@ -28,20 +28,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         ../src/cthread.cpp \
+        ../src/view.cpp \
         ../src/devwindow.cpp \
         ../src/main.cpp \
         ../src/mainwindow.cpp \
         ../src/catch.cpp \
         ../src/sniffer.cpp \
+        ../src/filter.cpp \
         ../src/utils/utils.cpp
 
 HEADERS += \
         ../src/cthread.h \
+        ../src/view.h \
         ../src/devwindow.h \
         ../src/mainwindow.h \
         ../src/catch.h \
         ../src/sniffer.h \
         ../src/utils/utils.h \
+        ../src/filter.h \
         ../src/utils/hdr.h
 
 FORMS += \
