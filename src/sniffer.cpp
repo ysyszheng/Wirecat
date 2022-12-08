@@ -10,6 +10,8 @@ Sniffer::Sniffer() {
 Sniffer::~Sniffer() {
   if (allDev_ptr)
     pcap_freealldevs(allDev_ptr);
+  if (handle)
+    pcap_close(handle);
 }
 
 bool Sniffer::findAllDevs() {
@@ -59,7 +61,6 @@ bool Sniffer::getDevInfo() {
 void Sniffer::sniff() {
   LOG("Start Sniffing...")
 
-
   while (TRUE) {
     if (status == Start) {
       LOG("Start");
@@ -73,8 +74,6 @@ void Sniffer::sniff() {
     }
   }
   // pcap_loop(handle, num_packets, get_packet, NULL);
-
-  pcap_close(handle);
 
   return;
 }
