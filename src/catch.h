@@ -1,5 +1,5 @@
-#ifndef CAPTURE_H
-#define CAPTURE_H
+#ifndef CATCH_H
+#define CATCH_H
 
 #include "utils/utils.h"
 
@@ -17,4 +17,4 @@ void handle_udp(const u_char *packet, size_t hdr_len, size_t total_len);
 void handle_icmp(const u_char *packet, size_t hdr_len, size_t total_len);
 void handle_igmp(const u_char *packet, size_t hdr_len, size_t total_len);
 
-#endif // CAPTURE_H
+#endif // CATCH_H

@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "qaction.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -8,6 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
   QMenuBar *mBar = menuBar();
   setMenuBar(mBar);
   setWindowTitle(tr("Wirecat"));
+  // main window layout
+  // view->pktInfo = ui->tableView;
+  // view->hdrInfo = ui->treeView;
+  // view->pktContent = ui->textBrowser;
 
   // variables
   sniffer = new Sniffer();
@@ -18,33 +21,41 @@ MainWindow::MainWindow(QWidget *parent)
   devwindow->show();
   connect(devwindow, SIGNAL(subWndClosed()), this, SLOT(showMainWnd()));
 
-  // main window layout
-  // view->pktInfo = ui->tableView;
-  // view->hdrInfo = ui->treeView;
-  // view->pktContent = ui->textBrowser;
+  cthread = new QThread;
+  sniffer->moveToThread(cthread);
+  cthread->start();
+  connect(this, SIGNAL(sig()), sniffer, SLOT(sniff()));
 }
 
 MainWindow::~MainWindow() { delete ui; }
 
 // SLOT function
 void MainWindow::showMainWnd() {
+  LOG(sniffer->dev);
+  char errbuf[PCAP_ERRBUF_SIZE];
+  sniffer->handle = pcap_open_live(sniffer->dev, BUFSIZ, -1, 1000, errbuf);
+  if (sniffer->handle == NULL) {
+    ERROR_INFO(errbuf);
+    exit(1);
+  }
+
+  emit sig();
   this->show();
-  // cthread->start();
 }
 
 void MainWindow::start_catch() {
   LOG("Start");
-  // cthread->flag = Start;
+  sniffer->status = Start;
 }
 
 void MainWindow::stop_catch() {
   LOG("Stop");
-  // cthread->flag = Stop;
+  sniffer->status = Stop;
 }
 
 void MainWindow::restart_catch() {
   LOG("Restart");
-  // cthread->flag = Restart;
+  sniffer->status = Restart;
 }
 
 // Menu

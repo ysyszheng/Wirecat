@@ -3,6 +3,7 @@
 Sniffer::Sniffer() {
   dev = NULL;
   allDev_ptr = NULL;
+  status = Init;
   findAllDevs();
 }
 
@@ -55,20 +56,25 @@ bool Sniffer::getDevInfo() {
   return TRUE;
 }
 
-bool Sniffer::sniff() {
-  char errbuf[PCAP_ERRBUF_SIZE];
-  pcap_t *handle;
-  int num_packets = -1;
+void Sniffer::sniff() {
+  LOG("Start Sniffing...")
 
-  handle = pcap_open_live(dev, BUFSIZ, -1, 1000, errbuf);
-  if (handle == NULL) {
-    ERROR_INFO(errbuf);
-    return FALSE;
+
+  while (TRUE) {
+    if (status == Start) {
+      LOG("Start");
+      pcap_dispatch(handle, -1, get_packet, NULL);
+    } else if (status == Stop) {
+      LOG("Stop");
+    } else if (status == Restart) {
+      LOG("Restart");
+    } else {
+      LOG("Initiating...");
+    }
   }
-
-  pcap_loop(handle, num_packets, get_packet, NULL);
+  // pcap_loop(handle, num_packets, get_packet, NULL);
 
   pcap_close(handle);
 
-  return TRUE;
+  return;
 }

@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "cthread.h"
 #include "devwindow.h"
 #include "sniffer.h"
 #include "ui_mainwindow.h"
@@ -25,12 +24,15 @@ private slots:
   void stop_catch();
   void restart_catch();
 
+signals:
+  void sig();
+
 private:
   Ui::MainWindow *ui;
   // sniffer
   Sniffer *sniffer;
   // catch thread
-  CThread *cthread;
+  QThread *cthread;
   // dev choice window
   DevWindow *devwindow;
   // views

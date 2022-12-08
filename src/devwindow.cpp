@@ -22,7 +22,7 @@ QGroupBox *DevWindow::creatDevChoice() {
   QRadioButton *radioButton;
   std::vector<QRadioButton *> radio;
   for (auto &i : sniffer->allDev_vec) {
-    radioButton = new QRadioButton(tr(i->name));
+    radioButton = new QRadioButton(i->name);
     radio.push_back(radioButton);
     connect(radioButton, &QRadioButton::toggled, this, &DevWindow::onToggled);
   }
@@ -45,7 +45,7 @@ void DevWindow::onToggled(bool checked) {
 }
 
 void DevWindow::onClicked() {
-  sniffer->getDevName(selected->text().toLocal8Bit().constData());
+  sniffer->getDevName(selected->text().toUtf8().constData());
   LOG("Select Network Device: " << sniffer->dev);
   emit subWndClosed();
   this->close();
