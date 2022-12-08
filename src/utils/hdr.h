@@ -121,8 +121,8 @@ typedef struct {
 } igmp_header;
 
 /* data_packet */
-typedef enum { ARP, IPv4, IPv6, ICMP, IGMP } net_t;
-typedef enum { UDP, TCP } trs_t;
+typedef enum { Unet, ARP, IPv4, IPv6, ICMP, IGMP } net_t;
+typedef enum { Utrs, UDP, TCP } trs_t;
 
 typedef struct {
   size_t no;
