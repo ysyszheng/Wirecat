@@ -4,6 +4,7 @@
 #include "catch.h"
 #include "utils/hdr.h"
 #include "utils/utils.h"
+#include "view.h"
 #include <pcap/pcap.h>
 
 class Sniffer : public QObject {
@@ -22,6 +23,7 @@ protected:
   bpf_u_int32 net;                         // IP address
   flag_t status;                           // status {start, stop, restart}
   static std::vector<packet_struct *> pkt; // packet
+  static View *view;                       // view
 
 public:
   Sniffer();
@@ -29,6 +31,7 @@ public:
   bool findAllDevs();
   void getDevName(const char *devName);
   bool getDevInfo();
+  void getView(View *viewObj);
 
 private:
   static void get_packet(u_char *args, const struct pcap_pkthdr *header,

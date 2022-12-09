@@ -3,6 +3,7 @@
 #include <sys/types.h>
 
 std::vector<packet_struct *> Sniffer::pkt; // packet
+View *Sniffer::view;                       // view
 
 Sniffer::Sniffer() {
   dev = NULL;
@@ -62,6 +63,8 @@ bool Sniffer::getDevInfo() {
   return TRUE;
 }
 
+void Sniffer::getView(View *viewObj) { view = viewObj; }
+
 void Sniffer::sniff() {
   LOG("Start Sniffing...")
 
@@ -115,8 +118,10 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
     pkt_p->no = cnt;
     Sniffer::pkt.push_back(pkt_p);
     // print_payload((u_char *)pkt_p->eth_hdr, pkt_p->len); // test in CLI
-    // LOG(store_payload((u_char *)pkt_p->eth_hdr, pkt_p->len));
+    LOG(pkt_p->net_type << " " << pkt_p->trs_type << " " << pkt_p->len);
+    LOG("\n" << store_payload((u_char *)pkt_p->eth_hdr, pkt_p->len));
     // TODO view display view->func(pkt_p) balabala...
+    view->addPacketItem(pkt_p);
   }
 
   return;

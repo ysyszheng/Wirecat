@@ -8,11 +8,14 @@
 #include <QDialog>
 #include <QGroupBox>
 #include <QHeaderView>
+#include <QList>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
+#include <QModelIndex>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QStandardItem>
 #include <QStandardItemModel>
 #include <QString>
 #include <QTableView>
@@ -20,6 +23,7 @@
 #include <QThread>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QtGui>
 #include <arpa/inet.h>
 #include <cstdio>
 #include <cstdlib>
@@ -40,6 +44,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
+
 
 #define FALSE 0
 #define TRUE 1

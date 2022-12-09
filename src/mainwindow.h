@@ -23,6 +23,7 @@ private slots:
   void start_catch();
   void stop_catch();
   void restart_catch();
+  // void on_tableView_clicked(const QModelIndex &index);
 
 signals:
   void sig();

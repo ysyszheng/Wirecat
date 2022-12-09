@@ -7,13 +7,15 @@ MainWindow::MainWindow(QWidget *parent)
   QMenuBar *mBar = menuBar();
   setMenuBar(mBar);
   setWindowTitle(tr("Wirecat"));
-  // main window layout
-  // view->pktInfo = ui->tableView;
-  // view->hdrInfo = ui->treeView;
-  // view->pktContent = ui->textBrowser;
+
+  QTableView *v = new QTableView();
+  QTextBrowser *hex = new QTextBrowser();
+  QTreeView *tree = new QTreeView();
+  view = new View(v, hex, tree);
 
   // variables
   sniffer = new Sniffer();
+  sniffer->getView(view);
   // cthread = new CThread(sniffer);
 
   // Device choice
@@ -57,6 +59,11 @@ void MainWindow::restart_catch() {
   LOG("Restart");
   sniffer->status = Restart;
 }
+
+// void MainWindow::on_tableView_clicked(const QModelIndex &index)
+// {
+//     view->packetInfoByIndex(index);
+// }
 
 // Menu
 void MainWindow::setMenuBar(QMenuBar *mBar) {
