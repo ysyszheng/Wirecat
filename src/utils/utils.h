@@ -3,9 +3,11 @@
 
 #include "hdr.h"
 #include <QAction>
+#include <QByteArray>
 #include <QDebug>
 #include <QDialog>
 #include <QGroupBox>
+#include <QHeaderView>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
