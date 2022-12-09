@@ -235,7 +235,7 @@ void View::reload()
 }
 
 /*
- * called by MultiView::packetInfoByIndex
+ * called by View::packetInfoByIndex
  * Display treeView
  */
 void View::setTreeViewByIndex(packet_struct packet)
@@ -243,9 +243,71 @@ void View::setTreeViewByIndex(packet_struct packet)
     QStandardItem *item, *itemChild, *itemSub, *itemGrandChild;
     QModelIndex index;
 
+        QString src_IP = "";
+        QString dest_IP = "";
+        switch(tmpPacket.net_type){
+            case ARP:
+              int i;
+              for(i=0;i<4;i++){
+                QString temp = QString::number(tmpPacket.net_hdr.arp_hdr->src_ip[i],10);
+                src_IP.append(temp);
+                if(i<3)  src_IP.append('.');
+              }
+              for(i=0;i<4;i++){
+                QString temp = QString::number(tmpPacket.net_hdr.arp_hdr->dest_ip[i],10);
+                dest_IP.append(temp);
+                if(i<3)  dest_IP.append('.');
+              }
+              break;
+            
+            case IPv4:
+              src_IP = inet_ntoa(tmpPacket.net_hdr.ipv4_hdr->ip_src);
+              dest_IP = inet_ntoa(tmpPacket.net_hdr.ipv4_hdr->ip_dst);
+              break;
+
+            case IPv6:
+              int i;
+              for(i=0;i<8;i++){
+                QString temp = QString::number(tmpPacket.net_hdr.ipv6_hdr->src_addr[i],16)
+                src_IP.append(temp);
+                if(i<7)  src_IP.append(':');
+              }
+              for(i=0;i<8;i++){
+                QString temp = QString::number(tmpPacket.net_hdr.ipv6_hdr->dest_addr[i],16)
+                dest_IP.append(temp);
+                if(i<7)  dest_IP.append(':');
+              } 
+              break;
+        }
+
+        QString Protocal;
+        switch(tmpPacket.trs_type){
+            case UDP: 
+              Protocal = "UDP";
+              break;
+
+            case TCP:
+              Protocal = "TCP";
+              break;
+
+            case ICMP:
+              Protocal = "ICMP";
+              break;
+
+            case IGMP:
+              Protocal = "IGMP";
+              break;
+        }
+
+        QString NO = QString::number(tmpPacket.no, 10);
+
+        QString Length = QString::number(tmpPacket.len, 10);
+
+        QString Info = tmpPacket.payload;  //TODO 
+
     //preparation part
-    QString sip = snifferData.strSIP.mid(0, snifferData.strSIP.indexOf(QObject::tr(":")));
-    QString dip = snifferData.strDIP.mid(0, snifferData.strDIP.indexOf(QObject::tr(":")));
+    QString sip = src_IP.mid(0, src_IP.indexOf(QObject::tr(":")));
+    QString dip = dest_IP.mid(0, dest_IP.indexOf(QObject::tr(":")));
 
 
     /**********************   physical layer begin ***********************/
@@ -254,7 +316,7 @@ void View::setTreeViewByIndex(packet_struct packet)
     index = treeModel->item(0)->index();
     //treeView->setExpanded(index, true);
 
-    _eth_header* peth = (_eth_header*)snifferData.protoInfo.peth;
+    ethernet_header* peth = (ethernet_header*)Info.peth;
 
     QByteArray DMac,SMac;
     DMac.clear();SMac.clear();
@@ -272,7 +334,7 @@ void View::setTreeViewByIndex(packet_struct packet)
     item->appendRow(itemChild);
 
 
-    switch (htons(peth->eth_type)) {
+    switch (htons(peth->ether_type)) {
     case(EPT_IP): {
         itemChild = new QStandardItem(QObject::tr("Ethernet Type: IPV4 (0x0800)"));
         item->appendRow(itemChild);
@@ -771,6 +833,54 @@ void View::setTreeViewByIndex(packet_struct packet)
     itemChild = new QStandardItem(QObject::tr("Data: ") + QString(snifferData.protoInfo.strSendInfo.toHex()));
     item->appendRow(itemChild);
 }
+
+
+/*
+ * called by View::packetInfoByIndex
+ * Display hexView
+ */
+void MultiView::setHexViewByIndex(packet_struct packet)
+{
+    QByteArray rawData = packet.payload.toHex().toUpper();
+    bool ok; int cnt = 0;
+    QString data = rawData;
+    QString byte;
+    QString ascii = QObject::tr("");
+    QString line = QObject::tr("");
+    for (int i=0; i<data.length(); i = i+2) {    //from 17
+        cnt += 1;
+        byte = QObject::tr("");
+        byte.append(data[i]);
+        byte.append(data[i+1]);
+        int asc = byte.toInt(&ok, 16);
+        ascii.append((asc>32 && asc<127) ? char(asc) : '.');
+        line.append(byte);
+        line.append(" ");
+        if (cnt%8 == 0) {
+            line.append("  ");
+            line.append(ascii);
+            line.append("\n");
+            textBrowser->insertPlainText(line);
+            line = QObject::tr("");
+            ascii = QObject::tr("");
+        } else if(cnt==((data.length())/2)) {    //length-17
+            for(int j=0;j<25-3*(cnt%8);j++) {
+                line.append("  ");
+            }
+            line.append(ascii);
+            textBrowser->insertPlainText(line);
+            line = QObject::tr("");
+            ascii = QObject::tr("");
+        }
+    }
+
+}
+
+QList<QStandardItem*> View::returnTreeItems()
+{
+    return treeModel->findItems(QObject::tr("*"), Qt::MatchWildcard | Qt::MatchRecursive);
+}
+
 
 
 
