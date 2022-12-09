@@ -39,7 +39,6 @@
 #include <unistd.h>
 #include <vector>
 
-
 #define FALSE 0
 #define TRUE 1
 
@@ -60,6 +59,7 @@
 typedef enum { Init, Start, Stop, Restart } flag_t;
 
 void print_payload(const u_char *payload, size_t payload_len);
+std::string store_payload(const u_char *payload, size_t payload_len);
 
 const std::string currentDataTime();
 

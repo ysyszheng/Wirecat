@@ -117,6 +117,7 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
     pkt_p->no = cnt;
     Sniffer::pkt.push_back(pkt_p);
     // print_payload((u_char *)pkt_p->eth_hdr, pkt_p->len); // test in CLI
+    // LOG(store_payload((u_char *)pkt_p->eth_hdr, pkt_p->len));
     // TODO view display view->func(pkt_p) balabala...
   }
 
