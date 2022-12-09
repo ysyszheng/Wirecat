@@ -105,14 +105,12 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
     handle_ipv6(packet, pkt_p);
     break;
   default:
-    if (PRINT_UNKNOW_ETHER_TYPE) {
-      printf("  Unknown Ethernet Type: 0x%04x\n",
-             ntohs(pkt_p->eth_hdr->ether_type));
-    }
-    return;
+    pkt_p->net_type = Unet;
+    break;
   }
 
-  if (pkt_p->net_type != Unet && pkt_p->trs_type != Utrs) { // Known types
+  if (pkt_p->net_type != Unet && pkt_p->trs_type != Utrs ||
+      pkt_p->net_type == ARP) { // Known types
     cnt++;
     pkt_p->no = cnt;
     Sniffer::pkt.push_back(pkt_p);
