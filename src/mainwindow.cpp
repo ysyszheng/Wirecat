@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <QBrush>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -100,6 +101,8 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
  * when text changes, check the syntax.
  * when Filter button is pressed.
  */
+
+/*
 void MainWindow::on_filter_textChanged(const QString &command)
 {
     QPalette palette;
@@ -111,7 +114,8 @@ void MainWindow::on_filter_textChanged(const QString &command)
     }
     ui->filter->setPalette(palette);
 }
-
+*/
+/*
 void MainWindow::on_Filter_Pressed()
 {
     if (ui->filter->text() == tr("-h")) {
@@ -124,3 +128,4 @@ void MainWindow::on_Filter_Pressed()
     filter->printQuery();
     filter->launchFilter(view);
 }
+*/

@@ -1,7 +1,7 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-#include "/utils/utils.h"
+#include "utils/utils.h"
 #include "sniffer.h"
 #include <QTableView>
 #include <regex>
@@ -27,3 +27,4 @@ private:
     std::string findWord(std::string command, size_t pos);
 };
 
+#endif

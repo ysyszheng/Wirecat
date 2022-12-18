@@ -14,14 +14,8 @@ Filter::~Filter() {
  * -p protocal / -s sourceIP / -d destIP / -sport sourcePort / -dport destPort / -c packetContent
  * using regex to check syntax
  */
-bool Filter::checkCommand(Qstring command) {
-    std::string pattern{ "(-h)|
-                          (([ ]*((-p[ ]+[a-zA-Z]+)|
-                          ((-s|-d)[ ]+\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3})|
-                          ((-sport|-dport)[ ]+\\d+)|
-                          (-c[ ]\\S+))[ ]+)*((-p[ ]+[a-zA-Z]+)|
-                          ((-s|-d)[ ]+\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3})|
-                          ((-sport|-dport)[ ]+\\d+)|(-c[ ]\\S+))?)" };
+bool Filter::checkCommand(QString command) {
+    std::string pattern{ "(-h)|(([ ]*((-p[ ]+[a-zA-Z]+)|((-s|-d)[ ]+\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3})|((-sport|-dport)[ ]+\\d+)|(-c[ ]\\S+))[ ]+)*((-p[ ]+[a-zA-Z]+)|((-s|-d)[ ]+\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3})|((-sport|-dport)[ ]+\\d+)|(-c[ ]\\S+))?)" };
     std::regex re(pattern);
     return std::regex_match(command.toStdString(), re);
 }
@@ -125,7 +119,7 @@ bool Filter::launchOneFilter(packet_struct * tmpPacket) {
     for(std::map<int, std::string>::iterator iQuery = query.begin();iQuery!=query.end; iQuery++) {
         switch(iQuery->first) {
             case P:{
-                if(Protocal.toStdString().find(iQuery->second.data()) > Protocal.toStdString.length()) {
+                if(Protocal.toStdString().find(iQuery->second.data()) > Protocal.toStdString().length()) {
                     flag = false;
                 }
                 break;
@@ -142,8 +136,8 @@ bool Filter::launchOneFilter(packet_struct * tmpPacket) {
 
             case D:{
                 std::string tmpDest =  dest_IP.toStdString();
-                tmpDest = tmpDes.substr(0,tmpDes.find_first_of(':'));
-                if(iQuery->second.find(tmpDes.data()) != 0) {
+                tmpDest = tmpDest.substr(0,tmpDest.find_first_of(':'));
+                if(iQuery->second.find(tmpDest.data()) != 0) {
                     flag = false;
                 }
                 break;
@@ -216,13 +210,13 @@ bool Filter::launchOneFilter(packet_struct * tmpPacket) {
 
 void Filter::launchFilter(View * view) {
     /* clear the tableView */
-    view->rebuildInfo();
+    // view->rebuildInfo();
 
     bool flag;
     /* filtrate every packet */
-    for(std::<packet_struct>::iterator iPacket = view->packets.begin(); iPacket < view->packets.end(); iPacket++){
-        flag = launchOneFilter(*iPacket);
-        if(flag) view->addPacketItem(*iPacket, false);
+    for(std::vector<packet_struct>::iterator iPacket = view->pkt.begin(); iPacket < view->pkt.end(); iPacket++){
+        flag = launchOneFilter((packet_struct*)&iPacket);
+        if(flag) view->add_pkt((packet_struct*)&iPacket);
     }
 }
 
