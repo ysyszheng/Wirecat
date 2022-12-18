@@ -6,10 +6,12 @@
 #include "ui_mainwindow.h"
 #include "utils/utils.h"
 #include "view.h"
+#include "filter.h"
 
 namespace Ui {
 class MainWindow;
 }
+class Filter;
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -24,6 +26,9 @@ private slots:
   void stop_catch();
   void restart_catch();
   // void on_tableView_clicked(const QModelIndex &index);
+
+  void on_filter_textChanged(const QString &arg1);
+  void on_Filter_Pressed();
 
 signals:
   void sig();
@@ -40,6 +45,8 @@ private:
   View *view;
   // menuBar
   void setMenuBar(QMenuBar *mBar);
+  // filter
+  Filter *filter;
 };
 
 #endif // MAINWINDOW_H

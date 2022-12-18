@@ -12,6 +12,7 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
+#include <QMessageBox>
 #include <QModelIndex>
 #include <QPushButton>
 #include <QRadioButton>
