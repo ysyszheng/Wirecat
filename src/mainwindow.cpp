@@ -8,15 +8,14 @@ MainWindow::MainWindow(QWidget *parent)
   setMenuBar(mBar);
   setWindowTitle(tr("Wirecat"));
 
-  QTableView *v = new QTableView();
-  QTextBrowser *hex = new QTextBrowser();
-  QTreeView *tree = new QTreeView();
-  view = new View(v, hex, tree);
+  QTableView *table = ui->tableView;
+  QTextBrowser *text = ui->textBrowser;
+  QTreeView *tree = ui->treeView;
+  view = new View(table, text, tree);
 
   // variables
   sniffer = new Sniffer();
   sniffer->getView(view);
-  // cthread = new CThread(sniffer);
 
   // Device choice
   DevWindow *devwindow = new DevWindow(sniffer, this);
