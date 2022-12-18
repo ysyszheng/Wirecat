@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
   QTreeView *tree = new QTreeView();
   view = new View(v, hex, tree);
 
+  filter = new Filter();
+
   // variables
   sniffer = new Sniffer();
   sniffer->getView(view);
@@ -29,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(sig()), sniffer, SLOT(sniff()));
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() { delete ui; delete filter; }
 
 // SLOT function
 void MainWindow::showMainWnd() {
@@ -91,4 +93,35 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
   pRe->addSeparator();
   QAction *pFre = pRe->addAction("File Reassemble");
   connect(pFre, &QAction::triggered, [=]() { qDebug() << "File Reassemble"; });
+}
+
+
+/* 
+ * filter control functions 
+ * when text changes, check the syntax.
+ * when Filter button is pressed.
+ */
+void MainWindow::on_filter_textChanged(const QString &command)
+{
+    QPalette palette;
+    if (filter->checkCommand(command)) {
+        palette.setColor(QPalette::Base, Qt::green);
+    }
+    else {
+        palette.setColor(QPalette::Base, Qt::red);
+    }
+    ui->filter->setPalette(palette);
+}
+
+void MainWindow::on_Filter_Pressed()
+{
+    if (ui->filter->text() == tr("-h")) {
+        QMessageBox::about(this, tr("The Usage of filter"), tr("[-options] [data to query]\n"
+                                                                     "-h help\n-p protocol\n-s sourceIP\n-d destinationIP /"
+                                                                 " -sport sourcePort\n-dport destinationPort\n-c packetContent"));
+        return;
+    }
+    filter->loadCommand(ui->filter->text());
+    filter->printQuery();
+    filter->launchFilter(view);
 }
