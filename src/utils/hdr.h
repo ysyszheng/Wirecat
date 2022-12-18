@@ -16,7 +16,7 @@
 #define SIZE_ARP 28
 #define SIZE_IPv6 40
 #define SIZE_ICMP 8
-#define SIZE_IGMP 80
+#define SIZE_IGMP 64 // TODO
 
 #define ETHER_ADDR_LEN 6
 
@@ -115,11 +115,9 @@ typedef struct {
 /* IGMP header */
 typedef struct {
   uint8_t type;
-  uint8_t code;
+  uint8_t resp_time;
   uint16_t checksum;
-  uint32_t id;
-  uint32_t group_addr;
-  uint32_t access_key;
+  uint8_t group_addr[4];
 } igmp_header;
 
 /* data_packet */

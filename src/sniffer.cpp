@@ -116,7 +116,7 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
       pkt_p->net_type == ARP) { // Known types
     cnt++;
     pkt_p->no = cnt;
-    Sniffer::pkt.push_back(pkt_p);
+    // Sniffer::pkt.push_back(pkt_p);
     // print_payload((u_char *)pkt_p->eth_hdr, pkt_p->len); // test in CLI
     // LOG(pkt_p->net_type << " " << pkt_p->trs_type << " " << pkt_p->len);
     // LOG("\n" << store_payload((u_char *)pkt_p->eth_hdr, pkt_p->len));

@@ -1,8 +1,12 @@
 #include "view.h"
+#include "qchar.h"
+#include "qobject.h"
 #include "utils/hdr.h"
+#include <netinet/in.h>
 
 View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
     : table(table), tree(tree), text(text), index(0) {
+  // table
   TableModel = new QStandardItemModel();
   TableModel->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("NO.")));
   TableModel->setHorizontalHeaderItem(1,
@@ -31,6 +35,7 @@ View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
   table->setSelectionBehavior(QTableView::SelectRows);
   table->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+  // click table section
   qRegisterMetaType<QList<QPersistentModelIndex>>(
       "QList<QPersistentModelIndex>");
   qRegisterMetaType<QAbstractItemModel::LayoutChangeHint>(
@@ -38,8 +43,14 @@ View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
   connect(table, SIGNAL(clicked(const QModelIndex &)), this,
           SLOT(onTableClicked(const QModelIndex &)));
 
+  // tree
+  TreeModel = new QStandardItemModel();
+  tree->setModel(TreeModel);
+  tree->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+  // text
   text->setFont({"Courier"});
-  text->setFontPointSize(14);
+  text->setFontPointSize(10);
 }
 
 View::~View() {}
@@ -51,7 +62,8 @@ void View::add_pkt(packet_struct *packet) {
   switch (packet->net_type) {
   case ARP:
     prot = "ARP";
-    info = (packet->net_hdr.arp_hdr->opcode == 1) ? "ARP Request" : "ARP Reply";
+    info = (ntohs(packet->net_hdr.arp_hdr->opcode) == 1) ? "ARP Request"
+                                                         : "ARP Reply";
     src = QString::number(packet->net_hdr.arp_hdr->src_ip[0]) + ":" +
           QString::number(packet->net_hdr.arp_hdr->src_ip[1]) + ":" +
           QString::number(packet->net_hdr.arp_hdr->src_ip[2]) + ":" +
@@ -146,12 +158,402 @@ void View::add_pkt(packet_struct *packet) {
 }
 
 void View::onTableClicked(const QModelIndex &item) {
+  // textbrowser
   auto idx = item.row();
   if (item.isValid()) {
     text->clear();
     text->insertPlainText(QString::fromStdString(
         store_payload((u_char *)pkt[idx]->eth_hdr, pkt[idx]->len)));
   }
-  // qDebug() << "row: " << idx;
-  // qDebug() << "*******************************";
+
+  // tree
+  packet_struct *pkt_item = pkt[idx];
+  QStandardItem *child;
+
+  auto frame = new QStandardItem(QObject::tr("Frame Information"));
+  TreeModel->setItem(0, frame);
+  child = new QStandardItem(QObject::tr("Arrival Time: ") +
+                            QString::fromStdString(pkt_item->time));
+  frame->appendRow(child);
+  child = new QStandardItem(QObject::tr("Frame Number: ") +
+                            QString::number(pkt_item->no));
+  frame->appendRow(child);
+  child = new QStandardItem(
+      QObject::tr("Frame Length: ") + QString::number(pkt_item->len) +
+      QObject::tr(" bytes (") + QString::number(pkt_item->len * 8) +
+      QObject::tr(" bits)"));
+  frame->appendRow(child);
+  // itemChild = new QStandardItem(QObject::tr("Protocols in frame: ") +);
+  // tree_item->appendRow(itemChild);
+
+  auto eth = new QStandardItem(QObject::tr("Ethernet II"));
+  TreeModel->setItem(1, eth);
+  child = new QStandardItem(
+      QObject::tr("Source: ") +
+      QString::fromStdString(ether_ntoa(
+          (const struct ether_addr *)&pkt_item->eth_hdr->ether_shost)));
+  eth->appendRow(child);
+  child = new QStandardItem(
+      QObject::tr("Destination: ") +
+      QString::fromStdString(ether_ntoa(
+          (const struct ether_addr *)&pkt_item->eth_hdr->ether_dhost)));
+  eth->appendRow(child);
+  switch (pkt_item->net_type) {
+  case IPv4:
+    child = new QStandardItem(QObject::tr("Type: IPv4 (0x0800)"));
+    break;
+  case IPv6:
+    child = new QStandardItem(QObject::tr("Type: IPv6 (0x86dd)"));
+    break;
+  case ARP:
+    child = new QStandardItem(QObject::tr("Type: ARP (0x0806)"));
+    break;
+  }
+  eth->appendRow(child);
+
+  QStandardItem *net;
+  switch (pkt_item->net_type) {
+  //////////////////////////////////
+  case IPv4:
+    net = new QStandardItem(QObject::tr("Internet Protocol Version 4"));
+    TreeModel->setItem(2, net);
+    child =
+        new QStandardItem(QObject::tr("Version: ") +
+                          QString::number(IPv4_V(pkt_item->net_hdr.ipv4_hdr)));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Internet Header Length: ") +
+        QString::number(IPv4_HL(pkt_item->net_hdr.ipv4_hdr)) + ", length: " +
+        QString::number(IPv4_HL(pkt_item->net_hdr.ipv4_hdr) * 32 / 8) +
+        " bytes (" + QString::number(IPv4_HL(pkt_item->net_hdr.ipv4_hdr) * 32) +
+        " bits)");
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Differentiated Services Field: ") +
+        QString("0x%1").arg(pkt_item->net_hdr.ipv4_hdr->ip_tos, 4, 16,
+                            QLatin1Char('0')));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Total Length: ") +
+        QString::number(ntohs(pkt_item->net_hdr.ipv4_hdr->ip_len)) + " bytes");
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Identification: ") +
+        QString::number(ntohs(pkt_item->net_hdr.ipv4_hdr->ip_id)));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Flags: ") + "Reserved: " +
+        ((ntohs(pkt_item->net_hdr.ipv4_hdr->ip_off) & IP_RF) ? "1" : "0") +
+        ", Don't Fragement: " +
+        ((ntohs(pkt_item->net_hdr.ipv4_hdr->ip_off) & IP_DF) ? "1" : "0") +
+        ", More Fragement: " +
+        ((ntohs(pkt_item->net_hdr.ipv4_hdr->ip_off) & IP_MF) ? "1" : "0"));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Fragment Offset: ") +
+        QString::number(ntohs(pkt_item->net_hdr.ipv4_hdr->ip_off) &
+                        IP_OFFMASK)); // TODO
+    net->appendRow(child);
+    child =
+        new QStandardItem(QObject::tr("Time To Live: ") +
+                          QString::number(pkt_item->net_hdr.ipv4_hdr->ip_ttl));
+    net->appendRow(child);
+    child =
+        new QStandardItem(QObject::tr("Protocol: ") +
+                          QString::number(pkt_item->net_hdr.ipv4_hdr->ip_p));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Header Checksum: ") +
+        QString("0x%1").arg(ntohs(pkt_item->net_hdr.ipv4_hdr->ip_sum), 4, 16,
+                            QLatin1Char('0')));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Source IP Address: ") +
+        QString::fromStdString(inet_ntoa(pkt_item->net_hdr.ipv4_hdr->ip_src)));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Destination IP Address: ") +
+        QString::fromStdString(inet_ntoa(pkt_item->net_hdr.ipv4_hdr->ip_dst)));
+    net->appendRow(child);
+    break;
+  ////////////////////////////////
+  case IPv6:
+    net = new QStandardItem(QObject::tr("Internet Protocol Version 6"));
+    TreeModel->setItem(2, net);
+    child =
+        new QStandardItem(QObject::tr("Version: ") +
+                          QString::number(pkt_item->net_hdr.ipv6_hdr->version));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Traffic Class: ") +
+        QString("0x%1").arg(pkt_item->net_hdr.ipv6_hdr->flow_type, 2, 16,
+                            QLatin1Char('0')));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Flow Label: ") +
+        QString("0x%1").arg(pkt_item->net_hdr.ipv6_hdr->flow_type, 5, 16,
+                            QLatin1Char('0'))); // TODO
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Payload Length: ") +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->payload_len)));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Next Header: ") +
+        QString::number(pkt_item->net_hdr.ipv6_hdr->next_header));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Hop Limit: ") +
+        QString::number(pkt_item->net_hdr.ipv6_hdr->hop_limit));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Source Address: ") +
+        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[0])), 0,
+                          16) +
+        ":" +
+        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[1])), 0,
+                          16) +
+        ":" +
+        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[2])), 0,
+                          16) +
+        ":" +
+        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[3])), 0,
+                          16) +
+        ":" +
+        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[4])), 0,
+                          16) +
+        ":" +
+        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[5])), 0,
+                          16) +
+        ":" +
+        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[6])), 0,
+                          16) +
+        ":" +
+        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[7])), 0,
+                          16));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Destination Address: ") +
+        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[0]), 0,
+                          16) +
+        ":" +
+        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[1]), 0,
+                          16) +
+        ":" +
+        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[2]), 0,
+                          16) +
+        ":" +
+        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[3]), 0,
+                          16) +
+        ":" +
+        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[4]), 0,
+                          16) +
+        ":" +
+        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[5]), 0,
+                          16) +
+        ":" +
+        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[6]), 0,
+                          16) +
+        ":" +
+        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[7]), 0,
+                          16));
+    net->appendRow(child);
+    break;
+  ////////////////////////////////
+  case ARP:
+    net = new QStandardItem(QObject::tr("Address Resolution Protocol"));
+    TreeModel->setItem(2, net);
+    child = new QStandardItem(
+        QObject::tr("Hardware Type: ") +
+        QString::number(ntohs(pkt_item->net_hdr.arp_hdr->hard_type)));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Protocol Type: ") +
+        QString("0x%1").arg(ntohs(pkt_item->net_hdr.arp_hdr->pro_type), 4, 16,
+                            QLatin1Char('0')));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Hardware Address Length: ") +
+        QString::number(pkt_item->net_hdr.arp_hdr->hard_adr_len));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Protocol Address Length: ") +
+        QString::number(pkt_item->net_hdr.arp_hdr->pro_adr_len));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Operation: ") +
+        QString::number(ntohs(pkt_item->net_hdr.arp_hdr->opcode)));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Sender Hardware Address: ") +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->src_mac[0], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->src_mac[1], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->src_mac[2], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->src_mac[3], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->src_mac[4], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->src_mac[5], 0, 16));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Sender Protocol Address: ") +
+        QString::number(pkt_item->net_hdr.arp_hdr->src_ip[0]) + "." +
+        QString::number(pkt_item->net_hdr.arp_hdr->src_ip[1]) + "." +
+        QString::number(pkt_item->net_hdr.arp_hdr->src_ip[2]) + "." +
+        QString::number(pkt_item->net_hdr.arp_hdr->src_ip[3]));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Target Hardware Address: ") +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->dest_mac[0], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->dest_mac[1], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->dest_mac[2], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->dest_mac[3], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->dest_mac[4], 0, 16) + ":" +
+        QString("%1").arg(pkt_item->net_hdr.arp_hdr->dest_mac[5], 0, 16));
+    net->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Target Protocol Address: ") +
+        QString::number(pkt_item->net_hdr.arp_hdr->dest_ip[0]) + "." +
+        QString::number(pkt_item->net_hdr.arp_hdr->dest_ip[1]) + "." +
+        QString::number(pkt_item->net_hdr.arp_hdr->dest_ip[2]) + "." +
+        QString::number(pkt_item->net_hdr.arp_hdr->dest_ip[3]));
+    net->appendRow(child);
+    break;
+  }
+
+  QStandardItem *trs;
+  switch (pkt_item->trs_type) {
+  case ICMP:
+    trs = new QStandardItem(QObject::tr("Internet Control Message Protocol"));
+    TreeModel->setItem(3, trs);
+    child =
+        new QStandardItem(QObject::tr("Type: ") +
+                          QString::number(pkt_item->trs_hdr.icmp_hdr->type));
+    trs->appendRow(child);
+    child =
+        new QStandardItem(QObject::tr("Code: ") +
+                          QString::number(pkt_item->trs_hdr.icmp_hdr->code));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Checksum: ") +
+        QString("0x%1").arg(ntohs(pkt_item->trs_hdr.icmp_hdr->check_sum), 4, 16,
+                            QLatin1Char('0')));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Rest Of Header: ") +
+        QString("0x%1").arg(ntohl(pkt_item->trs_hdr.icmp_hdr->rst_of_header), 8,
+                            16, QLatin1Char('0')));
+    trs->appendRow(child);
+    break;
+  case IGMP:
+    trs = new QStandardItem(QObject::tr("Internet Group Management Protocol"));
+    TreeModel->setItem(3, trs);
+    child =
+        new QStandardItem(QObject::tr("Type: ") +
+                          QString("0x%1").arg(pkt_item->trs_hdr.igmp_hdr->type,
+                                              2, 16, QLatin1Char('0')));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Max Resp Time: ") +
+        QString("0x%1").arg(pkt_item->trs_hdr.igmp_hdr->resp_time, 2, 16,
+                            QLatin1Char('0')));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Checksum: ") +
+        QString("0x%1").arg(ntohs(pkt_item->trs_hdr.igmp_hdr->checksum), 4, 16,
+                            QLatin1Char('0')));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Group Address: ") +
+        QString::number(pkt_item->trs_hdr.igmp_hdr->group_addr[0]) + "." +
+        QString::number(pkt_item->trs_hdr.igmp_hdr->group_addr[1]) + "." +
+        QString::number(pkt_item->trs_hdr.igmp_hdr->group_addr[2]) + "." +
+        QString::number(pkt_item->trs_hdr.igmp_hdr->group_addr[3]));
+    trs->appendRow(child);
+    break;
+  case UDP:
+    trs = new QStandardItem(QObject::tr("User Datagram Protocol"));
+    TreeModel->setItem(3, trs);
+    child = new QStandardItem(
+        QObject::tr("Source Port: ") +
+        QString::number(ntohs(pkt_item->trs_hdr.udp_hdr->src_port)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Destination Port: ") +
+        QString::number(ntohs(pkt_item->trs_hdr.udp_hdr->dst_port)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Length: ") +
+        QString::number(ntohs(pkt_item->trs_hdr.udp_hdr->length)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Checksum: ") +
+        QString("0x%1").arg(ntohs(pkt_item->trs_hdr.udp_hdr->check_sum), 4, 16,
+                            QLatin1Char('0')));
+    trs->appendRow(child);
+    break;
+  case TCP:
+    trs = new QStandardItem(QObject::tr("Transmission Control Protocol"));
+    TreeModel->setItem(3, trs);
+    child = new QStandardItem(
+        QObject::tr("Source Port: ") +
+        QString::number(ntohs(pkt_item->trs_hdr.tcp_hdr->th_sport)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Destination Port: ") +
+        QString::number(ntohs(pkt_item->trs_hdr.tcp_hdr->th_dport)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Sequence Number: ") +
+        QString::number(ntohl(pkt_item->trs_hdr.tcp_hdr->th_seq)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Acknowledgment Number: ") +
+        QString::number(ntohl(pkt_item->trs_hdr.tcp_hdr->th_ack)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Data Offset: ") +
+        QString::number(TH_OFF(pkt_item->trs_hdr.tcp_hdr)) +
+        " (Header Length: " +
+        QString::number(TH_OFF(pkt_item->trs_hdr.tcp_hdr) * 4) + " bytes)");
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Reverse: ") +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_offx2 & 0x08) >> 3) +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_offx2 & 0x04) >> 2) +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_offx2 & 0x02) >> 1));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Flags: NS: ") +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_offx2 & 0x01)) +
+        ", CWR: " +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_flags & TH_CWR) >> 7) +
+        ", ECE: " +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_flags & TH_ECE) >> 6) +
+        ", URG: " +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_flags & TH_URG) >> 5) +
+        ", ACK: " +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_flags & TH_ACK) >> 4) +
+        ", PSH: " +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_flags & TH_PUSH) >> 3) +
+        ", RST: " +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_flags & TH_RST) >> 2) +
+        ", SYN: " +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_flags & TH_SYN) >> 1) +
+        ", FIN: " +
+        QString::number((pkt_item->trs_hdr.tcp_hdr->th_flags & TH_FIN)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Window Size: ") +
+        QString::number(ntohs(pkt_item->trs_hdr.tcp_hdr->th_win)));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Checksum: ") +
+        QString("0x%1").arg(ntohs(pkt_item->trs_hdr.tcp_hdr->th_sum), 4, 16,
+                            QLatin1Char('0')));
+    trs->appendRow(child);
+    child = new QStandardItem(
+        QObject::tr("Urgent Pointer: ") +
+        QString::number(ntohs(pkt_item->trs_hdr.tcp_hdr->th_urp)));
+    trs->appendRow(child);
+    break;
+  }
 }

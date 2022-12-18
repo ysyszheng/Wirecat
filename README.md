@@ -3,6 +3,8 @@
 
 A Not Simple Network Sniffer.
 
+![demo](doc/img/demo.png)
+
 Environment
 -----
 * Ubuntu 20.04

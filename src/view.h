@@ -8,7 +8,6 @@ class View : public QObject {
   Q_OBJECT
 
 private:
-  QStandardItemModel *treeModel;
   QTableView *table;
   QTreeView *tree;
   QTextBrowser *text;
@@ -26,6 +25,7 @@ protected:
   friend class MainWindow;
   int index;
   QStandardItemModel *TableModel;
+  QStandardItemModel *TreeModel;
   std::vector<packet_struct *> pkt;
 };
 
