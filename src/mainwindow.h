@@ -6,7 +6,7 @@
 #include "ui_mainwindow.h"
 #include "utils/utils.h"
 #include "view.h"
-// #include "filter.h"
+#include "filter.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,8 +26,8 @@ private slots:
   void stop_catch();
   void restart_catch();
 
-  // void on_filter_textChanged(const QString &arg1);
-  // void on_Filter_Pressed();
+  void on_filter_textChanged(const QString &arg1);
+  void on_Filter_Pressed();
 
 signals:
   void sig();
@@ -45,7 +45,7 @@ private:
   // menuBar
   void setMenuBar(QMenuBar *mBar);
   // filter
-  // Filter *filter;
+  Filter *filter;
 };
 
 #endif // MAINWINDOW_H

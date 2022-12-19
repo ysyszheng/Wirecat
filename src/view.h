@@ -13,6 +13,8 @@ private:
   QTextBrowser *text;
 
 public:
+  std::vector<packet_struct *> pkt;
+
   View(QTableView *table, QTextBrowser *text, QTreeView *tree);
   ~View();
   void add_pkt(packet_struct *packete);
@@ -26,7 +28,6 @@ protected:
   int index;
   QStandardItemModel *TableModel;
   QStandardItemModel *TreeModel;
-  std::vector<packet_struct *> pkt;
 };
 
 #endif // VIEW_H

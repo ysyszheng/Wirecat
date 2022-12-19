@@ -98,32 +98,27 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
  * when text changes, check the syntax.
  * when Filter button is pressed.
  */
-
-/*
 void MainWindow::on_filter_textChanged(const QString &command)
-{
-    QPalette palette;
-    if (filter->checkCommand(command)) {
-        palette.setColor(QPalette::Base, Qt::green);
-    }
-    else {
-        palette.setColor(QPalette::Base, Qt::red);
-    }
-    ui->filter->setPalette(palette);
+{   
+  QLineEdit *le = ui->fliter_rule; 
+  if (filter->checkCommand(command)) {
+      le->setStyleSheet("QLineEdit {background-color: green;}");
+  }
+  else {
+      le->setStyleSheet("QLineEdit {background-color: red;}");
+  }
 }
-*/
-/*
+
+
 void MainWindow::on_Filter_Pressed()
 {
     if (ui->filter->text() == tr("-h")) {
-        QMessageBox::about(this, tr("The Usage of filter"), tr("[-options] [data
-to query]\n"
-                                                                     "-h
-help\n-p protocol\n-s sourceIP\n-d destinationIP /" " -sport sourcePort\n-dport
-destinationPort\n-c packetContent")); return;
+        QMessageBox::about(this, tr("The Usage of filter"), tr("[-options] [data to query]\n"
+                                                                     "-h help\n-p protocol\n-s sourceIP\n-d destinationIP /"
+                                                                 " -sport sourcePort\n-dport destinationPort\n-c packetContent"));
+        return;
     }
-    filter->loadCommand(ui->filter->text());
+    filter->loadCommand(ui->fliter_rule->text());
     filter->printQuery();
     filter->launchFilter(view);
 }
-*/
