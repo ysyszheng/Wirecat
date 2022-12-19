@@ -233,7 +233,7 @@ void Filter::launchFilter(View *view) {
   bool flag;
   for(i=0;i<len;++i){
     flag = launchOneFilter(view->pkt[i]);
-    if(flag) view->add_pkt(view->pkt[i]);
+    if(flag) view->add_pkt(view->pkt[i], true);
   }
 }
 
