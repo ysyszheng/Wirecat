@@ -9,6 +9,7 @@
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QList>
+#include <QLineEdit>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>

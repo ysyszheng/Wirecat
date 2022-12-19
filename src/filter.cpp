@@ -25,7 +25,7 @@ bool Filter::checkCommand(QString command) {
  * load correct command to query structure
  * prepare for function launchfilter() 
  */
-bool Filter::loadCommand(Qstring command) {
+bool Filter::loadCommand(QString command) {
     query.clear();
     if(!checkCommand(command)) {
         return false;
@@ -116,7 +116,7 @@ bool Filter::launchOneFilter(packet_struct * tmpPacket) {
     case Utrs: break;
     }
     bool flag = true;
-    for(std::map<int, std::string>::iterator iQuery = query.begin();iQuery!=query.end; iQuery++) {
+    for(std::map<int, std::string>::iterator iQuery = query.begin();iQuery!=query.end(); iQuery++) {
         switch(iQuery->first) {
             case P:{
                 if(Protocal.toStdString().find(iQuery->second.data()) > Protocal.toStdString().length()) {
@@ -214,7 +214,7 @@ void Filter::launchFilter(View * view) {
 
     bool flag;
     /* filtrate every packet */
-    for(std::vector<packet_struct>::iterator iPacket = view->pkt.begin(); iPacket < view->pkt.end(); iPacket++){
+    for(std::vector<packet_struct*>::iterator iPacket = view->pkt.begin(); iPacket < view->pkt.end(); iPacket++){
         flag = launchOneFilter((packet_struct*)&iPacket);
         if(flag) view->add_pkt((packet_struct*)&iPacket);
     }
