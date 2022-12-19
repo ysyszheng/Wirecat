@@ -111,6 +111,7 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
   }
 
   QString Protocal;
+  
   switch (tmpPacket->trs_type) {
   case UDP:
     Protocal = "UDP";
@@ -127,12 +128,16 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
   case Utrs:
     break;
   }
-  switch (tmpPacket->net_type) {
-    case ARP: Protocal = "ARP"; break;
-    case IPv4: Protocal = "IPv4"; break;
-    case IPv6: Protocal = "IPv6"; break;
-    case Unet: break;
+  if(tmpPacket->trs_type == Utrs){
+    switch (tmpPacket->net_type) {
+      case ARP: Protocal = "ARP"; break;
+      case IPv4: Protocal = "IPv4"; break;
+      case IPv6: Protocal = "IPv6"; break;
+      case Unet: break;
+      default: break;
   }
+  }
+
 
   bool flag = true;
   for (std::map<int, std::string>::iterator iQuery = query.begin();
