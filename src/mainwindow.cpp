@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include <QBrush>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -66,30 +65,30 @@ void MainWindow::stop_catch() {
   sniffer->status = Stop;
 }
 
-void MainWindow::restart_catch() {
-  LOG("Restart");
-  sniffer->status = Restart;
+void MainWindow::clear_catch() {
+  LOG("Clear");
+  view->clearView();
 }
 
 // Menu
 void MainWindow::setMenuBar(QMenuBar *mBar) {
-  QMenu *pFile = mBar->addMenu("Files");
-  QAction *pOpen = pFile->addAction("Open");
-  connect(pOpen, &QAction::triggered, [=]() { qDebug() << "Open"; });
-  pFile->addSeparator();
-  QAction *pSave = pFile->addAction("Save");
-  connect(pSave, &QAction::triggered, [=]() { qDebug() << "Save"; });
-  pFile->addSeparator();
-  QAction *pNewSave = pFile->addAction("Save as");
-  connect(pNewSave, &QAction::triggered, [=]() { qDebug() << "Save as"; });
+  // QMenu *pFile = mBar->addMenu("Files");
+  // QAction *pOpen = pFile->addAction("Open");
+  // connect(pOpen, &QAction::triggered, [=]() { qDebug() << "Open"; });
+  // pFile->addSeparator();
+  // QAction *pSave = pFile->addAction("Save");
+  // connect(pSave, &QAction::triggered, this, &MainWindow::save_file);
 
   // QMenu *pRun = mBar->addMenu("Run");
   QAction *pStart = mBar->addAction("Start");
   connect(pStart, &QAction::triggered, this, &MainWindow::start_catch);
   QAction *pStop = mBar->addAction("Stop");
   connect(pStop, &QAction::triggered, this, &MainWindow::stop_catch);
-  QAction *pRestart = mBar->addAction("Restart");
-  connect(pRestart, &QAction::triggered, this, &MainWindow::restart_catch);
+  QAction *pRestart = mBar->addAction("Clear");
+  connect(pRestart, &QAction::triggered, this, &MainWindow::clear_catch);
+
+  QAction *pSave = mBar->addAction("Save");
+  connect(pSave, &QAction::triggered, this, &MainWindow::save_file);
 
   QMenu *pRe = mBar->addMenu("Reassemble");
   QAction *pIPre = pRe->addAction("IP Reassemble");
@@ -117,12 +116,50 @@ void MainWindow::on_filter_Pressed() {
   if (ui->filter_rule->text() == tr("-h")) {
     QMessageBox::about(
         this, tr("The Usage of filter"),
-        tr("[-options] [data to query]\n"
-           "-h help\n-p protocol\n-s sourceIP\n-d destinationIP\n"
-           "-sport sourcePort\n-dport destinationPort\n-c packetContent"));
+        tr("[-options]\t[data to query]\n"
+           "-h\thelp\n-p\tprotocol\n-s\tsourceIP\n-d\tdestinationIP\n"
+           "-sport\tsourcePort\n-dport\tdestinationPort\n-c\tpacketContent"));
     return;
   }
   filter->loadCommand(ui->filter_rule->text());
   filter->printQuery();
   filter->launchFilter(view);
+}
+
+void MainWindow::save_file() {
+  LOG("Save file");
+  QDateTime time = QDateTime::currentDateTime();
+  QString dateTime = time.toString("MM-dd_hh-mm-ss");
+  QString timeName = QString("%1.log").arg(dateTime);
+
+  QString fileName = QFileDialog::getSaveFileName(
+      this, tr("Save Network Packet"), "../test/log/" + timeName,
+      tr("Log File (*.log);;All Files (*)"));
+  if (fileName.isEmpty())
+    return;
+  else {
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+      QMessageBox::information(this, tr("Unable to open file"),
+                               file.errorString());
+      return;
+    }
+    // QDataStream out(&file);
+    // out.setVersion(QDataStream::Qt_4_5);
+    QTextStream out(&file);
+    out.setCodec("UTF-8");
+
+    for (auto &pkt : view->pkt) {
+      out << QString::fromStdString("Time: ").toUtf8()
+          << QString::fromStdString(pkt->time).toUtf8()
+          << QString::fromStdString("\n").toUtf8()
+          << QString::fromStdString("NO: ").toUtf8()
+          << QString::number(pkt->no).toUtf8()
+          << QString::fromStdString("\n").toUtf8()
+          << QString::fromStdString(
+                 store_payload((u_char *)pkt->eth_hdr, pkt->len))
+                 .toUtf8()
+          << QString::fromStdString("\n").toUtf8();
+    }
+  }
 }

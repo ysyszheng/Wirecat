@@ -14,6 +14,7 @@ private:
 
 public:
   std::vector<packet_struct *> pkt;
+
   std::vector<packet_struct *> copy_pkt;
 
   View(QTableView *table, QTextBrowser *text, QTreeView *tree);
@@ -21,6 +22,7 @@ public:
   void add_pkt(packet_struct *packete, bool flag=false);
 
   void rebuildTableView();
+  void clearView();
 
 private slots:
   void onTableClicked(const QModelIndex &);

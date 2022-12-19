@@ -145,9 +145,9 @@ TODO
 * [ ] IP fragmentation reassembly
 * [ ] Filter packets (Filter IP addresses (src & dst), ports (src & dst), protocols, etc.)
 * [ ] Search packets (Search by content, etc.)
-* [ ] Save packets (Save packets to readable file)
+* [x] Save packets (Save packets to readable file)
 * [ ] File reassembly (Reassemble files from TCP packets)
-* [ ] Interact in GUI (Show packets info in GUI)
+* [x] Interact in GUI (Show packets info in GUI)
 * [ ] Beautify UI (QStyle class may be helpful)
 
 Reference

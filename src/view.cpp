@@ -49,15 +49,18 @@ View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
   tree->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
   // text
-  text->setFont({"Courier"});
+  // text->setFont({"Courier"});
+  text->setFont({"monospace"});
   text->setFontPointSize(10);
 }
 
 View::~View() {}
 
 void View::add_pkt(packet_struct *packet, bool flag) {
-  if(!flag)   pkt.push_back(packet);
-  else   copy_pkt.push_back(packet);
+  if (!flag)
+    pkt.push_back(packet);
+  else
+    copy_pkt.push_back(packet);
 
   QString prot, src, dst, info;
 
@@ -182,6 +185,8 @@ void View::onTableClicked(const QModelIndex &item) {
   if (!item.isValid()) {
     return;
   }
+  idx = TableModel->item(idx, 0)->text().toInt() - 1;
+  LOG(idx);
 
   // textbrowser
   text->clear();
@@ -299,7 +304,7 @@ void View::onTableClicked(const QModelIndex &item) {
         QString::fromStdString(inet_ntoa(pkt_item->net_hdr.ipv4_hdr->ip_dst)));
     net->appendRow(child);
     break;
-  ////////////////////////////////
+  ////////////// TODO ////////////////
   case IPv6:
     net = new QStandardItem(QObject::tr("Internet Protocol Version 6"));
     TreeModel->setItem(2, net);
@@ -316,10 +321,9 @@ void View::onTableClicked(const QModelIndex &item) {
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Flow Label: ") +
-        QString("0x%1").arg(pkt_item->net_hdr.ipv6_hdr->tcf & 0x0f, 1, 16,
-                            QLatin1Char('0')) +
-        QString("%1").arg(ntohl(pkt_item->net_hdr.ipv6_hdr->flow), 4, 16,
-                          QLatin1Char('0'))); // TODO
+        QString("0x%1").arg((pkt_item->net_hdr.ipv6_hdr->tcf & 0x0f) << 16 |
+                                ntohs(pkt_item->net_hdr.ipv6_hdr->flow),
+                            5, 16, QLatin1Char('0')));
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Payload Length: ") +
@@ -335,55 +339,39 @@ void View::onTableClicked(const QModelIndex &item) {
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Source Address: ") +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[0])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[0]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[1])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[1]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[2])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[2]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[3])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[3]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[4])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[4]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[5])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[5]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[6])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[6]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[7])), 0,
-                          16));
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[7]), 16));
     net->appendRow(child);
     child = new QStandardItem(
-        QObject::tr("Destination Address: ") +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[0]), 0,
-                          16) +
+        QObject::tr("Source Address: ") +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[0]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[1]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[1]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[2]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[2]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[3]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[3]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[4]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[4]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[5]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[5]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[6]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[6]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[7]), 0,
-                          16));
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[7]), 16));
     net->appendRow(child);
     break;
   ////////////////////////////////
@@ -590,38 +578,41 @@ void View::onTableClicked(const QModelIndex &item) {
   }
 }
 
+void View::rebuildTableView() { clearView(); }
 
-void View::rebuildTableView()
-{
-    TableModel->clear();
-    //set tableview
-    TableModel = new QStandardItemModel();
-    TableModel->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("NO.")));
-    TableModel->setHorizontalHeaderItem(1,
-                                        new QStandardItem(QObject::tr("Time")));
-    TableModel->setHorizontalHeaderItem(2,
-                                        new QStandardItem(QObject::tr("Source")));
-    TableModel->setHorizontalHeaderItem(
-        3, new QStandardItem(QObject::tr("Destination")));
-    TableModel->setHorizontalHeaderItem(
-        4, new QStandardItem(QObject::tr("Protocol")));
-    TableModel->setHorizontalHeaderItem(5,
-                                        new QStandardItem(QObject::tr("Length")));
-    TableModel->setHorizontalHeaderItem(6,
-                                        new QStandardItem(QObject::tr("Info")));
+void View::clearView() {
+  TreeModel->clear();
+  text->clear();
 
-    table->setModel(TableModel);
-    table->setColumnWidth(0, 100);
-    table->setColumnWidth(1, 150);
-    table->setColumnWidth(2, 250);
-    table->setColumnWidth(3, 250);
-    table->setColumnWidth(4, 70);
-    table->setColumnWidth(5, 60);
-    table->setColumnWidth(6, 350);
+  TableModel->clear();
+  // set tableview
+  TableModel = new QStandardItemModel();
+  TableModel->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("NO.")));
+  TableModel->setHorizontalHeaderItem(1,
+                                      new QStandardItem(QObject::tr("Time")));
+  TableModel->setHorizontalHeaderItem(2,
+                                      new QStandardItem(QObject::tr("Source")));
+  TableModel->setHorizontalHeaderItem(
+      3, new QStandardItem(QObject::tr("Destination")));
+  TableModel->setHorizontalHeaderItem(
+      4, new QStandardItem(QObject::tr("Protocol")));
+  TableModel->setHorizontalHeaderItem(5,
+                                      new QStandardItem(QObject::tr("Length")));
+  TableModel->setHorizontalHeaderItem(6,
+                                      new QStandardItem(QObject::tr("Info")));
 
-    table->verticalHeader()->setVisible(false);
-    table->setSelectionBehavior(QTableView::SelectRows);
-    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  table->setModel(TableModel);
+  table->setColumnWidth(0, 100);
+  table->setColumnWidth(1, 150);
+  table->setColumnWidth(2, 250);
+  table->setColumnWidth(3, 250);
+  table->setColumnWidth(4, 70);
+  table->setColumnWidth(5, 60);
+  table->setColumnWidth(6, 350);
 
-    index = 0;
+  table->verticalHeader()->setVisible(false);
+  table->setSelectionBehavior(QTableView::SelectRows);
+  table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+  index = 0;
 }
