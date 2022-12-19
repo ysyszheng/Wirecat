@@ -61,10 +61,13 @@ typedef struct {
 
 /* IPv6 header */
 typedef struct {
-  u_int version : 4;    /* version, 4 bits */
-  uint8_t flow_type;    /* flow type, 1 byte */
-  u_int flow_id : 20;   /* flow id, 20 bits*/
-  uint16_t payload_len; /* length of load， 2 bytes*/
+  // u_int version : 4;    /* version, 4 bits */
+  // uint8_t flow_type;    /* flow type, 1 byte */
+  // u_int flow_id : 20;   /* flow id, 20 bits*/
+  uint8_t vtc;
+  uint8_t tcf;
+  u_short flow;
+  u_short payload_len;  /* length of load， 2 bytes*/
   uint8_t next_header;  /* next head，1 byte */
   uint8_t hop_limit;    /* hop limit，1 byte */
   u_short src_addr[8];  /* source address，16 bytes */

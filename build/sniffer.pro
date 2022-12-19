@@ -33,7 +33,6 @@ SOURCES += \
         ../src/mainwindow.cpp \
         ../src/catch.cpp \
         ../src/sniffer.cpp \
-        ../src/filter.cpp \
         ../src/utils/utils.cpp
 
 HEADERS += \
@@ -43,7 +42,6 @@ HEADERS += \
         ../src/catch.h \
         ../src/sniffer.h \
         ../src/utils/utils.h \
-        ../src/filter.h \
         ../src/utils/hdr.h
 
 FORMS += \

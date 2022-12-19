@@ -112,8 +112,7 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
     break;
   }
 
-  if (pkt_p->net_type != Unet && pkt_p->trs_type != Utrs ||
-      pkt_p->net_type == ARP) { // Known types
+  if (pkt_p->net_type != Unet) { // Known types
     cnt++;
     pkt_p->no = cnt;
     // Sniffer::pkt.push_back(pkt_p);

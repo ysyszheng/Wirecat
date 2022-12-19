@@ -29,7 +29,7 @@ View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
   table->setColumnWidth(3, 250);
   table->setColumnWidth(4, 70);
   table->setColumnWidth(5, 60);
-  table->setColumnWidth(6, 311);
+  table->setColumnWidth(6, 350);
 
   table->verticalHeader()->setVisible(false);
   table->setSelectionBehavior(QTableView::SelectRows);
@@ -78,23 +78,39 @@ void View::add_pkt(packet_struct *packet) {
     dst = QString::fromStdString(inet_ntoa(packet->net_hdr.ipv4_hdr->ip_dst));
     break;
   case IPv6:
-    src = QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[0])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[1])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[2])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[3])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[4])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[5])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[6])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[7]));
-    dst = QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[0])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[1])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[2])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[3])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[4])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[5])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[6])) + ":" +
-          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[7]));
+    src = QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[0]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[1]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[2]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[3]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[4]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[5]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[6]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->src_addr[7]), 16);
+    dst = QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[0]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[1]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[2]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[3]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[4]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[5]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[6]), 16) +
+          ":" +
+          QString::number(ntohs(packet->net_hdr.ipv6_hdr->dest_addr[7]), 16);
     break;
+  default: // will never reach this
+    return;
   }
 
   // protocol
@@ -120,8 +136,10 @@ void View::add_pkt(packet_struct *packet) {
              " to Dst port: " +
              QString::number(ntohs(packet->trs_hdr.udp_hdr->dst_port));
       break;
+    case Utrs:
+      break;
     }
-  } else if (packet->net_type != Unet) {
+  } else {
     switch (packet->net_type) {
     case ARP:
       prot = "ARP";
@@ -132,9 +150,9 @@ void View::add_pkt(packet_struct *packet) {
     case IPv6:
       prot = "IPv6";
       break;
+    case Unet: // will never reach this
+      return;
     }
-  } else {
-    return;
   }
 
   // display in TableView
@@ -158,15 +176,18 @@ void View::add_pkt(packet_struct *packet) {
 }
 
 void View::onTableClicked(const QModelIndex &item) {
-  // textbrowser
   auto idx = item.row();
-  if (item.isValid()) {
-    text->clear();
-    text->insertPlainText(QString::fromStdString(
-        store_payload((u_char *)pkt[idx]->eth_hdr, pkt[idx]->len)));
+  if (!item.isValid()) {
+    return;
   }
 
+  // textbrowser
+  text->clear();
+  text->insertPlainText(QString::fromStdString(
+      store_payload((u_char *)pkt[idx]->eth_hdr, pkt[idx]->len)));
+
   // tree
+  TreeModel->clear();
   packet_struct *pkt_item = pkt[idx];
   QStandardItem *child;
 
@@ -183,8 +204,6 @@ void View::onTableClicked(const QModelIndex &item) {
       QObject::tr(" bytes (") + QString::number(pkt_item->len * 8) +
       QObject::tr(" bits)"));
   frame->appendRow(child);
-  // itemChild = new QStandardItem(QObject::tr("Protocols in frame: ") +);
-  // tree_item->appendRow(itemChild);
 
   auto eth = new QStandardItem(QObject::tr("Ethernet II"));
   TreeModel->setItem(1, eth);
@@ -208,6 +227,8 @@ void View::onTableClicked(const QModelIndex &item) {
   case ARP:
     child = new QStandardItem(QObject::tr("Type: ARP (0x0806)"));
     break;
+  case Unet: // will never reach this
+    return;
   }
   eth->appendRow(child);
 
@@ -280,19 +301,23 @@ void View::onTableClicked(const QModelIndex &item) {
   case IPv6:
     net = new QStandardItem(QObject::tr("Internet Protocol Version 6"));
     TreeModel->setItem(2, net);
-    child =
-        new QStandardItem(QObject::tr("Version: ") +
-                          QString::number(pkt_item->net_hdr.ipv6_hdr->version));
+    child = new QStandardItem(
+        QObject::tr("Version: ") +
+        QString::number(pkt_item->net_hdr.ipv6_hdr->vtc >> 4));
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Traffic Class: ") +
-        QString("0x%1").arg(pkt_item->net_hdr.ipv6_hdr->flow_type, 2, 16,
-                            QLatin1Char('0')));
+        QString("0x%1").arg(pkt_item->net_hdr.ipv6_hdr->vtc & 0x0f, 1, 16,
+                            QLatin1Char('0')) +
+        QString("%1").arg(pkt_item->net_hdr.ipv6_hdr->tcf >> 4, 1, 16,
+                          QLatin1Char('0')));
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Flow Label: ") +
-        QString("0x%1").arg(pkt_item->net_hdr.ipv6_hdr->flow_type, 5, 16,
-                            QLatin1Char('0'))); // TODO
+        QString("0x%1").arg(pkt_item->net_hdr.ipv6_hdr->tcf & 0x0f, 1, 16,
+                            QLatin1Char('0')) +
+        QString("%1").arg(ntohl(pkt_item->net_hdr.ipv6_hdr->flow), 4, 16,
+                          QLatin1Char('0'))); // TODO
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Payload Length: ") +
@@ -417,6 +442,9 @@ void View::onTableClicked(const QModelIndex &item) {
         QString::number(pkt_item->net_hdr.arp_hdr->dest_ip[3]));
     net->appendRow(child);
     break;
+  ////////////////////////////////
+  case Unet: // will never reach this
+    return;
   }
 
   QStandardItem *trs;
@@ -554,6 +582,8 @@ void View::onTableClicked(const QModelIndex &item) {
         QObject::tr("Urgent Pointer: ") +
         QString::number(ntohs(pkt_item->trs_hdr.tcp_hdr->th_urp)));
     trs->appendRow(child);
+    break;
+  case Utrs:
     break;
   }
 }

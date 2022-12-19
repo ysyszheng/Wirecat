@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
   QTreeView *tree = ui->treeView;
   view = new View(table, text, tree);
 
-  filter = new Filter();
+  // filter = new Filter();
 
   // variables
   sniffer = new Sniffer();
@@ -31,7 +31,10 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(sig()), sniffer, SLOT(sniff()));
 }
 
-MainWindow::~MainWindow() { delete ui; delete filter; }
+MainWindow::~MainWindow() {
+  delete ui;
+  // delete filter;
+}
 
 // SLOT function
 void MainWindow::showMainWnd() {
@@ -62,11 +65,6 @@ void MainWindow::restart_catch() {
   sniffer->status = Restart;
 }
 
-// void MainWindow::on_tableView_clicked(const QModelIndex &index)
-// {
-//     view->packetInfoByIndex(index);
-// }
-
 // Menu
 void MainWindow::setMenuBar(QMenuBar *mBar) {
   QMenu *pFile = mBar->addMenu("Files");
@@ -95,9 +93,8 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
   connect(pFre, &QAction::triggered, [=]() { qDebug() << "File Reassemble"; });
 }
 
-
-/* 
- * filter control functions 
+/*
+ * filter control functions
  * when text changes, check the syntax.
  * when Filter button is pressed.
  */
@@ -119,10 +116,11 @@ void MainWindow::on_filter_textChanged(const QString &command)
 void MainWindow::on_Filter_Pressed()
 {
     if (ui->filter->text() == tr("-h")) {
-        QMessageBox::about(this, tr("The Usage of filter"), tr("[-options] [data to query]\n"
-                                                                     "-h help\n-p protocol\n-s sourceIP\n-d destinationIP /"
-                                                                 " -sport sourcePort\n-dport destinationPort\n-c packetContent"));
-        return;
+        QMessageBox::about(this, tr("The Usage of filter"), tr("[-options] [data
+to query]\n"
+                                                                     "-h
+help\n-p protocol\n-s sourceIP\n-d destinationIP /" " -sport sourcePort\n-dport
+destinationPort\n-c packetContent")); return;
     }
     filter->loadCommand(ui->filter->text());
     filter->printQuery();
