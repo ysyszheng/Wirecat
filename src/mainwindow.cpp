@@ -14,17 +14,23 @@ MainWindow::MainWindow(QWidget *parent)
   QTreeView *tree = ui->treeView;
   view = new View(table, text, tree);
 
-  // filter = new Filter();
-
   // variables
   sniffer = new Sniffer();
   sniffer->getView(view);
+
+  // filter
+  filter = new Filter();
+  connect(this->ui->filter_rule, SIGNAL(textChanged(const QString &)), this,
+          SLOT(on_filter_textChanged(const QString &)));
+  connect(this->ui->filterButton, SIGNAL(clicked()), this,
+          SLOT(on_filter_Pressed()));
 
   // Device choice
   DevWindow *devwindow = new DevWindow(sniffer, this);
   devwindow->show();
   connect(devwindow, SIGNAL(subWndClosed()), this, SLOT(showMainWnd()));
 
+  // catch thread
   cthread = new QThread;
   sniffer->moveToThread(cthread);
   cthread->start();
@@ -33,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {
   delete ui;
-  // delete filter;
+  delete filter;
 }
 
 // SLOT function
@@ -98,27 +104,25 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
  * when text changes, check the syntax.
  * when Filter button is pressed.
  */
-void MainWindow::on_filter_textChanged(const QString &command)
-{   
-  QLineEdit *le = ui->fliter_rule; 
+void MainWindow::on_filter_textChanged(const QString &command) {
+  QLineEdit *le = ui->filter_rule;
   if (filter->checkCommand(command)) {
-      le->setStyleSheet("QLineEdit {background-color: green;}");
-  }
-  else {
-      le->setStyleSheet("QLineEdit {background-color: red;}");
+    le->setStyleSheet("QLineEdit {background-color: #AFE1AF;}");
+  } else {
+    le->setStyleSheet("QLineEdit {background-color: #FAA0A0;}");
   }
 }
 
-
-void MainWindow::on_Filter_Pressed()
-{
-    if (ui->filter->text() == tr("-h")) {
-        QMessageBox::about(this, tr("The Usage of filter"), tr("[-options] [data to query]\n"
-                                                                     "-h help\n-p protocol\n-s sourceIP\n-d destinationIP /"
-                                                                 " -sport sourcePort\n-dport destinationPort\n-c packetContent"));
-        return;
-    }
-    filter->loadCommand(ui->fliter_rule->text());
-    filter->printQuery();
-    filter->launchFilter(view);
+void MainWindow::on_filter_Pressed() {
+  if (ui->filter_rule->text() == tr("-h")) {
+    QMessageBox::about(
+        this, tr("The Usage of filter"),
+        tr("[-options] [data to query]\n"
+           "-h help\n-p protocol\n-s sourceIP\n-d destinationIP\n"
+           "-sport sourcePort\n-dport destinationPort\n-c packetContent"));
+    return;
+  }
+  filter->loadCommand(ui->filter_rule->text());
+  filter->printQuery();
+  filter->launchFilter(view);
 }

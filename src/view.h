@@ -20,7 +20,6 @@ public:
   void add_pkt(packet_struct *packete);
 
 private slots:
-  // void onTableClicked(int idx);
   void onTableClicked(const QModelIndex &);
 
 protected:

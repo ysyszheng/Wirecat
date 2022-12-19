@@ -25,9 +25,8 @@ private slots:
   void start_catch();
   void stop_catch();
   void restart_catch();
-
   void on_filter_textChanged(const QString &arg1);
-  void on_Filter_Pressed();
+  void on_filter_Pressed();
 
 signals:
   void sig();

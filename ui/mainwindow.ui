@@ -46,7 +46,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="fliter_rule">
+        <widget class="QLineEdit" name="filter_rule">
          <property name="styleSheet">
           <string notr="true">background-color: rgb(222, 221, 218);</string>
          </property>
@@ -55,7 +55,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="filterButton">
        <property name="font">
         <font>
          <pointsize>16</pointsize>
@@ -110,7 +110,7 @@ background-color: rgb(154, 153, 150);</string>
       </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="searchButton">
        <property name="font">
         <font>
          <pointsize>16</pointsize>
