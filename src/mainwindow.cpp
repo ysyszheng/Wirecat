@@ -117,9 +117,9 @@ void MainWindow::on_filter_Pressed() {
   if (ui->filter_rule->text() == tr("-h")) {
     QMessageBox::about(
         this, tr("The Usage of filter"),
-        tr("[-options] [data to query]\n"
-           "-h help\n-p protocol\n-s sourceIP\n-d destinationIP\n"
-           "-sport sourcePort\n-dport destinationPort\n-c packetContent"));
+        tr("[-options]\t[data to query]\n"
+           "-h\thelp\n-p\tprotocol\n-s\tsourceIP\n-d\tdestinationIP\n"
+           "-sport\tsourcePort\n-dport\tdestinationPort\n-c\tpacketContent"));
     return;
   }
   filter->loadCommand(ui->filter_rule->text());

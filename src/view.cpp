@@ -297,7 +297,7 @@ void View::onTableClicked(const QModelIndex &item) {
         QString::fromStdString(inet_ntoa(pkt_item->net_hdr.ipv4_hdr->ip_dst)));
     net->appendRow(child);
     break;
-  ////////////////////////////////
+  ////////////// TODO ////////////////
   case IPv6:
     net = new QStandardItem(QObject::tr("Internet Protocol Version 6"));
     TreeModel->setItem(2, net);
@@ -314,10 +314,9 @@ void View::onTableClicked(const QModelIndex &item) {
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Flow Label: ") +
-        QString("0x%1").arg(pkt_item->net_hdr.ipv6_hdr->tcf & 0x0f, 1, 16,
-                            QLatin1Char('0')) +
-        QString("%1").arg(ntohl(pkt_item->net_hdr.ipv6_hdr->flow), 4, 16,
-                          QLatin1Char('0'))); // TODO
+        QString("0x%1").arg((pkt_item->net_hdr.ipv6_hdr->tcf & 0x0f) << 16 |
+                                ntohs(pkt_item->net_hdr.ipv6_hdr->flow),
+                            5, 16, QLatin1Char('0')));
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Payload Length: ") +
@@ -333,55 +332,39 @@ void View::onTableClicked(const QModelIndex &item) {
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Source Address: ") +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[0])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[0]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[1])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[1]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[2])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[2]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[3])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[3]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[4])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[4]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[5])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[5]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[6])), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[6]), 16) +
         ":" +
-        QString("%1").arg((ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[7])), 0,
-                          16));
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->src_addr[7]), 16));
     net->appendRow(child);
     child = new QStandardItem(
-        QObject::tr("Destination Address: ") +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[0]), 0,
-                          16) +
+        QObject::tr("Source Address: ") +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[0]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[1]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[1]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[2]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[2]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[3]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[3]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[4]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[4]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[5]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[5]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[6]), 0,
-                          16) +
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[6]), 16) +
         ":" +
-        QString("%1").arg(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[7]), 0,
-                          16));
+        QString::number(ntohs(pkt_item->net_hdr.ipv6_hdr->dest_addr[7]), 16));
     net->appendRow(child);
     break;
   ////////////////////////////////

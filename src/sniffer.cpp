@@ -1,5 +1,6 @@
 #include "sniffer.h"
 #include "utils/hdr.h"
+#include "utils/utils.h"
 #include <sys/types.h>
 
 std::vector<packet_struct *> Sniffer::pkt; // packet
@@ -67,6 +68,7 @@ void Sniffer::getView(View *viewObj) { view = viewObj; }
 
 void Sniffer::sniff() {
   LOG("Start Sniffing...")
+  status = Start;
 
   while (TRUE) {
     if (status == Start) {
