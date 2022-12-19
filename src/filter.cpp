@@ -227,15 +227,13 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
 
 void Filter::launchFilter(View *view) {
   /* clear the tableView */
-  // view->rebuildInfo();
-
+  view->rebuildTableView();
+  int len = view->pkt.size();
+  int i;
   bool flag;
-  /* filtrate every packet */
-  for (std::vector<packet_struct *>::iterator iPacket = view->pkt.begin();
-       iPacket < view->pkt.end(); iPacket++) {
-    flag = launchOneFilter((packet_struct *)&iPacket);
-    if (flag)
-      view->add_pkt((packet_struct *)&iPacket);
+  for(i=0;i<len;++i){
+    flag = launchOneFilter(view->pkt[i]);
+    if(flag) view->add_pkt(view->pkt[i]);
   }
 }
 

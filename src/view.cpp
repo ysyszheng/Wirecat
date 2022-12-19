@@ -57,6 +57,7 @@ View::~View() {}
 
 void View::add_pkt(packet_struct *packet) {
   pkt.push_back(packet);
+  //copy_pkt.push_back(packet);
   QString prot, src, dst, info;
 
   switch (packet->net_type) {
@@ -569,4 +570,40 @@ void View::onTableClicked(const QModelIndex &item) {
   case Utrs:
     break;
   }
+}
+
+
+void View::rebuildTableView()
+{
+    TableModel->clear();
+    //set tableview
+    TableModel = new QStandardItemModel();
+    TableModel->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("NO.")));
+    TableModel->setHorizontalHeaderItem(1,
+                                        new QStandardItem(QObject::tr("Time")));
+    TableModel->setHorizontalHeaderItem(2,
+                                        new QStandardItem(QObject::tr("Source")));
+    TableModel->setHorizontalHeaderItem(
+        3, new QStandardItem(QObject::tr("Destination")));
+    TableModel->setHorizontalHeaderItem(
+        4, new QStandardItem(QObject::tr("Protocol")));
+    TableModel->setHorizontalHeaderItem(5,
+                                        new QStandardItem(QObject::tr("Length")));
+    TableModel->setHorizontalHeaderItem(6,
+                                        new QStandardItem(QObject::tr("Info")));
+
+    table->setModel(TableModel);
+    table->setColumnWidth(0, 100);
+    table->setColumnWidth(1, 150);
+    table->setColumnWidth(2, 250);
+    table->setColumnWidth(3, 250);
+    table->setColumnWidth(4, 70);
+    table->setColumnWidth(5, 60);
+    table->setColumnWidth(6, 350);
+
+    table->verticalHeader()->setVisible(false);
+    table->setSelectionBehavior(QTableView::SelectRows);
+    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    index = 0;
 }
