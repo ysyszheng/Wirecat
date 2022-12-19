@@ -127,6 +127,13 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
   case Utrs:
     break;
   }
+  switch (tmpPacket->net_type) {
+    case ARP: Protocal = "ARP"; break;
+    case IPv4: Protocal = "IPv4"; break;
+    case IPv6: Protocal = "IPv6"; break;
+    case Unet: break;
+  }
+
   bool flag = true;
   for (std::map<int, std::string>::iterator iQuery = query.begin();
        iQuery != query.end(); iQuery++) {
@@ -162,7 +169,6 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
         QString Sport =
             QString::number(tmpPacket->trs_hdr.tcp_hdr->th_sport, 10);
         std::string tmpSPort = Sport.toStdString();
-        tmpSPort = tmpSPort.substr(tmpSPort.find_first_of(':'));
         if (iQuery->second.find(tmpSPort.data()) != 0) {
           flag = false;
         }
@@ -172,7 +178,6 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
         QString Sport =
             QString::number(tmpPacket->trs_hdr.udp_hdr->src_port, 10);
         std::string tmpSPort = Sport.toStdString();
-        tmpSPort = tmpSPort.substr(tmpSPort.find_first_of(':'));
         if (iQuery->second.find(tmpSPort.data()) != 0) {
           flag = false;
         }
@@ -188,7 +193,6 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
         QString Dport =
             QString::number(tmpPacket->trs_hdr.tcp_hdr->th_dport, 10);
         std::string tmpDPort = Dport.toStdString();
-        tmpDPort = tmpDPort.substr(tmpDPort.find_first_of(':'));
         if (iQuery->second.find(tmpDPort.data()) != 0) {
           flag = false;
         }
@@ -198,7 +202,6 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
         QString Dport =
             QString::number(tmpPacket->trs_hdr.udp_hdr->dst_port, 10);
         std::string tmpDPort = Dport.toStdString();
-        tmpDPort = tmpDPort.substr(tmpDPort.find_first_of(':'));
         if (iQuery->second.find(tmpDPort.data()) != 0) {
           flag = false;
         }
