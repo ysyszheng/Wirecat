@@ -2,11 +2,11 @@
 #define MAINWINDOW_H
 
 #include "devwindow.h"
+#include "filter.h"
 #include "sniffer.h"
 #include "ui_mainwindow.h"
 #include "utils/utils.h"
 #include "view.h"
-#include "filter.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,9 +24,10 @@ private slots:
   void showMainWnd();
   void start_catch();
   void stop_catch();
-  void restart_catch();
+  void clear_catch();
   void on_filter_textChanged(const QString &arg1);
   void on_filter_Pressed();
+  void save_file();
 
 signals:
   void sig();

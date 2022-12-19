@@ -3,13 +3,15 @@
 
 #include "hdr.h"
 #include <QAction>
+#include <QBrush>
 #include <QByteArray>
 #include <QDebug>
 #include <QDialog>
+#include <QFileDialog>
 #include <QGroupBox>
 #include <QHeaderView>
-#include <QList>
 #include <QLineEdit>
+#include <QList>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
@@ -65,7 +67,7 @@
 #define LOG(msg)                                                               \
   std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << msg << std::endl;
 
-typedef enum { Init, Start, Stop, Restart } flag_t;
+typedef enum { Init, Start, Stop } flag_t;
 
 void print_payload(const u_char *payload, size_t payload_len);
 std::string store_payload(const u_char *payload, size_t payload_len);

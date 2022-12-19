@@ -76,8 +76,6 @@ void Sniffer::sniff() {
       pcap_dispatch(handle, -1, get_packet, NULL);
     } else if (status == Stop) {
       LOG("Stop");
-    } else if (status == Restart) {
-      LOG("Restart");
     } else {
       LOG("Initiating...");
     }

@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include <QBrush>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -66,9 +65,9 @@ void MainWindow::stop_catch() {
   sniffer->status = Stop;
 }
 
-void MainWindow::restart_catch() {
-  LOG("Restart");
-  sniffer->status = Restart;
+void MainWindow::clear_catch() {
+  LOG("Clear");
+  view->clearView();
 }
 
 // Menu
@@ -78,18 +77,15 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
   connect(pOpen, &QAction::triggered, [=]() { qDebug() << "Open"; });
   pFile->addSeparator();
   QAction *pSave = pFile->addAction("Save");
-  connect(pSave, &QAction::triggered, [=]() { qDebug() << "Save"; });
-  pFile->addSeparator();
-  QAction *pNewSave = pFile->addAction("Save as");
-  connect(pNewSave, &QAction::triggered, [=]() { qDebug() << "Save as"; });
+  connect(pSave, &QAction::triggered, this, &MainWindow::save_file);
 
   // QMenu *pRun = mBar->addMenu("Run");
   QAction *pStart = mBar->addAction("Start");
   connect(pStart, &QAction::triggered, this, &MainWindow::start_catch);
   QAction *pStop = mBar->addAction("Stop");
   connect(pStop, &QAction::triggered, this, &MainWindow::stop_catch);
-  QAction *pRestart = mBar->addAction("Restart");
-  connect(pRestart, &QAction::triggered, this, &MainWindow::restart_catch);
+  QAction *pRestart = mBar->addAction("Clear");
+  connect(pRestart, &QAction::triggered, this, &MainWindow::clear_catch);
 
   QMenu *pRe = mBar->addMenu("Reassemble");
   QAction *pIPre = pRe->addAction("IP Reassemble");
@@ -125,4 +121,30 @@ void MainWindow::on_filter_Pressed() {
   filter->loadCommand(ui->filter_rule->text());
   filter->printQuery();
   filter->launchFilter(view);
+}
+
+void MainWindow::save_file() {
+  LOG("Save file");
+  QString fileName =
+      QFileDialog::getSaveFileName(this, tr("Save Network Packet"), "",
+                                   tr("Log File (*.log);;All Files (*)"));
+  if (fileName.isEmpty())
+    return;
+  else {
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+      QMessageBox::information(this, tr("Unable to open file"),
+                               file.errorString());
+      return;
+    }
+    QDataStream out(&file);
+    out.setVersion(QDataStream::Qt_4_5);
+    for (auto &pkt : view->pkt) {
+      out << "Time: " << QString::fromStdString(pkt->time)
+          << "\tNO: " << QString::number(pkt->no) << "\n";
+      out << QString::fromStdString(
+                 store_payload((u_char *)pkt->eth_hdr, pkt->len))
+          << "\n";
+    }
+  }
 }
