@@ -55,9 +55,10 @@ View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
 
 View::~View() {}
 
-void View::add_pkt(packet_struct *packet) {
-  pkt.push_back(packet);
-  //copy_pkt.push_back(packet);
+void View::add_pkt(packet_struct *packet, bool flag) {
+  if(!flag)   pkt.push_back(packet);
+  else   copy_pkt.push_back(packet);
+
   QString prot, src, dst, info;
 
   switch (packet->net_type) {
