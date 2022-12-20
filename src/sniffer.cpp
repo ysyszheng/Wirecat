@@ -116,10 +116,7 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
     cnt++;
     pkt_p->no = cnt;
     // Sniffer::pkt.push_back(pkt_p);
-    // print_payload((u_char *)pkt_p->eth_hdr, pkt_p->len); // test in CLI
-    // LOG(pkt_p->net_type << " " << pkt_p->trs_type << " " << pkt_p->len);
     // LOG("\n" << store_payload((u_char *)pkt_p->eth_hdr, pkt_p->len));
-    // TODO view display view->func(pkt_p) balabala...
     view->add_pkt(pkt_p);
   }
 

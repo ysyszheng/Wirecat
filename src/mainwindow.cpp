@@ -149,6 +149,7 @@ void MainWindow::save_file() {
     QTextStream out(&file);
     out.setCodec("UTF-8");
 
+    sniffer->status = Stop; // TODO
     for (auto &pkt : view->pkt) {
       out << QString::fromStdString("Time: ").toUtf8()
           << QString::fromStdString(pkt->time).toUtf8()
@@ -161,5 +162,6 @@ void MainWindow::save_file() {
                  .toUtf8()
           << QString::fromStdString("\n").toUtf8();
     }
+    sniffer->status = Start;
   }
 }
