@@ -199,14 +199,14 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
 
     case DPORT: {
       if (tmpPacket->trs_type == TCP) {
-        std::string tmpDPort = std::to_string(tmpPacket->trs_hdr.tcp_hdr->th_dport);
+        std::string tmpDPort = std::to_string(ntohs(tmpPacket->trs_hdr.tcp_hdr->th_dport));
         if (iQuery->second.find(tmpDPort.data()) != 0) {
           flag = false;
         }
         break;
       }
       else if (tmpPacket->trs_type == UDP) {
-        std::string tmpDPort = std::to_string(tmpPacket->trs_hdr.udp_hdr->dst_port);
+        std::string tmpDPort = std::to_string(ntohs(tmpPacket->trs_hdr.udp_hdr->dst_port));
         if (iQuery->second.find(tmpDPort.data()) != 0) {
           flag = false;
         }
