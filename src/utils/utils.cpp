@@ -42,7 +42,7 @@ void print_payload(const u_char *payload, size_t payload_len) {
   }
 }
 
-std::string store_payload(const u_char *payload, size_t payload_len) {
+std::string store_payload(const u_char *payload, long payload_len) {
   std::string data;
   size_t offset = 0;
   size_t cnt = 0;
@@ -94,6 +94,25 @@ std::string store_payload(const u_char *payload, size_t payload_len) {
     offset += 16;
     sprintf(buffer, "\n");
     data += buffer;
+  }
+
+  return data;
+}
+
+std::string store_content(const u_char *payload, long payload_len) {
+  std::string data;
+  int cnt = 0;
+  char buffer[64];
+
+  while (cnt < payload_len) {
+    if (isprint(payload[cnt])) {
+      sprintf(buffer, "%c", payload[cnt]);
+      data += buffer;
+    } else {
+      sprintf(buffer, " ");
+      data += buffer;
+    }
+    cnt++;
   }
 
   return data;

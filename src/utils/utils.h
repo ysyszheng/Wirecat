@@ -70,7 +70,8 @@
 typedef enum { Init, Start, Stop } flag_t;
 
 void print_payload(const u_char *payload, size_t payload_len);
-std::string store_payload(const u_char *payload, size_t payload_len);
+std::string store_payload(const u_char *payload, long payload_len);
+std::string store_content(const u_char *payload, long payload_len);
 
 const std::string currentDataTime();
 
