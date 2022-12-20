@@ -179,18 +179,14 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
 
     case SPORT: {
       if (tmpPacket->trs_type == TCP) {
-        QString Sport =
-            QString::number(tmpPacket->trs_hdr.tcp_hdr->th_sport, 10);
-        std::string tmpSPort = Sport.toStdString();
+        std::string tmpSPort = std::to_string(ntohs(tmpPacket->trs_hdr.tcp_hdr->th_sport));
         if (iQuery->second.find(tmpSPort.data()) != 0) {
           flag = false;
         }
         break;
       }
-      if (tmpPacket->trs_type == UDP) {
-        QString Sport =
-            QString::number(tmpPacket->trs_hdr.udp_hdr->src_port, 10);
-        std::string tmpSPort = Sport.toStdString();
+      else if (tmpPacket->trs_type == UDP) {
+        std::string tmpSPort = std::to_string(ntohs(tmpPacket->trs_hdr.udp_hdr->src_port));
         if (iQuery->second.find(tmpSPort.data()) != 0) {
           flag = false;
         }
@@ -203,18 +199,14 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
 
     case DPORT: {
       if (tmpPacket->trs_type == TCP) {
-        QString Dport =
-            QString::number(tmpPacket->trs_hdr.tcp_hdr->th_dport, 10);
-        std::string tmpDPort = Dport.toStdString();
+        std::string tmpDPort = std::to_string(ntohs(tmpPacket->trs_hdr.tcp_hdr->th_dport));
         if (iQuery->second.find(tmpDPort.data()) != 0) {
           flag = false;
         }
         break;
       }
-      if (tmpPacket->trs_type == UDP) {
-        QString Dport =
-            QString::number(tmpPacket->trs_hdr.udp_hdr->dst_port, 10);
-        std::string tmpDPort = Dport.toStdString();
+      else if (tmpPacket->trs_type == UDP) {
+        std::string tmpDPort = std::to_string(ntohs(tmpPacket->trs_hdr.udp_hdr->dst_port));
         if (iQuery->second.find(tmpDPort.data()) != 0) {
           flag = false;
         }
