@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1319</width>
-    <height>919</height>
+    <width>1002</width>
+    <height>697</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,9 +20,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>10</y>
-      <width>1211</width>
+      <x>20</x>
+      <y>0</y>
+      <width>961</width>
       <height>41</height>
      </rect>
     </property>
@@ -30,25 +30,12 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QLabel" name="input_rule">
-         <property name="font">
-          <font>
-           <pointsize>15</pointsize>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 0);</string>
-         </property>
-         <property name="text">
-          <string>Input the filtering rule     </string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QLineEdit" name="filter_rule">
          <property name="styleSheet">
           <string notr="true">background-color: rgb(222, 221, 218);</string>
+         </property>
+         <property name="placeholderText">
+          <string>Apply a display filter (packet info, payload content...), -h for help.</string>
          </property>
         </widget>
        </item>
@@ -58,7 +45,7 @@
       <widget class="QPushButton" name="filterButton">
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="styleSheet">
@@ -66,62 +53,7 @@
 background-color: rgb(154, 153, 150);</string>
        </property>
        <property name="text">
-        <string>Filter</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>50</y>
-      <width>1211</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="search">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="font">
-          <font>
-           <pointsize>15</pointsize>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 0);</string>
-         </property>
-         <property name="text">
-          <string>Input the search criteria  </string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(222, 221, 218);</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QPushButton" name="searchButton">
-       <property name="font">
-        <font>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(154, 153, 150);</string>
-       </property>
-       <property name="text">
-        <string>Search</string>
+        <string>Apply</string>
        </property>
       </widget>
      </item>
@@ -130,30 +62,30 @@ background-color: rgb(154, 153, 150);</string>
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>100</y>
-      <width>1211</width>
-      <height>261</height>
+      <x>20</x>
+      <y>40</y>
+      <width>961</width>
+      <height>211</height>
      </rect>
     </property>
    </widget>
    <widget class="QTreeView" name="treeView">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>360</y>
-      <width>1211</width>
-      <height>231</height>
+      <x>20</x>
+      <y>250</y>
+      <width>961</width>
+      <height>191</height>
      </rect>
     </property>
    </widget>
    <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>590</y>
-      <width>1211</width>
-      <height>261</height>
+      <x>20</x>
+      <y>440</y>
+      <width>961</width>
+      <height>211</height>
      </rect>
     </property>
    </widget>
@@ -163,7 +95,7 @@ background-color: rgb(154, 153, 150);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1319</width>
+     <width>1002</width>
      <height>22</height>
     </rect>
    </property>

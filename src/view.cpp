@@ -23,13 +23,13 @@ View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
                                       new QStandardItem(QObject::tr("Info")));
 
   table->setModel(TableModel);
-  table->setColumnWidth(0, 100);
-  table->setColumnWidth(1, 150);
-  table->setColumnWidth(2, 250);
-  table->setColumnWidth(3, 250);
-  table->setColumnWidth(4, 70);
-  table->setColumnWidth(5, 60);
-  table->setColumnWidth(6, 350);
+  table->setColumnWidth(0, table->width() / 12);
+  table->setColumnWidth(1, table->width() / 5);
+  table->setColumnWidth(2, table->width() / 7);
+  table->setColumnWidth(3, table->width() / 7);
+  table->setColumnWidth(4, table->width() / 10);
+  table->setColumnWidth(5, table->width() / 15);
+  table->setColumnWidth(6, table->width() / 3.5);
 
   table->verticalHeader()->setVisible(false);
   table->setSelectionBehavior(QTableView::SelectRows);
@@ -54,7 +54,10 @@ View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
   text->setFontPointSize(10);
 }
 
-View::~View() {}
+View::~View() {
+  delete TableModel;
+  delete TreeModel;
+}
 
 void View::add_pkt(packet_struct *packet, bool flag) {
   if (!flag)
@@ -602,13 +605,13 @@ void View::clearView() {
                                       new QStandardItem(QObject::tr("Info")));
 
   table->setModel(TableModel);
-  table->setColumnWidth(0, 100);
-  table->setColumnWidth(1, 150);
-  table->setColumnWidth(2, 250);
-  table->setColumnWidth(3, 250);
-  table->setColumnWidth(4, 70);
-  table->setColumnWidth(5, 60);
-  table->setColumnWidth(6, 350);
+  table->setColumnWidth(0, table->width() / 12);
+  table->setColumnWidth(1, table->width() / 5);
+  table->setColumnWidth(2, table->width() / 7);
+  table->setColumnWidth(3, table->width() / 7);
+  table->setColumnWidth(4, table->width() / 10);
+  table->setColumnWidth(5, table->width() / 15);
+  table->setColumnWidth(6, table->width() / 3.5);
 
   table->verticalHeader()->setVisible(false);
   table->setSelectionBehavior(QTableView::SelectRows);

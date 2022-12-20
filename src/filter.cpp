@@ -1,4 +1,5 @@
 #include "filter.h"
+#include "utils/utils.h"
 
 Filter::Filter() {}
 
@@ -111,7 +112,7 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
   }
 
   QString Protocal;
-  
+
   switch (tmpPacket->trs_type) {
   case UDP:
     Protocal = "UDP";
@@ -128,16 +129,23 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
   case Utrs:
     break;
   }
-  if(tmpPacket->trs_type == Utrs){
+  if (tmpPacket->trs_type == Utrs) {
     switch (tmpPacket->net_type) {
-      case ARP: Protocal = "ARP"; break;
-      case IPv4: Protocal = "IPv4"; break;
-      case IPv6: Protocal = "IPv6"; break;
-      case Unet: break;
-      default: break;
+    case ARP:
+      Protocal = "ARP";
+      break;
+    case IPv4:
+      Protocal = "IPv4";
+      break;
+    case IPv6:
+      Protocal = "IPv6";
+      break;
+    case Unet:
+      break;
+    default:
+      break;
+    }
   }
-  }
-
 
   bool flag = true;
   for (std::map<int, std::string>::iterator iQuery = query.begin();
@@ -211,7 +219,7 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
 
     case C: {
       std::string text =
-          store_payload((u_char *)tmpPacket->eth_hdr, tmpPacket->len);
+          store_content((u_char *)tmpPacket->eth_hdr, tmpPacket->len);
       if (text.find(iQuery->second) >= text.size()) {
         flag = false;
       }
@@ -231,9 +239,10 @@ void Filter::launchFilter(View *view) {
   int len = view->pkt.size();
   int i;
   bool flag;
-  for(i=0;i<len;++i){
+  for (i = 0; i < len; ++i) {
     flag = launchOneFilter(view->pkt[i]);
-    if(flag) view->add_pkt(view->pkt[i], true);
+    if (flag)
+      view->add_pkt(view->pkt[i], true);
   }
 }
 
