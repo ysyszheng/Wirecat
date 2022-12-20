@@ -63,6 +63,7 @@ void MainWindow::start_catch() {
 void MainWindow::stop_catch() {
   LOG("Stop");
   sniffer->status = Stop;
+  on_filter_Pressed();
 }
 
 void MainWindow::clear_catch() {
