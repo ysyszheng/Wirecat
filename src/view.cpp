@@ -216,12 +216,12 @@ void View::onTableClicked(const QModelIndex &item) {
   auto eth = new QStandardItem(QObject::tr("Ethernet II"));
   TreeModel->setItem(1, eth);
   child = new QStandardItem(
-      QObject::tr("Destination: ") +
+      QObject::tr("Source: ") +
       QString::fromStdString(ether_ntoa(
           (const struct ether_addr *)&pkt_item->eth_hdr->ether_shost)));
   eth->appendRow(child);
   child = new QStandardItem(
-      QObject::tr("Source: ") +
+      QObject::tr("Destination: ") +
       QString::fromStdString(ether_ntoa(
           (const struct ether_addr *)&pkt_item->eth_hdr->ether_dhost)));
   eth->appendRow(child);
