@@ -20,7 +20,6 @@ public:
   bool checkCommand(QString command);
   bool loadCommand(QString command);
   void launchFilter(View *view);
-  void printQuery();
   bool launchOneFilter(packet_struct *packet);
 
 private:

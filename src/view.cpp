@@ -585,6 +585,8 @@ void View::clearView() {
   TreeModel->clear();
   text->clear();
 
+  TableModel->clear();
+
   // set tableview
   TableModel = new QStandardItemModel();
   TableModel->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("NO.")));

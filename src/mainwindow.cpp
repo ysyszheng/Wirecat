@@ -63,7 +63,7 @@ void MainWindow::start_catch() {
 void MainWindow::stop_catch() {
   LOG("Stop");
   sniffer->status = Stop;
-  on_filter_Pressed();
+  //on_filter_Pressed();
 }
 
 void MainWindow::clear_catch() {
@@ -123,7 +123,6 @@ void MainWindow::on_filter_Pressed() {
     return;
   }
   filter->loadCommand(ui->filter_rule->text());
-  filter->printQuery();
   filter->launchFilter(view);
 }
 

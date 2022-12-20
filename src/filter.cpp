@@ -245,11 +245,3 @@ void Filter::launchFilter(View *view) {
       view->add_pkt(view->pkt[i], true);
   }
 }
-
-void Filter::printQuery() {
-  LOG("test mdoe");
-  for (std::map<int, std::string>::iterator iQuery = query.begin();
-       iQuery != query.end(); iQuery++) {
-    std::cout << iQuery->first << "  " << iQuery->second.data() << std::endl;
-  }
-}
