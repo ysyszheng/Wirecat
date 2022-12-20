@@ -179,14 +179,14 @@ bool Filter::launchOneFilter(packet_struct *tmpPacket) {
 
     case SPORT: {
       if (tmpPacket->trs_type == TCP) {
-        std::string tmpSPort = std::to_string(tmpPacket->trs_hdr.tcp_hdr->th_sport);
+        std::string tmpSPort = std::to_string(ntohs(tmpPacket->trs_hdr.tcp_hdr->th_sport));
         if (iQuery->second.find(tmpSPort.data()) != 0) {
           flag = false;
         }
         break;
       }
       else if (tmpPacket->trs_type == UDP) {
-        std::string tmpSPort = std::to_string(tmpPacket->trs_hdr.udp_hdr->src_port);
+        std::string tmpSPort = std::to_string(ntohs(tmpPacket->trs_hdr.udp_hdr->src_port));
         if (iQuery->second.find(tmpSPort.data()) != 0) {
           flag = false;
         }
