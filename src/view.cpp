@@ -59,8 +59,8 @@ View::~View() {
   delete TreeModel;
 }
 
-void View::add_pkt(packet_struct *packet, bool flag) {
-  if (!flag)
+void View::add_pkt(const packet_struct *packet, bool flag) {
+  if (!flag) // TODO // TODO // TODO // TODO // TODO // TODO // TODO // need test
     pkt.push_back(packet);
 
   QString prot, src, dst, info;
@@ -192,7 +192,7 @@ void View::onTableClicked(const QModelIndex &item) {
 
   // tree
   TreeModel->clear();
-  packet_struct *pkt_item = pkt[idx];
+  const packet_struct *pkt_item = pkt[idx]; // TODO // TODO // TODO // TODO // TODO // TODO // TODO // need test
   QStandardItem *child;
 
   auto frame = new QStandardItem(QObject::tr("Frame Information"));

@@ -13,11 +13,11 @@ private:
   QTextBrowser *text;
 
 public:
-  std::vector<packet_struct *> pkt;
+  std::vector<const packet_struct *> pkt;
 
   View(QTableView *table, QTextBrowser *text, QTreeView *tree);
   ~View();
-  void add_pkt(packet_struct *packete, bool flag=false);
+  void add_pkt(const packet_struct *packete, bool flag=false);
 
   void rebuildTableView();
   void clearView();

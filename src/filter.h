@@ -21,7 +21,7 @@ public:
   bool loadCommand(QString command);
   void launchFilter(View *view);
   void printQuery();
-  bool launchOneFilter(packet_struct *packet);
+  bool launchOneFilter(const packet_struct *packet);
 
 private:
   std::map<int, std::string> query;

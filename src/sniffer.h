@@ -12,7 +12,7 @@ class Sniffer : public QObject {
 
   friend class MainWindow;
   friend class DevWindow;
-  friend class CThread;
+  friend class View;
 
 protected:
   pcap_if_t *allDev_ptr;
