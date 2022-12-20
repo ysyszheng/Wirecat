@@ -68,7 +68,7 @@ void Sniffer::getView(View *viewObj) { view = viewObj; }
 
 void Sniffer::sniff() {
   LOG("Start Sniffing...")
-  status = Start;
+  // status = Start;
 
   while (TRUE) {
     if (status == Start) {
