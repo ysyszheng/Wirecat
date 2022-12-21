@@ -59,8 +59,8 @@ View::~View() {
   delete TreeModel;
 }
 
-void View::add_pkt(packet_struct *packet, bool flag) {
-  if (!flag)
+void View::add_pkt(const packet_struct *packet, bool flag) {
+  if (!flag) // TODO // TODO // TODO // TODO // TODO // TODO // TODO // need test
     pkt.push_back(packet);
 
   QString prot, src, dst, info;
@@ -70,14 +70,10 @@ void View::add_pkt(packet_struct *packet, bool flag) {
     prot = "ARP";
     info = (ntohs(packet->net_hdr.arp_hdr->opcode) == 1) ? "ARP Request"
                                                          : "ARP Reply";
-    src = QString::number(packet->net_hdr.arp_hdr->src_ip[0]) + ":" +
-          QString::number(packet->net_hdr.arp_hdr->src_ip[1]) + ":" +
-          QString::number(packet->net_hdr.arp_hdr->src_ip[2]) + ":" +
-          QString::number(packet->net_hdr.arp_hdr->src_ip[3]);
-    dst = QString::number(packet->net_hdr.arp_hdr->dest_ip[0]) + ":" +
-          QString::number(packet->net_hdr.arp_hdr->dest_ip[1]) + ":" +
-          QString::number(packet->net_hdr.arp_hdr->dest_ip[2]) + ":" +
-          QString::number(packet->net_hdr.arp_hdr->dest_ip[3]);
+    src = QString::fromStdString(
+        ether_ntoa((const struct ether_addr *)&packet->eth_hdr->ether_shost));
+    dst = QString::fromStdString(
+        ether_ntoa((const struct ether_addr *)&packet->eth_hdr->ether_dhost));
     break;
   case IPv4:
     src = QString::fromStdString(inet_ntoa(packet->net_hdr.ipv4_hdr->ip_src));
@@ -196,7 +192,7 @@ void View::onTableClicked(const QModelIndex &item) {
 
   // tree
   TreeModel->clear();
-  packet_struct *pkt_item = pkt[idx];
+  const packet_struct *pkt_item = pkt[idx]; // TODO // TODO // TODO // TODO // TODO // TODO // TODO // need test
   QStandardItem *child;
 
   auto frame = new QStandardItem(QObject::tr("Frame Information"));
@@ -218,12 +214,12 @@ void View::onTableClicked(const QModelIndex &item) {
   child = new QStandardItem(
       QObject::tr("Destination: ") +
       QString::fromStdString(ether_ntoa(
-          (const struct ether_addr *)&pkt_item->eth_hdr->ether_shost)));
+          (const struct ether_addr *)&pkt_item->eth_hdr->ether_dhost)));
   eth->appendRow(child);
   child = new QStandardItem(
       QObject::tr("Source: ") +
       QString::fromStdString(ether_ntoa(
-          (const struct ether_addr *)&pkt_item->eth_hdr->ether_dhost)));
+          (const struct ether_addr *)&pkt_item->eth_hdr->ether_shost)));
   eth->appendRow(child);
   switch (pkt_item->net_type) {
   case IPv4:
@@ -259,7 +255,7 @@ void View::onTableClicked(const QModelIndex &item) {
     net->appendRow(child);
     child = new QStandardItem(
         QObject::tr("Differentiated Services Field: ") +
-        QString("0x%1").arg(pkt_item->net_hdr.ipv4_hdr->ip_tos, 4, 16,
+        QString("0x%1").arg(pkt_item->net_hdr.ipv4_hdr->ip_tos, 2, 16,
                             QLatin1Char('0')));
     net->appendRow(child);
     child = new QStandardItem(

@@ -115,7 +115,7 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
   if (pkt_p->net_type != Unet) { // Known types
     cnt++;
     pkt_p->no = cnt;
-    // Sniffer::pkt.push_back(pkt_p);
+    Sniffer::pkt.push_back(pkt_p);
     // LOG("\n" << store_payload((u_char *)pkt_p->eth_hdr, pkt_p->len));
     view->add_pkt(pkt_p);
   }

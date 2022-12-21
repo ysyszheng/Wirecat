@@ -115,11 +115,12 @@ void MainWindow::on_filter_textChanged(const QString &command) {
 
 void MainWindow::on_filter_Pressed() {
   if (ui->filter_rule->text() == tr("-h")) {
-    QMessageBox::about(
-        this, tr("The Usage of filter"),
-        tr("<-options>\t<filter rule>\n"
-           "-h\thelp\n-p\tprotocol\n-s\tsource IP address\n-d\tdestination IP address\n"
-           "-sport\tsource port\n-dport\tdestination port\n-c\tpacket content"));
+    QMessageBox::about(this, tr("The Usage of filter"),
+                       tr("<-options>\t<filter rule>\n"
+                          "-h\thelp\n-p\tprotocol\n-s\tsource IP "
+                          "address\n-d\tdestination IP address\n"
+                          "-sport\tsource port\n-dport\tdestination "
+                          "port\n-c\tpacket content"));
     return;
   }
   filter->loadCommand(ui->filter_rule->text());
@@ -137,7 +138,7 @@ void MainWindow::save_file() {
       tr("Log File (*.log);;All Files (*)"));
   if (fileName.isEmpty())
     return;
-  else {
+  else { // TODO
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly)) {
       QMessageBox::information(this, tr("Unable to open file"),

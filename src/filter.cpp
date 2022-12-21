@@ -62,7 +62,7 @@ std::string Filter::findWord(std::string command, size_t pos) {
   return command.substr(beg, end - beg);
 }
 
-bool Filter::launchOneFilter(packet_struct *tmpPacket) {
+bool Filter::launchOneFilter(const packet_struct *tmpPacket) {
   QString src_IP = "";
   QString dest_IP = "";
   switch (tmpPacket->net_type) {
