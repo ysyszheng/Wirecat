@@ -29,11 +29,14 @@ MainWindow::MainWindow(QWidget *parent)
   devwindow->show();
   connect(devwindow, SIGNAL(subWndClosed()), this, SLOT(showMainWnd()));
 
+  
+
   // catch thread
   cthread = new QThread;
   sniffer->moveToThread(cthread);
   cthread->start();
   connect(this, SIGNAL(sig()), sniffer, SLOT(sniff()));
+
 }
 
 MainWindow::~MainWindow() {
@@ -71,6 +74,7 @@ void MainWindow::clear_catch() {
   view->clearView();
 }
 
+
 // Menu
 void MainWindow::setMenuBar(QMenuBar *mBar) {
   // QMenu *pFile = mBar->addMenu("Files");
@@ -93,7 +97,8 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
 
   QMenu *pRe = mBar->addMenu("Reassemble");
   QAction *pIPre = pRe->addAction("IP Reassemble");
-  connect(pIPre, &QAction::triggered, [=]() { qDebug() << "IP Reassemble"; });
+  connect(pIPre, &QAction::triggered, [=]() { qDebug() << "IP Reassemble"; }); 
+  //TODO:make IPassemble a QCheckBox, change sniffer.is_IPreassmble_ticked to true if ticked.
   pRe->addSeparator();
   QAction *pFre = pRe->addAction("File Reassemble");
   connect(pFre, &QAction::triggered, [=]() { qDebug() << "File Reassemble"; });

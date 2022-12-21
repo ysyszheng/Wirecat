@@ -24,7 +24,8 @@ protected:
   flag_t status;                           // status {start, stop, restart}
   static std::vector<packet_struct *> pkt; // packet
   static View *view;                       // view
-
+  std::vector<ushort> idenList;            // identification to be reassembly
+  std::vector<buf*> segpack;
 public:
   Sniffer();
   ~Sniffer();
@@ -32,6 +33,12 @@ public:
   void getDevName(const char *devName);
   bool getDevInfo();
   void getView(View *viewObj);
+
+  void ip_regroup(packet_struct* newpacket);
+  void bit_set(void* buf, int offset);
+  int bit_isset(void* buf, int offset);
+
+  bool is_IPreassmble_ticked;
 
 private:
   static void get_packet(u_char *args, const struct pcap_pkthdr *header,

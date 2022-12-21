@@ -147,4 +147,14 @@ typedef struct {
   } trs_hdr;
 } packet_struct;
 
+/* struct for ip regroup */
+typedef struct _buf
+{
+    unsigned char* data;              /* data buffer */
+    struct pcap_pkthdr* header;
+    ethernet_header* th;              /* ethernet header */
+    ipv4_header* ip;								  /* header buffer */
+    unsigned char* seg_PT;            /* Fragmentation block bit table */
+    unsigned short TDL;               /* total data length */
+}buf;
 #endif // HDR_H
