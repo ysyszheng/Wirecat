@@ -194,3 +194,42 @@ void Sniffer::handle_arp(const u_char *packet, packet_struct *pkt_p) {
   pkt_p->len += SIZE_ARP;
   return;
 }
+
+/* IP reassmble function */
+void Sniffer::ipv4Reassmble(const packet_struct* packet) {
+    uint16_t identification = packet->net_hdr.ipv4_hdr->ip_id;
+    int size = pkt.size();
+    u_char* datagram = new u_char[8000];
+    packet_struct * newpacket = new packet_struct;
+    uint32_t final_hdr_length = 0;
+    uint32_t total_data_len = 0;
+    for(int i=0; i<size; i++) {
+        if(pkt[i]->net_hdr.ipv4_hdr->ip_id == identification){  // fragments of a same packet
+            ushort tmpOffset = ntohs(pkt[i]->net_hdr.ipv4_hdr->ip_off) & 0x1fff;
+            uint32_t hdr_length = 0;
+        
+            hdr_length += SIZE_ETHERNET + 20;
+            switch(pkt[i]->trs_type) {
+                case UDP: hdr_length += 8; break;
+                case TCP: hdr_length += 20; break;
+                case ICMP: hdr_length += SIZE_ICMP; break;
+                case IGMP: hdr_length += 8; break;
+                case Utrs: break;
+            }
+
+            total_data_len += pkt[i]->len - hdr_length;
+            if(total_data_len > 8000)   break;    
+      
+            if(tmpOffset == 0){  // the first fragment
+                final_hdr_length = hdr_length;
+                memcpy(newpacket->eth_hdr, pkt[i]->eth_hdr, final_hdr_length);           // copy header of the first fragment 
+                memcpy(datagram, pkt[i]->eth_hdr + hdr_length, pkt[i]->len-hdr_length);  // copy data of the first fragment
+            }
+            else{
+                memcpy(datagram + tmpOffset*8, pkt[i]->eth_hdr + hdr_length, pkt[i]->len-hdr_length);  //copy data of this fragment
+            }
+        }
+    }
+
+    memcpy(newpacket->eth_hdr + final_hdr_length, datagram, total_data_len);    // newpacket is the packet after reassmbled.
+}
