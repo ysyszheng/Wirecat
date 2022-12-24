@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "utils/hdr.h"
+#include "utils/utils.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -29,14 +31,11 @@ MainWindow::MainWindow(QWidget *parent)
   devwindow->show();
   connect(devwindow, SIGNAL(subWndClosed()), this, SLOT(showMainWnd()));
 
-  
-
   // catch thread
   cthread = new QThread;
   sniffer->moveToThread(cthread);
   cthread->start();
   connect(this, SIGNAL(sig()), sniffer, SLOT(sniff()));
-
 }
 
 MainWindow::~MainWindow() {
@@ -66,14 +65,13 @@ void MainWindow::start_catch() {
 void MainWindow::stop_catch() {
   LOG("Stop");
   sniffer->status = Stop;
-  //on_filter_Pressed();
+  // on_filter_Pressed();
 }
 
 void MainWindow::clear_catch() {
   LOG("Clear");
   view->clearView();
 }
-
 
 // Menu
 void MainWindow::setMenuBar(QMenuBar *mBar) {
@@ -97,8 +95,9 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
 
   QMenu *pRe = mBar->addMenu("Reassemble");
   QAction *pIPre = pRe->addAction("IP Reassemble");
-  connect(pIPre, &QAction::triggered, [=]() { qDebug() << "IP Reassemble"; }); 
-  //TODO:make IPassemble a QCheckBox, change sniffer.is_IPreassmble_ticked to true if ticked.
+  connect(pIPre, &QAction::triggered, this, &MainWindow::ip_reassemble);
+  // TODO:make IPassemble a QCheckBox, change sniffer.is_IPreassmble_ticked to
+  // true if ticked.
   pRe->addSeparator();
   QAction *pFre = pRe->addAction("File Reassemble");
   connect(pFre, &QAction::triggered, [=]() { qDebug() << "File Reassemble"; });
@@ -169,5 +168,29 @@ void MainWindow::save_file() {
           << QString::fromStdString("\n").toUtf8();
     }
     sniffer->status = Start;
+  }
+}
+
+void MainWindow::ip_reassemble() {
+  QItemSelectionModel *select = ui->tableView->selectionModel();
+  if (select->selectedRows().empty()) {
+    QMessageBox::critical(this, tr("Warning"), tr("Please select a packet"));
+    return;
+  } else {
+    int row = select->selectedIndexes().at(0).row();
+    const packet_struct *packet = view->pkt[row];
+    if (packet->net_type != IPv4) {
+      QMessageBox::critical(this, tr("Warning"), tr("Not a IP packet"));
+    } else if ((ntohs(packet->net_hdr.ipv4_hdr->ip_off) & IP_DF) == 1) {
+      QMessageBox::critical(this, tr("Warning"), tr("Not a Fragment packet"));
+    } else {
+      print_payload((u_char *)packet, packet->len); // TODO: delete this
+      auto res = sniffer->ipv4Reassmble(packet);
+      ui->textBrowser->clear();
+      ui->textBrowser->insertPlainText(
+          QString::fromStdString(store_payload((u_char *)res, res->len)));
+    }
+    delete packet;
+    return;
   }
 }

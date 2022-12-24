@@ -1,6 +1,7 @@
 #include "view.h"
 #include "qchar.h"
 #include "qobject.h"
+#include "qtableview.h"
 #include "utils/hdr.h"
 #include <netinet/in.h>
 
@@ -33,6 +34,7 @@ View::View(QTableView *table, QTextBrowser *text, QTreeView *tree)
 
   table->verticalHeader()->setVisible(false);
   table->setSelectionBehavior(QTableView::SelectRows);
+  table->setSelectionMode(QAbstractItemView::SingleSelection);
   table->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
   // click table section
@@ -183,7 +185,7 @@ void View::onTableClicked(const QModelIndex &item) {
     return;
   }
   idx = TableModel->item(idx, 0)->text().toInt() - 1;
-  LOG(idx);
+  // LOG(idx);
 
   // textbrowser
   text->clear();
@@ -192,7 +194,7 @@ void View::onTableClicked(const QModelIndex &item) {
 
   // tree
   TreeModel->clear();
-  const packet_struct *pkt_item = pkt[idx]; // TODO // TODO // TODO // TODO // TODO // TODO // TODO // need test
+  const packet_struct *pkt_item = pkt[idx]; // TODO: packet content changed ?
   QStandardItem *child;
 
   auto frame = new QStandardItem(QObject::tr("Frame Information"));

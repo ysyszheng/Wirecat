@@ -28,6 +28,7 @@ private slots:
   void on_filter_textChanged(const QString &arg1);
   void on_filter_Pressed();
   void save_file();
+  void ip_reassemble();
 
 signals:
   void sig();
