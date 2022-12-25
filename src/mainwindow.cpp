@@ -100,7 +100,7 @@ void MainWindow::setMenuBar(QMenuBar *mBar) {
   // true if ticked.
   pRe->addSeparator();
   QAction *pFre = pRe->addAction("File Reassemble");
-  connect(pFre, &QAction::triggered, [=]() { qDebug() << "File Reassemble"; });
+  connect(pFre, &QAction::triggered, this, &MainWindow::file_reassemble);
 }
 
 /*
@@ -162,8 +162,6 @@ void MainWindow::save_file() {
           << QString::fromStdString("NO: ").toUtf8()
           << QString::number(pkt->no).toUtf8()
           << QString::fromStdString("\n").toUtf8()
-          << QString::pointer((u_char *)pkt->eth_hdr)
-          << QString::fromStdString("\n").toUtf8()
           << QString::fromStdString(
                  store_payload((u_char *)pkt->eth_hdr, pkt->len))
                  .toUtf8()
@@ -183,6 +181,36 @@ void MainWindow::ip_reassemble() {
     const packet_struct *packet = view->pkt[row];
     if (packet->net_type != IPv4) {
       QMessageBox::critical(this, tr("Warning"), tr("Not a IP packet"));
+    } else if (((ntohs(packet->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 14) == 1) {
+      QMessageBox::critical(this, tr("Warning"), tr("Not a Fragment packet"));
+    } else {
+      ui->textBrowser->clear();
+      auto res = sniffer->ipv4Reassmble(packet);
+      ui->textBrowser->insertPlainText(
+          QString::fromStdString(store_payload((u_char *)packet, packet->len)));
+      // uint16_t id = ntohs(packet->net_hdr.ipv4_hdr->ip_id);
+      // for (auto &i : view->pkt) {
+      //   if (i->net_type == IPv4 && ntohs(i->net_hdr.ipv4_hdr->ip_id) == id &&
+      //       ((ntohs(i->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 15) == 1) {
+      //     ui->textBrowser->insertPlainText(
+      //         QString::fromStdString(store_payload((u_char *)i, i->len)));
+      //   }
+      // }
+    }
+    return;
+  }
+}
+
+void MainWindow::file_reassemble() {
+  QItemSelectionModel *select = ui->tableView->selectionModel();
+  if (select->selectedRows().empty()) {
+    QMessageBox::critical(this, tr("Warning"), tr("Please select a packet"));
+    return;
+  } else {
+    int row = select->selectedIndexes().at(0).row();
+    const packet_struct *packet = view->pkt[row];
+    if (packet->trs_type != TCP) {
+      QMessageBox::critical(this, tr("Warning"), tr("Not a TCP packet"));
     } else if (((ntohs(packet->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 14) == 1) {
       QMessageBox::critical(this, tr("Warning"), tr("Not a Fragment packet"));
     } else {

@@ -29,6 +29,7 @@ private slots:
   void on_filter_Pressed();
   void save_file();
   void ip_reassemble();
+  void file_reassemble();
 
 signals:
   void sig();
