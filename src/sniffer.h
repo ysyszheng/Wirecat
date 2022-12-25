@@ -34,8 +34,6 @@ public:
   bool getDevInfo();
   void getView(View *viewObj);
 
-  static packet_struct *ipv4Reassmble(const packet_struct *packet);
-
 private:
   static void get_packet(u_char *args, const struct pcap_pkthdr *header,
                          const u_char *packet);
