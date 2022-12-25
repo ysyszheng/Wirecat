@@ -126,3 +126,8 @@ const std::string currentDataTime() {
   strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tstruct);
   return buf;
 }
+
+bool ipcmp(const packet_struct *p1, const packet_struct *p2) {
+  return ((ntohs(p1->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK) <
+          (ntohs(p2->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK));
+}

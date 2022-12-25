@@ -99,13 +99,13 @@ TODO
 * [x] Find all network devices
 * [x] Catch packets
 * [x] Parse packets (Parse IP, TCP, UDP, ICMP, ARP, etc.)
-* [ ] IP fragmentation reassembly
+* [x] IP fragmentation reassembly
 * [x] Filter packets (Filter IP addresses (src & dst), ports (src & dst), protocols, etc.)
 * [x] Search packets (Search by content, etc.)
 * [x] Save packets (Save packets to readable file)
 * [ ] File reassembly (Reassemble files from TCP packets)
 * [x] Interact in GUI (Show packets info in GUI)
-* [ ] Beautify UI (QStyle class may be helpful)
+* [x] Beautify UI (QStyle class may be helpful)
 
 Reference
 -----

@@ -185,17 +185,90 @@ void MainWindow::ip_reassemble() {
       QMessageBox::critical(this, tr("Warning"), tr("Not a Fragment packet"));
     } else {
       ui->textBrowser->clear();
-      auto res = sniffer->ipv4Reassmble(packet);
+      int len;
+      int iplen = IPv4_HL(packet->net_hdr.ipv4_hdr) * 4;
+      void *content, *content_new;
+      std::vector<const packet_struct *> repkt;
+      uint16_t id = ntohs(packet->net_hdr.ipv4_hdr->ip_id);
+      for (auto &item : view->pkt) {
+        if (ntohs(item->net_hdr.ipv4_hdr->ip_id) == id) {
+          repkt.push_back(item);
+        }
+      }
+      sort(repkt.begin(), repkt.end(), ipcmp);
+      content = malloc(
+          repkt.back()->len +
+          (ntohs(repkt.back()->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK) * 8);
+      switch (packet->trs_type) {
+      case TCP:
+        for (auto &item : repkt) {
+          LOG((ntohs(item->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK));
+          if ((ntohs(item->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK) == 0) {
+            memcpy(content, item->trs_hdr.tcp_hdr,
+                   item->len - SIZE_ETHERNET - iplen);
+            len = item->len - SIZE_ETHERNET - iplen;
+            content_new = (u_char *)content + len;
+          } else {
+            memcpy(content_new, (u_char *)(item->trs_hdr.tcp_hdr),
+                   item->len - SIZE_ETHERNET - iplen);
+            len += item->len - SIZE_ETHERNET - iplen;
+            content_new = (u_char *)content + len;
+          }
+        }
+        break;
+      case UDP:
+        for (auto &item : repkt) {
+          LOG((ntohs(item->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK));
+          if ((ntohs(item->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK) == 0) {
+            memcpy(content, item->trs_hdr.udp_hdr,
+                   item->len - SIZE_ETHERNET - iplen);
+            len = item->len - SIZE_ETHERNET - iplen;
+            content_new = (u_char *)content + len;
+          } else {
+            memcpy(content_new, (u_char *)(item->trs_hdr.udp_hdr),
+                   item->len - SIZE_ETHERNET - iplen);
+            len += item->len - SIZE_ETHERNET - iplen;
+            content_new = (u_char *)content + len;
+          }
+        }
+        break;
+      case ICMP:
+        for (auto &item : repkt) {
+          LOG((ntohs(item->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK));
+          if ((ntohs(item->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK) == 0) {
+            memcpy(content, item->trs_hdr.icmp_hdr,
+                   item->len - SIZE_ETHERNET - iplen);
+            len = item->len - SIZE_ETHERNET - iplen;
+            content_new = (u_char *)content + len;
+          } else {
+            memcpy(content_new, (u_char *)(item->trs_hdr.icmp_hdr),
+                   item->len - SIZE_ETHERNET - iplen);
+            len += item->len - SIZE_ETHERNET - iplen;
+            content_new = (u_char *)content + len;
+          }
+        }
+        break;
+      case IGMP:
+        for (auto &item : repkt) {
+          LOG((ntohs(item->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK));
+          if ((ntohs(item->net_hdr.ipv4_hdr->ip_off) & IP_OFFMASK) == 0) {
+            memcpy(content, item->trs_hdr.igmp_hdr,
+                   item->len - SIZE_ETHERNET - iplen);
+            len = item->len - SIZE_ETHERNET - iplen;
+            content_new = (u_char *)content + len;
+          } else {
+            memcpy(content_new, (u_char *)(item->trs_hdr.igmp_hdr),
+                   item->len - SIZE_ETHERNET - iplen);
+            len += item->len - SIZE_ETHERNET - iplen;
+            content_new = (u_char *)content + len;
+          }
+        }
+        break;
+      case Utrs:
+        break;
+      }
       ui->textBrowser->insertPlainText(
-          QString::fromStdString(store_payload((u_char *)packet, packet->len)));
-      // uint16_t id = ntohs(packet->net_hdr.ipv4_hdr->ip_id);
-      // for (auto &i : view->pkt) {
-      //   if (i->net_type == IPv4 && ntohs(i->net_hdr.ipv4_hdr->ip_id) == id &&
-      //       ((ntohs(i->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 15) == 1) {
-      //     ui->textBrowser->insertPlainText(
-      //         QString::fromStdString(store_payload((u_char *)i, i->len)));
-      //   }
-      // }
+          QString::fromStdString(store_payload((u_char *)content, len)));
     }
     return;
   }

@@ -49,7 +49,6 @@
 #include <unistd.h>
 #include <vector>
 
-
 #define FALSE 0
 #define TRUE 1
 
@@ -73,6 +72,7 @@ void print_payload(const u_char *payload, size_t payload_len);
 std::string store_payload(const u_char *payload, long payload_len);
 std::string store_content(const u_char *payload, long payload_len);
 
+bool ipcmp(const packet_struct *a, const packet_struct *b);
 const std::string currentDataTime();
 
 #endif // UTILS_H
