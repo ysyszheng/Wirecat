@@ -103,7 +103,7 @@ TODO
 * [x] Filter packets (Filter IP addresses (src & dst), ports (src & dst), protocols, etc.)
 * [x] Search packets (Search by content, etc.)
 * [x] Save packets (Save packets to readable file)
-* [ ] File reassembly (Reassemble files from TCP packets)
+* [x] File reassembly (Reassemble files from TCP packets)
 * [x] Interact in GUI (Show packets info in GUI)
 * [x] Beautify UI (QStyle class may be helpful)
 
