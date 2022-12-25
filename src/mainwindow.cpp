@@ -183,18 +183,21 @@ void MainWindow::ip_reassemble() {
     const packet_struct *packet = view->pkt[row];
     if (packet->net_type != IPv4) {
       QMessageBox::critical(this, tr("Warning"), tr("Not a IP packet"));
-    } else if (((ntohs(packet->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 15) == 1) {
+    } else if (((ntohs(packet->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 14) == 1) {
       QMessageBox::critical(this, tr("Warning"), tr("Not a Fragment packet"));
     } else {
       ui->textBrowser->clear();
-      uint16_t id = ntohs(packet->net_hdr.ipv4_hdr->ip_id);
-      for (auto &i : view->pkt) {
-        if (i->net_type == IPv4 && ntohs(i->net_hdr.ipv4_hdr->ip_id) == id &&
-            ((ntohs(i->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 15) == 1) {
-          ui->textBrowser->insertPlainText(
-              QString::fromStdString(store_payload((u_char *)i, i->len)));
-        }
-      }
+      auto res = sniffer->ipv4Reassmble(packet);
+      ui->textBrowser->insertPlainText(
+          QString::fromStdString(store_payload((u_char *)packet, packet->len)));
+      // uint16_t id = ntohs(packet->net_hdr.ipv4_hdr->ip_id);
+      // for (auto &i : view->pkt) {
+      //   if (i->net_type == IPv4 && ntohs(i->net_hdr.ipv4_hdr->ip_id) == id &&
+      //       ((ntohs(i->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 15) == 1) {
+      //     ui->textBrowser->insertPlainText(
+      //         QString::fromStdString(store_payload((u_char *)i, i->len)));
+      //   }
+      // }
     }
     return;
   }
