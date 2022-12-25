@@ -19,7 +19,6 @@ public:
   ~View();
   void add_pkt(const packet_struct *packete, bool flag=false);
 
-  void rebuildTableView();
   void clearView();
 
 private slots:

@@ -13,7 +13,8 @@
 #define DPORT 4 /* dest port */
 #define C 5     /* packet content */
 
-class Filter {
+class Filter : public QObject {
+  Q_OBJECT
 public:
   Filter();
   ~Filter();

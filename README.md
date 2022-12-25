@@ -115,6 +115,7 @@ Resources
 * [sniffex.c](https://www.tcpdump.org/other/sniffex.c)
 * [libpcap packet capture tutorial](http://yuba.stanford.edu/~casado/pcap/)
 * [Qt groupbox example](https://doc.qt.io/qt-5/qtwidgets-widgets-groupbox-example.html)
+* [pcap](https://www.tcpdump.org/manpages/pcap.3pcap.html)
 
 Q&A
 * [QGroupBox find selected Radio Button](https://stackoverflow.com/questions/43106746/qgroupbox-find-selected-radio-button)

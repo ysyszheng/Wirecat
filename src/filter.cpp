@@ -179,14 +179,15 @@ bool Filter::launchOneFilter(const packet_struct *tmpPacket) {
 
     case SPORT: {
       if (tmpPacket->trs_type == TCP) {
-        std::string tmpSPort = std::to_string(ntohs(tmpPacket->trs_hdr.tcp_hdr->th_sport));
+        std::string tmpSPort =
+            std::to_string(ntohs(tmpPacket->trs_hdr.tcp_hdr->th_sport));
         if (iQuery->second.find(tmpSPort.data()) != 0) {
           flag = false;
         }
         break;
-      }
-      else if (tmpPacket->trs_type == UDP) {
-        std::string tmpSPort = std::to_string(ntohs(tmpPacket->trs_hdr.udp_hdr->src_port));
+      } else if (tmpPacket->trs_type == UDP) {
+        std::string tmpSPort =
+            std::to_string(ntohs(tmpPacket->trs_hdr.udp_hdr->src_port));
         if (iQuery->second.find(tmpSPort.data()) != 0) {
           flag = false;
         }
@@ -199,14 +200,15 @@ bool Filter::launchOneFilter(const packet_struct *tmpPacket) {
 
     case DPORT: {
       if (tmpPacket->trs_type == TCP) {
-        std::string tmpDPort = std::to_string(ntohs(tmpPacket->trs_hdr.tcp_hdr->th_dport));
+        std::string tmpDPort =
+            std::to_string(ntohs(tmpPacket->trs_hdr.tcp_hdr->th_dport));
         if (iQuery->second.find(tmpDPort.data()) != 0) {
           flag = false;
         }
         break;
-      }
-      else if (tmpPacket->trs_type == UDP) {
-        std::string tmpDPort = std::to_string(ntohs(tmpPacket->trs_hdr.udp_hdr->dst_port));
+      } else if (tmpPacket->trs_type == UDP) {
+        std::string tmpDPort =
+            std::to_string(ntohs(tmpPacket->trs_hdr.udp_hdr->dst_port));
         if (iQuery->second.find(tmpDPort.data()) != 0) {
           flag = false;
         }
@@ -235,7 +237,7 @@ bool Filter::launchOneFilter(const packet_struct *tmpPacket) {
 
 void Filter::launchFilter(View *view) {
   /* clear the tableView */
-  view->rebuildTableView();
+  view->clearView();
   int len = view->pkt.size();
   int i;
   bool flag;
