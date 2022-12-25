@@ -9,6 +9,7 @@ View *Sniffer::view;                       // view
 Sniffer::Sniffer() {
   dev = NULL;
   allDev_ptr = NULL;
+  dumper = NULL;
   status = Init;
   findAllDevs();
 }
@@ -67,27 +68,31 @@ bool Sniffer::getDevInfo() {
 void Sniffer::getView(View *viewObj) { view = viewObj; }
 
 void Sniffer::sniff() {
-  LOG("Start Sniffing...")
-  // status = Start;
-
+  status = Start;
   while (TRUE) {
     if (status == Start) {
-      LOG("Start");
+      // LOG("Start");
+      // dumper = pcap_dump_open(handle, "./packet.pcap");
+      // pcap_dispatch(handle, -1, get_packet, (u_char *)dumper);
       pcap_dispatch(handle, -1, get_packet, NULL);
+      // pcap_dump_flush(dumper);
+      // pcap_dump_close(dumper);
+      // get_packet();
     } else if (status == Stop) {
       LOG("Stop");
     } else {
       LOG("Initiating...");
     }
   }
-
-  return;
 }
 
 void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
                          const u_char *packet) {
 
   static size_t cnt = 0;
+  // pcap_dumper_t *dumper = (pcap_dumper_t *)args;
+  // pcap_dump(args, header, packet);
+  // pcap_dump_flush(dumper);
 
   packet_struct *pkt_p = new packet_struct;
   pkt_p->len = SIZE_ETHERNET;
@@ -113,10 +118,36 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
     break;
   }
 
+  void *packet_cpy = malloc(pkt_p->len);
+  memcpy(packet_cpy, packet, pkt_p->len);
+
+  pkt_p->len = SIZE_ETHERNET;
+  pkt_p->eth_hdr = (ethernet_header *)(packet_cpy);
+
+  switch (ntohs(pkt_p->eth_hdr->ether_type)) {
+  case ETHERTYPE_IP: {
+    pkt_p->net_type = IPv4;
+    handle_ipv4((const u_char *)packet_cpy, pkt_p);
+    break;
+  }
+  case ETHERTYPE_ARP:
+    pkt_p->net_type = ARP;
+    handle_arp((const u_char *)packet_cpy, pkt_p);
+    break;
+  case ETHERTYPE_IPV6:
+    pkt_p->net_type = IPv6;
+    handle_ipv6((const u_char *)packet_cpy, pkt_p);
+    break;
+  default:
+    pkt_p->net_type = Unet;
+    break;
+  }
+
   if (pkt_p->net_type != Unet) { // Known types
     cnt++;
     pkt_p->no = cnt;
-    Sniffer::pkt.push_back(pkt_p);
+
+    // Sniffer::pkt.push_back(pkt_p);
     // LOG("\n" << store_payload((u_char *)pkt_p->eth_hdr, pkt_p->len));
     view->add_pkt(pkt_p);
   }

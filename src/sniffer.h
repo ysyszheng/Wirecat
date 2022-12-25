@@ -19,6 +19,7 @@ protected:
   std::vector<pcap_if_t *> allDev_vec;
   const char *dev; // device name
   pcap_t *handle;
+  pcap_dumper_t *dumper;
   bpf_u_int32 mask;                        // net mask
   bpf_u_int32 net;                         // IP address
   flag_t status;                           // status {start, stop, restart}
@@ -33,7 +34,7 @@ public:
   bool getDevInfo();
   void getView(View *viewObj);
 
-  static packet_struct* ipv4Reassmble(const packet_struct* packet);
+  static packet_struct *ipv4Reassmble(const packet_struct *packet);
 
 private:
   static void get_packet(u_char *args, const struct pcap_pkthdr *header,

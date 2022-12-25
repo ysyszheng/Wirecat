@@ -62,7 +62,7 @@ View::~View() {
 }
 
 void View::add_pkt(const packet_struct *packet, bool flag) {
-  if (!flag) // TODO // TODO // TODO // TODO // TODO // TODO // TODO // need test
+  if (!flag) // TODO
     pkt.push_back(packet);
 
   QString prot, src, dst, info;
@@ -577,8 +577,6 @@ void View::onTableClicked(const QModelIndex &item) {
   }
 }
 
-void View::rebuildTableView() { clearView(); }
-
 void View::clearView() {
   TreeModel->clear();
   text->clear();
@@ -612,6 +610,7 @@ void View::clearView() {
 
   table->verticalHeader()->setVisible(false);
   table->setSelectionBehavior(QTableView::SelectRows);
+  table->setSelectionMode(QAbstractItemView::SingleSelection);
   table->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
   index = 0;

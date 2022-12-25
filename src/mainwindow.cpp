@@ -15,9 +15,13 @@ MainWindow::MainWindow(QWidget *parent)
   QTreeView *tree = ui->treeView;
   view = new View(table, text, tree);
 
-  // variables
+  // catch thread
+  cthread = new QThread;
   sniffer = new Sniffer();
+  sniffer->moveToThread(cthread);
   sniffer->getView(view);
+  connect(this, SIGNAL(sig()), sniffer, SLOT(sniff()));
+  cthread->start();
 
   // filter
   filter = new Filter();
@@ -30,17 +34,13 @@ MainWindow::MainWindow(QWidget *parent)
   DevWindow *devwindow = new DevWindow(sniffer, this);
   devwindow->show();
   connect(devwindow, SIGNAL(subWndClosed()), this, SLOT(showMainWnd()));
-
-  // catch thread
-  cthread = new QThread;
-  sniffer->moveToThread(cthread);
-  cthread->start();
-  connect(this, SIGNAL(sig()), sniffer, SLOT(sniff()));
 }
 
 MainWindow::~MainWindow() {
   delete ui;
   delete filter;
+  delete sniffer;
+  delete view;
 }
 
 // SLOT function
@@ -162,6 +162,8 @@ void MainWindow::save_file() {
           << QString::fromStdString("NO: ").toUtf8()
           << QString::number(pkt->no).toUtf8()
           << QString::fromStdString("\n").toUtf8()
+          << QString::pointer((u_char *)pkt->eth_hdr)
+          << QString::fromStdString("\n").toUtf8()
           << QString::fromStdString(
                  store_payload((u_char *)pkt->eth_hdr, pkt->len))
                  .toUtf8()
@@ -181,16 +183,19 @@ void MainWindow::ip_reassemble() {
     const packet_struct *packet = view->pkt[row];
     if (packet->net_type != IPv4) {
       QMessageBox::critical(this, tr("Warning"), tr("Not a IP packet"));
-    } else if ((ntohs(packet->net_hdr.ipv4_hdr->ip_off) & IP_DF) == 1) {
+    } else if (((ntohs(packet->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 15) == 1) {
       QMessageBox::critical(this, tr("Warning"), tr("Not a Fragment packet"));
     } else {
-      print_payload((u_char *)packet, packet->len); // TODO: delete this
-      auto res = sniffer->ipv4Reassmble(packet);
       ui->textBrowser->clear();
-      ui->textBrowser->insertPlainText(
-          QString::fromStdString(store_payload((u_char *)res, res->len)));
+      uint16_t id = ntohs(packet->net_hdr.ipv4_hdr->ip_id);
+      for (auto &i : view->pkt) {
+        if (i->net_type == IPv4 && ntohs(i->net_hdr.ipv4_hdr->ip_id) == id &&
+            ((ntohs(i->net_hdr.ipv4_hdr->ip_off) & IP_DF) >> 15) == 1) {
+          ui->textBrowser->insertPlainText(
+              QString::fromStdString(store_payload((u_char *)i, i->len)));
+        }
+      }
     }
-    delete packet;
     return;
   }
 }
