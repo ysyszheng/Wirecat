@@ -194,72 +194,47 @@ void Sniffer::handle_arp(const u_char *packet, packet_struct *pkt_p) {
 }
 
 /* IP reassmble function */
-packet_struct *Sniffer::ipv4Reassmble(const packet_struct *packet) {
+packet_struct *Sniffer::ipv4Reassmble(const packet_struct *packet) { 
   uint16_t identification = ntohs(packet->net_hdr.ipv4_hdr->ip_id);
   int size = pkt.size();
-  u_char *datagram = new u_char[8000]; // space to store payload
 
   packet_struct *newpacket = new packet_struct;
   newpacket->time = currentDataTime();
   newpacket->net_type = IPv4;
 
-  uint32_t final_hdr_length = 0; // header length of reassmbled data
-  uint32_t total_data_len = 0;   // length of payload
-
-  bool oversize_flag = false;
+  uint32_t final_hdr_length = 0;     // header length of reassmbled data
+  uint32_t total_data_len = 0;       // length of payload
 
   for (int i = 0; i < size; i++) {
     if (ntohs(pkt[i]->net_hdr.ipv4_hdr->ip_id) ==
-        identification) { // is a fragment of a same packet
+        identification) {    // is a fragment of a same packet
       ushort tmpOffset = ntohs(pkt[i]->net_hdr.ipv4_hdr->ip_off) & 0x1fff;
-      uint32_t hdr_length = 0;
-
-      hdr_length += SIZE_ETHERNET + 20; // 20-length of ipv4_header
-      switch (pkt[i]->trs_type) {
-      case UDP:
-        hdr_length += 8;
-        break; // 8-length of UDP header
-      case TCP:
-        hdr_length += 20;
-        break; // 20-length of TCP header
-      case ICMP:
-        hdr_length += 8;
-        break; // 8-length of ICMP header
-      case IGMP:
-        hdr_length += 8;
-        break; // 8-length of IGMP header
-      case Utrs:
-        break;
-      }
+      long hdr_length = 0;
+      long size_ip = IPv4_HL(pkt[i]->net_hdr.ipv4_hdr) * 4;
+      hdr_length += SIZE_ETHERNET + size_ip;
 
       total_data_len += pkt[i]->len - hdr_length;
-      if (total_data_len > 8000) { // too big, discard
-        oversize_flag = true;
-        break;
-      }
 
       if (tmpOffset == 0) { // the first fragment
         final_hdr_length = hdr_length;
-        memcpy(newpacket->eth_hdr, pkt[i]->eth_hdr,
-               final_hdr_length); // copy header of the first fragment
-        memcpy(datagram, pkt[i]->eth_hdr + hdr_length,
-               pkt[i]->len - hdr_length); // copy data of the first fragment
-      } else {
-        memcpy(datagram + tmpOffset * 8, pkt[i]->eth_hdr + hdr_length,
-               pkt[i]->len - hdr_length); // copy data of this fragment
-      }
+        memcpy(newpacket->eth_hdr, pkt[i]->eth_hdr, final_hdr_length);
+      } 
     }
   }
 
-  if (oversize_flag) { // oversize, reassmble failed
-    return NULL;
+
+  for(int i = 0; i < size; i++) {
+      if(ntohs(pkt[i]->net_hdr.ipv4_hdr->ip_id == identification)) {
+          ushort tmpOffset = ntohs(pkt[i]->net_hdr.ipv4_hdr->ip_off) & 0x1fff;
+          long hdr_length = 0;
+          long size_ip = IPv4_HL(pkt[i]->net_hdr.ipv4_hdr) * 4;
+          hdr_length += SIZE_ETHERNET + size_ip;
+
+          memcpy(newpacket->eth_hdr + final_hdr_length + tmpOffset*8, pkt[i]->eth_hdr + hdr_length, pkt[i]->len - hdr_length);
+      }
   }
 
-  memcpy(newpacket->eth_hdr + final_hdr_length, datagram,
-         total_data_len); // newpacket is the packet after reassmbled
   newpacket->len = final_hdr_length + total_data_len;
 
-  delete[] datagram;
-
-  return newpacket;
+  return newpacket;  
 }
