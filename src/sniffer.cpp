@@ -68,7 +68,7 @@ bool Sniffer::getDevInfo() {
 void Sniffer::getView(View *viewObj) { view = viewObj; }
 
 void Sniffer::sniff() {
-  status = Start;
+  // status = Start;
   while (TRUE) {
     if (status == Start) {
       // LOG("Start");
@@ -147,8 +147,7 @@ void Sniffer::get_packet(u_char *args, const struct pcap_pkthdr *header,
     cnt++;
     pkt_p->no = cnt;
 
-    // Sniffer::pkt.push_back(pkt_p);
-    // LOG("\n" << store_payload((u_char *)pkt_p->eth_hdr, pkt_p->len));
+    Sniffer::pkt.push_back(pkt_p);
     view->add_pkt(pkt_p);
   }
   return;
