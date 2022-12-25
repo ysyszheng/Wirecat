@@ -19,7 +19,7 @@ public:
   ~View();
   void add_pkt(const packet_struct *packete, bool flag=false);
 
-  void clearView();
+  void clearView();  
 
 private slots:
   void onTableClicked(const QModelIndex &);
@@ -29,6 +29,8 @@ protected:
   int index;
   QStandardItemModel *TableModel;
   QStandardItemModel *TreeModel;
+
+  void setColor(const packet_struct* packet, QStandardItem *item);
 };
 
 #endif // VIEW_H

@@ -163,20 +163,47 @@ void View::add_pkt(const packet_struct *packet, bool flag) {
   QStandardItem *item;
   item = new QStandardItem(QString::number(packet->no));
   TableModel->setItem(index, 0, item);
+  setColor(packet, item);
   item = new QStandardItem(QString::fromStdString(packet->time));
   TableModel->setItem(index, 1, item);
+  setColor(packet, item);
   item = new QStandardItem(src);
   TableModel->setItem(index, 2, item);
+  setColor(packet, item);
   item = new QStandardItem(dst);
   TableModel->setItem(index, 3, item);
+  setColor(packet, item);
   item = new QStandardItem(prot);
   TableModel->setItem(index, 4, item);
+  setColor(packet, item);
   item = new QStandardItem(QString::number(packet->len));
   TableModel->setItem(index, 5, item);
+  setColor(packet, item);
   item = new QStandardItem(info);
   TableModel->setItem(index, 6, item);
+  setColor(packet, item);
 
   index++;
+}
+
+/* set different color according to protocal */
+void View::setColor(const packet_struct* packet, QStandardItem *item) {
+  if(packet->trs_type != Utrs) {
+      switch(packet->trs_type) {
+          case TCP: item->setBackground(QBrush(QColor(255, 240, 245))); break;
+          case UDP: item->setBackground(QBrush(QColor(255, 255, 240))); break;
+          case ICMP:item->setBackground(QBrush(QColor(64 , 224, 208))); break;
+          case IGMP:item->setBackground(QBrush(QColor(135, 206, 250))); break;
+          case Utrs:break;
+      }
+  }else {
+      switch(packet->net_type) {
+          case IPv4:item->setBackground(QBrush(QColor(250, 128, 114))); break;
+          case IPv6:item->setBackground(QBrush(QColor(152, 251, 152))); break;
+          case ARP: item->setBackground(QBrush(QColor(238, 130, 238))); break;
+          case Unet:break;
+      }
+  }
 }
 
 void View::onTableClicked(const QModelIndex &item) {
