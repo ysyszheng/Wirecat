@@ -32,11 +32,16 @@ Structure
   * `src/sniffer.h` - Sniffer header
   * `src/catch.h` - Catch package
   * `src/catch.cpp` - Catch package implementation
+  * `src/filter.h` - Filter header
+  * `src/filter.cpp` - Filter
+  * `src/devwindow.h` - Devwindow header
+  * `src/devwindow.cpp` - Devwindow
 * `ui/` - UI files
   * `ui/mainwindow.ui` - Main window UI
 * `build/` - Build directory
   * `build/build.sh` - Build script
   * `build/sniffer.pro` - Project file
+  * `build/Makefile` - Makefile
   * `build/bin/` - Executable directory
     * `build/bin/sniffer` - Executable file
 * `test/` - Test directory
