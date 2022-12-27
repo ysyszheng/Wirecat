@@ -3,7 +3,7 @@
 
 A Not Simple Network Sniffer.
 
-![demo](doc/img/demo.png)
+![demo](doc/demo/demo.png)
 
 Environment
 -----
